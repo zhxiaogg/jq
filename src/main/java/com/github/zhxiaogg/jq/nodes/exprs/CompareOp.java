@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.exprs;
+package com.github.zhxiaogg.jq.nodes.exprs;
 
 public enum CompareOp {
     GT,

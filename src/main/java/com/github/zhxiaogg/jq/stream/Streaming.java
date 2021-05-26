@@ -2,8 +2,8 @@ package com.github.zhxiaogg.jq.stream;
 
 import com.github.zhxiaogg.jq.Relation;
 import com.github.zhxiaogg.jq.DataSource;
-import com.github.zhxiaogg.jq.plans.LogicalPlan;
-import com.github.zhxiaogg.jq.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.plans.LogicalPlan;
+import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
 
 import java.util.Optional;
 

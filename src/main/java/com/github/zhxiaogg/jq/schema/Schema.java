@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.schema;
 
-import com.github.zhxiaogg.jq.plans.interpreter.ObjectReader;
-import com.github.zhxiaogg.jq.plans.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.plans.interpreter.ObjectReader;
+import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
@@ -32,10 +32,11 @@ public class Schema {
                 int i = 0;
                 for (Attribute attribute : attributes) {
                     try {
-                        Field f = name.getClazz().getField(attribute.getName());
-                        Object value = f.get(f);
-                        values.set(i++, new LiteralValue(value, attribute.getDataType()));
-                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                        Field f = attribute.getField();
+                        f.setAccessible(true);
+                        Object value = f.get(data);
+                        values.add(new LiteralValue(value, attribute.getDataType()));
+                    } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }

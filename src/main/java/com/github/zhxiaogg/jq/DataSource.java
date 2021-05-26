@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq;
 
-import com.github.zhxiaogg.jq.plans.LogicalPlan;
+import com.github.zhxiaogg.jq.nodes.plans.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.Schema;
 import com.github.zhxiaogg.jq.stream.Streaming;
 import lombok.Data;

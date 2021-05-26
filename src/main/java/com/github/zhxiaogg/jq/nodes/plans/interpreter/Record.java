@@ -1,13 +1,11 @@
-package com.github.zhxiaogg.jq.plans.interpreter;
+package com.github.zhxiaogg.jq.nodes.plans.interpreter;
 
-import com.github.zhxiaogg.jq.schema.Schema;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @ToString

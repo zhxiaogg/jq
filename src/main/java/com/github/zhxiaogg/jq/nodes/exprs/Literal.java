@@ -1,6 +1,6 @@
-package com.github.zhxiaogg.jq.exprs;
+package com.github.zhxiaogg.jq.nodes.exprs;
 
-import com.github.zhxiaogg.jq.plans.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
@@ -13,7 +13,7 @@ import java.time.Instant;
 @Data
 @ToString
 @EqualsAndHashCode
-public class Literal implements Expression {
+public class Literal implements LeafExprNode {
     private final Object value;
     private final DataType dataType;
 
@@ -28,5 +28,11 @@ public class Literal implements Expression {
     @Override
     public Value eval(Record record) {
         return new LiteralValue(value, dataType);
+    }
+
+    @Override
+    public String getDisplayName() {
+        // TODO: add a thread local name idx?
+        return "Literal_";
     }
 }

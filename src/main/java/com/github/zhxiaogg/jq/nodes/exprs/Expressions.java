@@ -1,10 +1,14 @@
-package com.github.zhxiaogg.jq.exprs;
+package com.github.zhxiaogg.jq.nodes.exprs;
 
 import java.time.Instant;
 
 public class Expressions {
     public static Sum sum(String attribute) {
         return new Sum(new UnResolvedAttribute(attribute));
+    }
+
+    public static Expression attri(String attribute) {
+        return new UnResolvedAttribute(attribute);
     }
 
     public static BooleanExpression gt(Expression left, Expression right) {

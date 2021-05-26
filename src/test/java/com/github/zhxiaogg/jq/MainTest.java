@@ -1,15 +1,19 @@
 package com.github.zhxiaogg.jq;
 
 
+import com.github.zhxiaogg.jq.analyzer.Analyser;
+import com.github.zhxiaogg.jq.analyzer.Batch;
+import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
-import com.github.zhxiaogg.jq.exprs.Expressions;
-import com.github.zhxiaogg.jq.plans.*;
-import com.github.zhxiaogg.jq.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.exprs.Expressions;
+import com.github.zhxiaogg.jq.nodes.plans.*;
+import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.stream.Streaming;
 import org.junit.Test;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainTest {
 
@@ -42,15 +46,28 @@ public class MainTest {
         }
     }
 
+    Analyser getAnalyser(DataSource dataSource) {
+        return new Analyser() {
+            @Override
+            public List<Batch> getBatches() {
+                return Arrays.asList(new Batch(Arrays.asList(new ResolveAttributesRule(dataSource))));
+            }
+        };
+    }
+
     @Test
     public void should_work() {
         Relation relation = Relation.create("orders", Order.class);
         DataSource ds = DataSource.create(relation);
 
         // select item_id, sum(price) as value from orders where time > "1h" having sum(price) >= 100 limit 10;
-        Streaming streaming = ds.streamQuery(createPlan());
+        LogicalPlan plan = createPlan();
+        LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
+        Streaming streaming = ds.streamQuery(analysedPlan);
         RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
         System.out.println(r1);
+        RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now()));
+        System.out.println(r2);
     }
 
     // select item_id, sum(price) as value from orders where time > "1h" having sum(price) > 100 limit 10;
@@ -58,8 +75,7 @@ public class MainTest {
         Scan scan = Scan.from("orders");
         Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
         Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.sum("price"), "value")), filter);
-        Having having = new Having(Expressions.gte(Expressions.sum("price"), 100), aggregate);
-        return new Limit(10, having);
+        return new Having(Expressions.gte(Expressions.attri("value"), 100), aggregate);
     }
 
 }
