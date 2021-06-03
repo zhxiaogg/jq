@@ -26,7 +26,7 @@ public class Compare implements BooleanExpression {
 
     @Override
     public boolean apply(Record record) {
-        return op.compare(left.eval(record), right.eval(record));
+        return op.apply(left.eval(record), right.eval(record));
     }
 
     @Override

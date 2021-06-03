@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.values;
+package com.github.zhxiaogg.jq.utils;
 
 public final  class MathUtils {
     public static double doubleSum(Object left, Object right) {
@@ -19,11 +19,19 @@ public final  class MathUtils {
     }
 
     public static long longMin(Object left, Object right) {
-        return Math.min(((long) left) , ((long) right));
+        return Math.min(((long) left), ((long) right));
     }
 
     public static long longMax(Object left, Object right) {
-        return Math.min(((long) left) , ((long) right));
+        return Math.min(((long) left), ((long) right));
+    }
+
+    public static double doubleMinus(Object left, Object right) {
+        return ((double) left) - ((double) right);
+    }
+
+    public static long longMinus(Object left, Object right) {
+        return ((long) left) - ((long) right);
     }
 }
 

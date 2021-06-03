@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.values;
 
-public abstract class Aggregator implements Value {
+public abstract class AggValue implements Value {
     public boolean isAggregator() {
         return true;
     }
@@ -9,9 +9,9 @@ public abstract class Aggregator implements Value {
         return false;
     }
 
-    public abstract Aggregator merge(Aggregator aggregator);
+    public abstract AggValue merge(AggValue aggregator);
 
-    protected void verifySameType(Aggregator aggregator) {
+    protected void verifySameType(AggValue aggregator) {
         if (!(aggregator.getClass() == this.getClass()))
             throw new IllegalArgumentException("cannot merge with " + aggregator.getClass());
         if (aggregator.getDataType() != this.getDataType())

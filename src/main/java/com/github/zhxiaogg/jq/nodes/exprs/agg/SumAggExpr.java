@@ -1,9 +1,10 @@
-package com.github.zhxiaogg.jq.nodes.exprs;
+package com.github.zhxiaogg.jq.nodes.exprs.agg;
 
+import com.github.zhxiaogg.jq.nodes.exprs.Expression;
 import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.SumAgg;
+import com.github.zhxiaogg.jq.values.agg.SumAggValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,17 +16,17 @@ import java.util.List;
 @Data
 @ToString
 @EqualsAndHashCode
-public class Sum implements Expression {
+public class SumAggExpr implements Expression {
     private final Expression expression;
 
-    public Sum(Expression expression) {
+    public SumAggExpr(Expression expression) {
         this.expression = expression;
     }
 
     @Override
     public Value eval(Record record) {
         LiteralValue value = (LiteralValue) expression.eval(record);
-        return SumAgg.from(value);
+        return SumAggValue.from(value);
     }
 
     @Override
@@ -50,6 +51,6 @@ public class Sum implements Expression {
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new Sum(children.get(0));
+        return new SumAggExpr(children.get(0));
     }
 }

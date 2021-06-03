@@ -75,7 +75,7 @@ public class MainTest {
         Scan scan = Scan.from("orders");
         Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
         Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.sum("price"), "value")), filter);
-        return new Having(Expressions.gte(Expressions.attri("value"), 100), aggregate);
+        return new Having(Expressions.gte(Expressions.attri("value"), 200), aggregate);
     }
 
 }

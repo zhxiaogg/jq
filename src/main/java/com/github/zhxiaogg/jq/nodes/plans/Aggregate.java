@@ -3,7 +3,7 @@ package com.github.zhxiaogg.jq.nodes.plans;
 import com.github.zhxiaogg.jq.DataSource;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
-import com.github.zhxiaogg.jq.values.Aggregator;
+import com.github.zhxiaogg.jq.values.AggValue;
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
 import com.github.zhxiaogg.jq.nodes.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
@@ -36,7 +36,7 @@ public class Aggregate implements LogicalPlan {
         return new Aggregate(groupingKeys.stream().map(UnResolvedAttribute::new).collect(Collectors.toList()), aggregators, child);
     }
 
-    private final Map<List<LiteralValue>, List<Aggregator>> states = new HashMap<>();
+    private final Map<List<LiteralValue>, List<AggValue>> states = new HashMap<>();
 
     @Override
     public RecordBag partialEval(DataSource dataSource) {
@@ -45,16 +45,16 @@ public class Aggregate implements LogicalPlan {
         for (Record record : recordBag.getRecords()) {
             // assembly a record based on  groupingKeys and aggregators
             List<LiteralValue> keys = groupingKeys.stream().map(e -> (LiteralValue) e.eval(record)).collect(Collectors.toList());
-            List<Aggregator> aggregated = aggregators.stream().map(e -> (Aggregator) e.eval(record)).collect(Collectors.toList());
-            List<Aggregator> existing = states.get(keys);
+            List<AggValue> aggregated = aggregators.stream().map(e -> (AggValue) e.eval(record)).collect(Collectors.toList());
+            List<AggValue> existing = states.get(keys);
             final Record r;
             if (existing == null) {
                 states.put(keys, aggregated);
                 r = Record.create((List<Value>) (ListUtils.concat((List) keys, (List) aggregated)));
             } else {
-                List<Aggregator> updated = new ArrayList<>(existing.size());
+                List<AggValue> updated = new ArrayList<>(existing.size());
                 for (int i = 0; i < existing.size(); i++) {
-                    Aggregator merged = existing.get(i).merge(aggregated.get(i));
+                    AggValue merged = existing.get(i).merge(aggregated.get(i));
                     updated.add(merged);
                 }
                 states.put(keys, updated);

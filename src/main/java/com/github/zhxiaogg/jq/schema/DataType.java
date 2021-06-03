@@ -27,7 +27,7 @@ public enum DataType implements DataTypeSupport, Comparable<DataType> {
         @Override
         public Object castTo(DataType dataType, Object value) {
             if (dataType == Float) {
-                return (double) (long) value;
+                return ((Number) value).doubleValue();
             } else {
                 throw new UnsupportedOperationException("cannot cast Int to " + dataType);
             }
@@ -35,7 +35,7 @@ public enum DataType implements DataTypeSupport, Comparable<DataType> {
 
         @Override
         public boolean canCastTo(DataType dataType) {
-            return dataType == Float;
+            return dataType.equals(Float);
         }
     },
     String {

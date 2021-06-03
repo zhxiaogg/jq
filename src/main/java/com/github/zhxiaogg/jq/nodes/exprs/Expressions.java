@@ -1,10 +1,12 @@
 package com.github.zhxiaogg.jq.nodes.exprs;
 
+import com.github.zhxiaogg.jq.nodes.exprs.agg.SumAggExpr;
+
 import java.time.Instant;
 
 public class Expressions {
-    public static Sum sum(String attribute) {
-        return new Sum(new UnResolvedAttribute(attribute));
+    public static SumAggExpr sum(String attribute) {
+        return new SumAggExpr(new UnResolvedAttribute(attribute));
     }
 
     public static Expression attri(String attribute) {
