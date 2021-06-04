@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.nodes.plans;
+package com.github.zhxiaogg.jq.nodes.logical;
 
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
 

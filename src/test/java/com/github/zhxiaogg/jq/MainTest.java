@@ -6,9 +6,9 @@ import com.github.zhxiaogg.jq.analyzer.Batch;
 import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.nodes.exprs.Expressions;
-import com.github.zhxiaogg.jq.nodes.plans.*;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
-import com.github.zhxiaogg.jq.stream.Streaming;
+import com.github.zhxiaogg.jq.nodes.logical.*;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -46,7 +46,7 @@ public class MainTest {
         }
     }
 
-    Analyser getAnalyser(DataSource dataSource) {
+    Analyser getAnalyser(Catalog dataSource) {
         return new Analyser() {
             @Override
             public List<Batch> getBatches() {
@@ -58,12 +58,12 @@ public class MainTest {
     @Test
     public void should_work() {
         Relation relation = Relation.create("orders", Order.class);
-        DataSource ds = DataSource.create(relation);
+        Catalog ds = Catalog.create(relation);
 
         // select item_id, sum(price) as value from orders where time > "1h" having sum(price) >= 100 limit 10;
         LogicalPlan plan = createPlan();
         LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
-        Streaming streaming = ds.streamQuery(analysedPlan);
+        StreamingQuery streaming = ds.streamQuery(analysedPlan);
         RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
         System.out.println(r1);
         RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now()));

@@ -1,15 +1,11 @@
 package com.github.zhxiaogg.jq.nodes.exprs;
 
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.Collections;
-import java.util.List;
 
 @Data
 @ToString

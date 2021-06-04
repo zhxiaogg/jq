@@ -1,10 +1,10 @@
-package com.github.zhxiaogg.jq.nodes.plans;
+package com.github.zhxiaogg.jq.nodes.logical;
 
-import com.github.zhxiaogg.jq.DataSource;
+import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.nodes.exprs.BooleanExpression;
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,16 +17,12 @@ import java.util.List;
 @Data
 @ToString
 @EqualsAndHashCode
-public class Filter implements LogicalPlan {
+public class Having implements LogicalPlan {
     private final BooleanExpression condition;
     private final LogicalPlan child;
 
-    public static Filter create(BooleanExpression condition, LogicalPlan child) {
-        return new Filter(condition, child);
-    }
-
     @Override
-    public RecordBag partialEval(DataSource dataSource) {
+    public RecordBag partialEval(Catalog dataSource) {
         RecordBag recordBag = child.partialEval(dataSource);
         List<Record> records = new ArrayList<>(recordBag.getRecords().size());
         for (Record r : recordBag.getRecords()) {
@@ -39,7 +35,7 @@ public class Filter implements LogicalPlan {
 
     @Override
     public LogicalPlan withExpressions(List<Expression> expressions) {
-        return Filter.create((BooleanExpression) expressions.get(0), child);
+        return new Having((BooleanExpression) expressions.get(0), child);
     }
 
     @Override
@@ -48,7 +44,7 @@ public class Filter implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(DataSource dataSource) {
+    public List<Attribute> getAttributes(Catalog dataSource) {
         return child.getAttributes(dataSource);
     }
 
@@ -64,6 +60,6 @@ public class Filter implements LogicalPlan {
 
     @Override
     public LogicalPlan withChildren(List<LogicalPlan> children) {
-        return Filter.create(condition, children.get(0));
+        return new Having(condition, children.get(0));
     }
 }

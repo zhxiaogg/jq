@@ -1,8 +1,8 @@
-package com.github.zhxiaogg.jq.nodes.plans;
+package com.github.zhxiaogg.jq.nodes.logical;
 
-import com.github.zhxiaogg.jq.DataSource;
+import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.Relation;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +23,7 @@ public class Scan implements LeafPlanNode {
     }
 
     @Override
-    public RecordBag partialEval(DataSource dataSource) {
+    public RecordBag partialEval(Catalog dataSource) {
         Optional<Relation> dataSet = dataSource.relationOf(relation);
         if (dataSet.isPresent()) {
             return dataSet.get().records();
@@ -33,7 +33,7 @@ public class Scan implements LeafPlanNode {
     }
 
     @Override
-    public List<Attribute> getAttributes(DataSource dataSource) {
+    public List<Attribute> getAttributes(Catalog dataSource) {
         Optional<Relation> relation = dataSource.relationOf(this.relation);
         if (relation.isPresent()) {
             return Collections.unmodifiableList(relation.get().getSchema().getAttributes());

@@ -1,10 +1,10 @@
 package com.github.zhxiaogg.jq.analyzer;
 
-import com.github.zhxiaogg.jq.DataSource;
+import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
 import com.github.zhxiaogg.jq.nodes.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.nodes.exprs.UnResolvedAttribute;
-import com.github.zhxiaogg.jq.nodes.plans.LogicalPlan;
+import com.github.zhxiaogg.jq.nodes.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.Attribute;
 
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 import static com.github.zhxiaogg.jq.utils.ListUtils.zipList;
 
 public class ResolveAttributesRule implements Rule<LogicalPlan> {
-    private final DataSource dataSource;
+    private final Catalog dataSource;
 
-    public ResolveAttributesRule(DataSource dataSource) {
+    public ResolveAttributesRule(Catalog dataSource) {
         this.dataSource = dataSource;
     }
 

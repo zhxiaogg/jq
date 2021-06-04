@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.nodes.plans.interpreter;
+package com.github.zhxiaogg.jq.nodes.logical.interpreter;
 
 import lombok.Data;
 

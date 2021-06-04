@@ -1,8 +1,8 @@
-package com.github.zhxiaogg.jq.nodes.plans;
+package com.github.zhxiaogg.jq.nodes.logical;
 
-import com.github.zhxiaogg.jq.DataSource;
+import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public RecordBag partialEval(DataSource dataSource) {
+    public RecordBag partialEval(Catalog dataSource) {
         return RecordBag.of(child.partialEval(dataSource).getRecords().stream().limit(limit).collect(Collectors.toList()));
     }
 
@@ -39,7 +39,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(DataSource dataSource) {
+    public List<Attribute> getAttributes(Catalog dataSource) {
         return null;
     }
 

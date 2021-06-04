@@ -1,13 +1,13 @@
-package com.github.zhxiaogg.jq.nodes.plans;
+package com.github.zhxiaogg.jq.nodes.logical;
 
-import com.github.zhxiaogg.jq.DataSource;
+import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 import com.github.zhxiaogg.jq.values.AggValue;
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
 import com.github.zhxiaogg.jq.nodes.exprs.UnResolvedAttribute;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
@@ -39,7 +39,7 @@ public class Aggregate implements LogicalPlan {
     private final Map<List<LiteralValue>, List<AggValue>> states = new HashMap<>();
 
     @Override
-    public RecordBag partialEval(DataSource dataSource) {
+    public RecordBag partialEval(Catalog dataSource) {
         RecordBag recordBag = child.partialEval(dataSource);
         List<Record> rs = new ArrayList<>();
         for (Record record : recordBag.getRecords()) {
@@ -88,7 +88,7 @@ public class Aggregate implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(DataSource dataSource) {
+    public List<Attribute> getAttributes(Catalog dataSource) {
         List<Attribute> attributes1 = groupingKeys.stream().map(expr -> new Attribute(expr.getDisplayName(), expr.getDataType(), null)).collect(Collectors.toList());
         List<Attribute> attributes2 = aggregators.stream().map(expr -> new Attribute(expr.getDisplayName(), expr.getDataType(), null)).collect(Collectors.toList());
         return ListUtils.concat(attributes1, attributes2);

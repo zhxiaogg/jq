@@ -1,17 +1,17 @@
-package com.github.zhxiaogg.jq.stream;
+package com.github.zhxiaogg.jq.streaming;
 
 import com.github.zhxiaogg.jq.Relation;
-import com.github.zhxiaogg.jq.DataSource;
-import com.github.zhxiaogg.jq.nodes.plans.LogicalPlan;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.nodes.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
 
 import java.util.Optional;
 
-public class Streaming {
+public class StreamingQuery {
     private final LogicalPlan plan;
-    private final DataSource dataSource;
+    private final Catalog dataSource;
 
-    public Streaming(LogicalPlan plan, DataSource dataSource) {
+    public StreamingQuery(LogicalPlan plan, Catalog dataSource) {
         this.plan = plan;
         this.dataSource = dataSource;
     }

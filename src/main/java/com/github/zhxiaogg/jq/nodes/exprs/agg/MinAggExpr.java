@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.nodes.exprs.agg;
 
 import com.github.zhxiaogg.jq.nodes.exprs.Expression;
-import com.github.zhxiaogg.jq.nodes.plans.interpreter.Record;
+import com.github.zhxiaogg.jq.nodes.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.MinAggValue;
 import lombok.EqualsAndHashCode;

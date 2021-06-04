@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.analyzer;
 
-import com.github.zhxiaogg.jq.nodes.plans.LogicalPlan;
+import com.github.zhxiaogg.jq.nodes.logical.LogicalPlan;
 
 import java.util.List;
 import java.util.Optional;
