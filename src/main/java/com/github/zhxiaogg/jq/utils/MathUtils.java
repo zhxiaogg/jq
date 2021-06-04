@@ -33,6 +33,22 @@ public final  class MathUtils {
     public static long longMinus(Object left, Object right) {
         return ((long) left) - ((long) right);
     }
+
+    public static double doubleDiv(Object left, Object right) {
+        return ((double) left) / ((double) right);
+    }
+
+    public static long longDiv(Object left, Object right) {
+        return ((long) left) / ((long) right);
+    }
+
+    public static double doubleProduct(Object left, Object right) {
+        return ((double) left) * ((double) right);
+    }
+
+    public static long longProduct(Object left, Object right) {
+        return ((long) left) * ((long) right);
+    }
 }
 
 
