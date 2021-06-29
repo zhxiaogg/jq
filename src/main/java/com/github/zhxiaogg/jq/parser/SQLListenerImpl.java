@@ -115,37 +115,23 @@ public class SQLListenerImpl implements SQLListener {
         } else if (ctx.unary_operator() != null) {
             builders.push(new Expr.ExprUnaryBuilder());
         } else if (ctx.expr() != null) {
-            Optional<TerminalNode> arithmeticOp = ObjectUtils.firstNonNull(ctx.STAR(), ctx.DIV(), ctx.MOD(), ctx.PLUS(), ctx.MINUS());
-            if (arithmeticOp.isPresent()) {
-                builders.push(new Expr.ExprBinaryMathBuilder(arithmeticOp.get().getText()));
-                return;
-            }
-            Optional<TerminalNode> compareOp = ObjectUtils.firstNonNull(ctx.LT(), ctx.LT_EQ(), ctx.GT(), ctx.GT_EQ(),
-                    ctx.ASSIGN(), ctx.EQ(), ctx.NOT_EQ1(), ctx.NOT_EQ2());
-            if (compareOp.isPresent()) {
-                builders.push(new Expr.ExprCompareBuilder(compareOp.get().getText()));
-                return;
-            }
-
-            if (ctx.AND_() != null) {
+            Optional<TerminalNode> op;
+            if ((op = ObjectUtils.firstNonNull(ctx.STAR(), ctx.DIV(), ctx.MOD(), ctx.PLUS(), ctx.MINUS())).isPresent()) {
+                builders.push(new Expr.ExprBinaryMathBuilder(op.get().getText()));
+            } else if ((op = ObjectUtils.firstNonNull(ctx.LT(), ctx.LT_EQ(), ctx.GT(), ctx.GT_EQ(),
+                    ctx.ASSIGN(), ctx.EQ(), ctx.NOT_EQ1(), ctx.NOT_EQ2())).isPresent()) {
+                builders.push(new Expr.ExprCompareBuilder(op.get().getText()));
+            } else if (ctx.AND_() != null) {
                 builders.push(new Expr.ExprAndBuilder());
-                return;
-            }
-            if (ctx.OR_() != null) {
+            } else if (ctx.OR_() != null) {
                 builders.push(new Expr.ExprOrBuilder());
-                return;
-            }
-
-            if (ctx.BETWEEN_() != null) {
+            } else if (ctx.BETWEEN_() != null) {
                 builders.push(new Expr.ExprBetweenBuilder(ctx.NOT_() != null));
-                return;
-            }
-
-            if (ctx.IN_() != null) {
+            } else if (ctx.IN_() != null) {
                 builders.push(new Expr.ExprInBuilder(ctx.NOT_() != null));
-                return;
+            } else {
+                throw new IllegalArgumentException("unsupported expression!");
             }
-            throw new IllegalArgumentException("unsupported expression!");
         }
     }
 
