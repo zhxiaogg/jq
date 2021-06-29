@@ -206,22 +206,24 @@ public class SQLListenerImpl implements SQLListener {
 
     @Override
     public void enterTable_name(SQLParser.Table_nameContext ctx) {
-
+        builders.push(new TableName(ctx.any_name().getText()));
     }
 
     @Override
     public void exitTable_name(SQLParser.Table_nameContext ctx) {
-
+        AstBuilder<TableName> builder = (AstBuilder<TableName>) builders.pop();
+        ((TableName.AcceptTableName) builders.peek()).accept(builder.build());
     }
 
     @Override
     public void enterColumn_name(SQLParser.Column_nameContext ctx) {
-
+        builders.push(new ColumnName(ctx.any_name().getText()));
     }
 
     @Override
     public void exitColumn_name(SQLParser.Column_nameContext ctx) {
-
+        AstBuilder<ColumnName> builder = (AstBuilder<ColumnName>) builders.pop();
+        ((ColumnName.AcceptColumnName) builders.peek()).accept(builder.build());
     }
 
     @Override

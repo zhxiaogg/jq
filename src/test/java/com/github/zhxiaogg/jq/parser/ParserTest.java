@@ -9,6 +9,6 @@ public class ParserTest {
     @Test
     public void parse_sql() {
         Parser parser = new Parser();
-        parser.parse("select 1 + 2");
+        parser.parse("Select 1 + 2, id");
     }
 }
