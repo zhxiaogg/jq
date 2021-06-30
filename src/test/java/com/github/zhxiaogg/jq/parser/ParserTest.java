@@ -31,4 +31,9 @@ public class ParserTest {
     public void parse_where() {
         parser.parse("select id, name from users where id = 1");
     }
+
+    @Test
+    public void parse_group_by() {
+        parser.parse("select id, name from users group by id, name having id > 100");
+    }
 }

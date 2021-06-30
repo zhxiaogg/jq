@@ -100,12 +100,24 @@ public class SQLListenerImpl implements SQLListener {
 
     @Override
     public void enterGroup_by_clause(SQLParser.Group_by_clauseContext ctx) {
-
+        builders.push(new GroupBy.GroupByBuilder());
     }
 
     @Override
     public void exitGroup_by_clause(SQLParser.Group_by_clauseContext ctx) {
+        AstBuilder<GroupBy> builder = builders.pop();
+        ((GroupBy.AcceptGroupBy) builders.peek()).accept(builder.build());
+    }
 
+    @Override
+    public void enterHaving_clause(SQLParser.Having_clauseContext ctx) {
+        builders.push(new Having.HavingBuilder());
+    }
+
+    @Override
+    public void exitHaving_clause(SQLParser.Having_clauseContext ctx) {
+        AstBuilder<Having> builder = builders.pop();
+        ((Having.AcceptHaving) builders.peek()).accept(builder.build());
     }
 
     @Override

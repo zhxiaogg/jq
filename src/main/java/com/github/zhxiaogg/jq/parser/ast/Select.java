@@ -11,15 +11,17 @@ public class Select implements AstNode {
     private final List<ResultColumn> resultColumns;
     private final FromTable fromTable;
     private final Where where;
+    private final GroupBy groupBy;
 
     public interface AcceptSelect {
         void accept(Select select);
     }
 
-    public static class SelectBuilder implements AstBuilder<Select>, ResultColumn.AcceptResultColumn, FromTable.AcceptFromTable, Where.AcceptWhere {
+    public static class SelectBuilder implements AstBuilder<Select>, ResultColumn.AcceptResultColumn, FromTable.AcceptFromTable, Where.AcceptWhere, GroupBy.AcceptGroupBy {
         private final List<ResultColumn> resultColumns = new ArrayList<>();
         private FromTable fromTable;
         private Where where;
+        private GroupBy groupBy;
 
         @Override
         public void accept(ResultColumn resultColumn) {
@@ -33,7 +35,12 @@ public class Select implements AstNode {
 
         @Override
         public Select build() {
-            return new Select(resultColumns, fromTable, where);
+            return new Select(resultColumns, fromTable, where, groupBy);
+        }
+
+        @Override
+        public void accept(GroupBy groupBy) {
+            this.groupBy = groupBy;
         }
 
         @Override
