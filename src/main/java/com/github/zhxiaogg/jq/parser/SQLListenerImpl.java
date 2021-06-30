@@ -206,6 +206,8 @@ public class SQLListenerImpl implements SQLListener {
                 builders.push(new Expr.ExprBetweenBuilder(ctx.NOT_() != null));
             } else if (ctx.IN_() != null) {
                 builders.push(new Expr.ExprInBuilder(ctx.NOT_() != null));
+            } else if (ctx.func() != null) {
+                builders.push(new Expr.ExprFunctionCallBuilder());
             } else {
                 throw new IllegalArgumentException("unsupported expression!");
             }
@@ -233,8 +235,19 @@ public class SQLListenerImpl implements SQLListener {
 
     @Override
     public void exitUnary_operator(SQLParser.Unary_operatorContext ctx) {
-        AstBuilder<UnaryOp> builder = (AstBuilder<UnaryOp>) builders.pop();
+        AstBuilder<UnaryOp> builder = builders.pop();
         ((UnaryOp.AcceptUnaryOp) builders.peek()).accept(builder.build());
+    }
+
+    @Override
+    public void enterFunc(SQLParser.FuncContext ctx) {
+        builders.push(new FuncName(ctx.getText()));
+    }
+
+    @Override
+    public void exitFunc(SQLParser.FuncContext ctx) {
+        AstBuilder<FuncName> builder = builders.pop();
+        ((FuncName.AcceptFuncName) builders.peek()).accept(builder.build());
     }
 
     @Override

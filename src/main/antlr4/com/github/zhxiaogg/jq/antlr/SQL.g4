@@ -29,6 +29,7 @@ join_operator:
 expr: literal_value
     | (table_name DOT)? column_name
     | unary_operator expr
+    | func OPEN_PAR (expr (COMMA expr)*)? CLOSE_PAR
     | expr ( STAR | DIV | MOD) expr
     | expr ( PLUS | MINUS) expr
     | expr ( LT | LT_EQ | GT | GT_EQ) expr
@@ -39,6 +40,8 @@ expr: literal_value
     | expr NOT_? IN_ ( OPEN_PAR (select_stmt | expr ( COMMA expr)*)? CLOSE_PAR );
 
 unary_operator: MINUS | PLUS | NOT_ ;
+
+func: any_name;
 
 literal_value:
     NUMERIC_LITERAL

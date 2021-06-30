@@ -259,4 +259,31 @@ public interface Expr extends AstNode {
         }
     }
 
+    @Data
+    class ExprFunctionCall implements Expr {
+        private final FuncName funcName;
+        private final List<Expr> args;
+    }
+
+    public static class ExprFunctionCallBuilder implements ExprBuilder<ExprFunctionCall>, AcceptExpr, FuncName.AcceptFuncName {
+        private FuncName funcName;
+        private final List<Expr> args = new ArrayList<>();
+
+        @Override
+        public ExprFunctionCall build() {
+            return new ExprFunctionCall(funcName, args);
+        }
+
+        @Override
+        public void accept(Expr expr) {
+            this.args.add(expr);
+        }
+
+        @Override
+        public void accept(FuncName funcName) {
+            this.funcName = funcName;
+        }
+    }
+
+
 }

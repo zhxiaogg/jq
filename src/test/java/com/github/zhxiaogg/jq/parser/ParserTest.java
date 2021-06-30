@@ -36,4 +36,9 @@ public class ParserTest {
     public void parse_group_by() {
         parser.parse("select id, name from users group by id, name having id > 100");
     }
+
+    @Test
+    public void parse_function_call() {
+        parser.parse("select id, sum(score) from users group by id having max(score) > 100");
+    }
 }
