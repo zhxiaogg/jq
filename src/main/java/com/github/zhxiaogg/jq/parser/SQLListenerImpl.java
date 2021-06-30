@@ -38,8 +38,12 @@ public class SQLListenerImpl implements SQLListener {
     @Override
     public void exitSelect_stmt(SQLParser.Select_stmtContext ctx) {
         AstBuilder<Select> builder = (AstBuilder<Select>) builders.pop();
-        Select select = builder.build();
-        System.out.println("select = " + select);
+        if (builders.peek() != null) {
+            ((Select.AcceptSelect) builders.peek()).accept(builder.build());
+        } else {
+            Select select = builder.build();
+            System.out.println("select = " + select);
+        }
     }
 
     @Override
@@ -67,43 +71,103 @@ public class SQLListenerImpl implements SQLListener {
     }
 
     @Override
-    public void enterTable_or_subquery(SQLParser.Table_or_subqueryContext ctx) {
+    public void enterFrom_clause(SQLParser.From_clauseContext ctx) {
+        if (ctx.join_clause() != null) {
+            builders.push(new FromTable.JoinsBuilder());
+        } else if (ctx.table_or_subquery() != null) {
+            builders.push(new FromTable.TableOrSubQueriesBuilder());
+        } else {
+            throw new IllegalArgumentException("unsupported from table!");
+        }
+    }
 
+    @Override
+    public void exitFrom_clause(SQLParser.From_clauseContext ctx) {
+        AstBuilder<FromTable> builder = builders.pop();
+        ((FromTable.AcceptFromTable) builders.peek()).accept(builder.build());
+    }
+
+    @Override
+    public void enterWhere_clause(SQLParser.Where_clauseContext ctx) {
+
+    }
+
+    @Override
+    public void exitWhere_clause(SQLParser.Where_clauseContext ctx) {
+
+    }
+
+    @Override
+    public void enterGroup_by_clause(SQLParser.Group_by_clauseContext ctx) {
+
+    }
+
+    @Override
+    public void exitGroup_by_clause(SQLParser.Group_by_clauseContext ctx) {
+
+    }
+
+    @Override
+    public void enterTable_or_subquery(SQLParser.Table_or_subqueryContext ctx) {
+        if (ctx.select_stmt() != null) {
+            builders.push(new TableOrSubQuery.SubQueryBuilder());
+        } else if (ctx.table_name() != null) {
+            builders.push(new TableOrSubQuery.TableBuilder());
+        } else {
+            throw new IllegalArgumentException("unsupported table or sub query!");
+        }
     }
 
     @Override
     public void exitTable_or_subquery(SQLParser.Table_or_subqueryContext ctx) {
-
+        AstBuilder<TableOrSubQuery> builder = builders.pop();
+        ((TableOrSubQuery.AcceptTableOrSubQuery) builders.peek()).accept(builder.build());
     }
 
     @Override
     public void enterJoin_clause(SQLParser.Join_clauseContext ctx) {
-
+        builders.push(new Join.JoinBuilder());
     }
 
     @Override
     public void exitJoin_clause(SQLParser.Join_clauseContext ctx) {
-
+        AstBuilder<Join> builder = builders.pop();
+        ((Join.AcceptJoin) builders.peek()).accept(builder.build());
     }
 
     @Override
     public void enterJoin_constraint(SQLParser.Join_constraintContext ctx) {
-
+        builders.push(new JoinConstraint.JoinConstraintBuilder());
     }
 
     @Override
     public void exitJoin_constraint(SQLParser.Join_constraintContext ctx) {
-
+        AstBuilder<JoinConstraint> builder = builders.pop();
+        ((JoinConstraint.AcceptJoinConstraint) builders.peek()).accept(builder.build());
     }
 
     @Override
     public void enterJoin_operator(SQLParser.Join_operatorContext ctx) {
-
+        boolean naturalJoin = ctx.NATURAL_() != null;
+        if (ctx.LEFT_() != null && ctx.OUTER_() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.LEFT_OUTER, naturalJoin));
+        } else if (ctx.LEFT_() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.LEFT, naturalJoin));
+        } else if (ctx.INNER_() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.INNER, naturalJoin));
+        } else if (ctx.CROSS_() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.CROSS, naturalJoin));
+        } else if (ctx.JOIN_() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.LEFT, naturalJoin));
+        } else if (ctx.COMMA() != null) {
+            builders.push(new JoinOp(JoinOp.JoinType.LEFT, naturalJoin));
+        }
     }
 
     @Override
     public void exitJoin_operator(SQLParser.Join_operatorContext ctx) {
-
+        AstBuilder<JoinOp> builder = builders.pop();
+        ((JoinOp.AcceptJoinOp) builders.peek()).accept(builder.build());
     }
 
     @Override
@@ -214,12 +278,13 @@ public class SQLListenerImpl implements SQLListener {
 
     @Override
     public void enterTable_alias(SQLParser.Table_aliasContext ctx) {
-
+        builders.push(new TableAlias(ctx.getText()));
     }
 
     @Override
     public void exitTable_alias(SQLParser.Table_aliasContext ctx) {
-
+        AstBuilder<TableAlias> builder = builders.pop();
+        ((TableAlias.AcceptTableAlias) builders.peek()).accept(builder.build());
     }
 
     @Override

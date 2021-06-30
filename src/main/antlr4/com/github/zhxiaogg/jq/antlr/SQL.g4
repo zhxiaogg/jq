@@ -4,11 +4,15 @@
 grammar SQL;
 
 sql: select_stmt;
-select_stmt: SELECT_ result_column (COMMA result_column)* (
-                         FROM_ (table_or_subquery (COMMA table_or_subquery)* | join_clause)
-                     )? (WHERE_ expr)? (GROUP_ BY_ expr (COMMA expr)* (HAVING_ expr)?)?;
+select_stmt: SELECT_ result_column (COMMA result_column)* (from_clause)? (where_clause)? (group_by_clause)?;
 
 result_column: STAR | table_name DOT STAR | expr;
+
+from_clause: FROM_ (table_or_subquery (COMMA table_or_subquery)* | join_clause);
+
+where_clause: WHERE_ expr;
+
+group_by_clause: GROUP_ BY_ expr (COMMA expr)* (HAVING_ expr)?;
 
 table_or_subquery:  table_name (AS_? table_alias)?
     | OPEN_PAR select_stmt CLOSE_PAR (AS_? table_alias)?

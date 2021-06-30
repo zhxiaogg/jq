@@ -5,10 +5,25 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ParserTest {
+    Parser parser = new Parser();
 
     @Test
     public void parse_sql() {
-        Parser parser = new Parser();
-        parser.parse("Select 1 + 2, id > 0");
+        parser.parse("Select 1 + 2 * 3, id > 0");
+    }
+
+    @Test
+    public void parse_from_table() {
+        parser.parse("Select id, name from table1, table2");
+    }
+
+    @Test
+    public void parse_from_sub_query() {
+        parser.parse("Select u.id, u.name from (select id, name from users) as u");
+    }
+
+    @Test
+    public void parse_from_join() {
+        parser.parse("Select u.id, u.name, f.fid, f.name from users as u join friends as f on u.id = f.id");
     }
 }
