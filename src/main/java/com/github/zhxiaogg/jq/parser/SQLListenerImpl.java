@@ -89,12 +89,13 @@ public class SQLListenerImpl implements SQLListener {
 
     @Override
     public void enterWhere_clause(SQLParser.Where_clauseContext ctx) {
-
+        builders.push(new Where.WhereBuilder());
     }
 
     @Override
     public void exitWhere_clause(SQLParser.Where_clauseContext ctx) {
-
+        AstBuilder<Where> builder = builders.pop();
+        ((Where.AcceptWhere) builders.peek()).accept(builder.build());
     }
 
     @Override

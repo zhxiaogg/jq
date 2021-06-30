@@ -26,4 +26,9 @@ public class ParserTest {
     public void parse_from_join() {
         parser.parse("Select u.id, u.name, f.fid, f.name from users as u join friends as f on u.id = f.id");
     }
+
+    @Test
+    public void parse_where() {
+        parser.parse("select id, name from users where id = 1");
+    }
 }

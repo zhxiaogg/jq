@@ -10,19 +10,16 @@ import java.util.List;
 public class Select implements AstNode {
     private final List<ResultColumn> resultColumns;
     private final FromTable fromTable;
-
-    public Select(List<ResultColumn> resultColumns, FromTable fromTable) {
-        this.resultColumns = resultColumns;
-        this.fromTable = fromTable;
-    }
+    private final Where where;
 
     public interface AcceptSelect {
         void accept(Select select);
     }
 
-    public static class SelectBuilder implements AstBuilder<Select>, ResultColumn.AcceptResultColumn, FromTable.AcceptFromTable {
+    public static class SelectBuilder implements AstBuilder<Select>, ResultColumn.AcceptResultColumn, FromTable.AcceptFromTable, Where.AcceptWhere {
         private final List<ResultColumn> resultColumns = new ArrayList<>();
         private FromTable fromTable;
+        private Where where;
 
         @Override
         public void accept(ResultColumn resultColumn) {
@@ -36,7 +33,12 @@ public class Select implements AstNode {
 
         @Override
         public Select build() {
-            return new Select(resultColumns, fromTable);
+            return new Select(resultColumns, fromTable, where);
+        }
+
+        @Override
+        public void accept(Where where) {
+            this.where = where;
         }
     }
 }
