@@ -20,6 +20,15 @@ public class SQLListenerImpl implements SQLListener {
 
     private LinkedList<AstBuilder> builders = new LinkedList<>();
 
+    public Select result() {
+        AstBuilder<Select> builder = builders.pop();
+        Select result = null;
+        if (builder != null) {
+            result = builder.build();
+        }
+        return result;
+    }
+
     @Override
     public void enterSql(SQLParser.SqlContext ctx) {
         log.debug("begin parse sql");
@@ -41,8 +50,7 @@ public class SQLListenerImpl implements SQLListener {
         if (builders.peek() != null) {
             ((AcceptSelect) builders.peek()).accept(builder.build());
         } else {
-            Select select = builder.build();
-            System.out.println("select = " + select);
+            builders.push(builder);
         }
     }
 
