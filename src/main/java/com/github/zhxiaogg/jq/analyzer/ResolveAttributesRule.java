@@ -1,10 +1,10 @@
 package com.github.zhxiaogg.jq.analyzer;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.nodes.exprs.Expression;
-import com.github.zhxiaogg.jq.nodes.exprs.ResolvedAttribute;
-import com.github.zhxiaogg.jq.nodes.exprs.UnResolvedAttribute;
-import com.github.zhxiaogg.jq.nodes.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.Attribute;
 
 import java.util.HashMap;

@@ -2,6 +2,7 @@ package com.github.zhxiaogg.jq.parser;
 
 import com.github.zhxiaogg.jq.antlr.SQLLexer;
 import com.github.zhxiaogg.jq.antlr.SQLParser;
+import com.github.zhxiaogg.jq.parser.utils.SQLListenerImpl;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;

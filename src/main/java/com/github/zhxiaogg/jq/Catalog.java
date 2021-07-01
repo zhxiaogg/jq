@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq;
 
-import com.github.zhxiaogg.jq.nodes.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

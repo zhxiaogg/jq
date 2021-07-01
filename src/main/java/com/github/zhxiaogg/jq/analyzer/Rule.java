@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.analyzer;
 
-import com.github.zhxiaogg.jq.nodes.Node;
+import com.github.zhxiaogg.jq.plan.Node;
 
 import java.util.Optional;
 

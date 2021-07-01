@@ -1,8 +1,5 @@
 package com.github.zhxiaogg.jq.utils;
 
-import com.github.zhxiaogg.jq.nodes.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.Attribute;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -5,9 +5,9 @@ import com.github.zhxiaogg.jq.analyzer.Analyser;
 import com.github.zhxiaogg.jq.analyzer.Batch;
 import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
-import com.github.zhxiaogg.jq.nodes.exprs.Expressions;
-import com.github.zhxiaogg.jq.nodes.logical.*;
-import com.github.zhxiaogg.jq.nodes.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.plan.exprs.Expressions;
+import com.github.zhxiaogg.jq.plan.logical.*;
+import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
