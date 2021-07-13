@@ -12,6 +12,7 @@ public class Join implements AstNode {
     private final TableOrSubQuery left;
     private final List<JoinTarget> targets;
 
+    // TODO: this looks wired.
     @Data
     public static class JoinTarget implements AstNode {
         private final JoinOp joinOp;
