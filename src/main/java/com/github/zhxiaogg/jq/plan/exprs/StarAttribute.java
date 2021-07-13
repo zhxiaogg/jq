@@ -15,7 +15,7 @@ public class StarAttribute implements LeafExprNode {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return "*";
     }
 

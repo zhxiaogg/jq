@@ -35,7 +35,7 @@ public class Between implements Expression {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return null;
     }
 

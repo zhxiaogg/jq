@@ -8,8 +8,6 @@ import com.github.zhxiaogg.jq.values.Value;
 public interface Expression extends Node<Expression> {
 
     Value eval(Record record);
-
-    String getDisplayName();
-
+    
     DataType getDataType();
 }

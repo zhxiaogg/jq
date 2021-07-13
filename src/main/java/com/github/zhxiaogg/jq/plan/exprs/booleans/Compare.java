@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-@ToString
 @EqualsAndHashCode
 public class Compare implements BooleanExpression {
     private final CompareOp op;
@@ -41,8 +40,8 @@ public class Compare implements BooleanExpression {
     }
 
     @Override
-    public String getDisplayName() {
-        return left.getDisplayName() + "_" + op.name() + "_" + right.getDisplayName();
+    public String toString() {
+        return left + "_" + op.name() + "_" + right;
     }
 
     @Override

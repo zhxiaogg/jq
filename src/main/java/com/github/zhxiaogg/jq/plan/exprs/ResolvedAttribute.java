@@ -25,7 +25,7 @@ public class ResolvedAttribute implements LeafExprNode {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return name;
     }
 }

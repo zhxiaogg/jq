@@ -20,5 +20,10 @@ public class Or extends BinaryExpression {
     protected Value evalImpl(Value l, Value r) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s OR %s", left, right);
+    }
 }
 

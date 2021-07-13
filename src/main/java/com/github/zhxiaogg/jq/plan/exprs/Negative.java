@@ -33,7 +33,7 @@ public class Negative implements Expression {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         return null;
     }
 

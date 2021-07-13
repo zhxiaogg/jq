@@ -1,9 +1,9 @@
-package com.github.zhxiaogg.jq.plan.exprs.agg;
+package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.values.Value;
-import com.github.zhxiaogg.jq.values.agg.MinAggValue;
+import com.github.zhxiaogg.jq.values.agg.MaxAggValue;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -11,24 +11,23 @@ import java.util.List;
 
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class MinAggExpr extends AggExpr {
-    public MinAggExpr(Expression child) {
+public class Avg extends AggExpr {
+    public Avg(Expression child) {
         super(child);
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new MinAggExpr(children.get(0));
+        return new Max(children.get(0));
     }
 
     @Override
     public Value eval(Record record) {
-        Value v = child.eval(record);
-        return new MinAggValue(v, getDataType());
+        throw new UnsupportedOperationException("");
     }
 
     @Override
-    public String getDisplayName() {
-        return String.format("Min(%s)", child.getDisplayName());
+    public String toString() {
+        return String.format("AVG(%s)", child);
     }
 }

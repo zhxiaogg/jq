@@ -1,6 +1,5 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
@@ -37,8 +36,8 @@ public abstract class BinaryExpression implements Expression {
     abstract protected Value evalImpl(Value l, Value r);
 
     @Override
-    public String getDisplayName() {
-        return String.format("%s + %s", left.getDisplayName(), right.getDisplayName());
+    public String toString() {
+        return String.format("%s + %s", left.toString(), right.toString());
     }
 
     @Override

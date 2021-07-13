@@ -20,4 +20,9 @@ public class And extends BinaryExpression {
     protected Value evalImpl(Value l, Value r) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s AND %s", left, right);
+    }
 }

@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.plan.exprs.agg;
+package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.DataType;
@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @EqualsAndHashCode
-@ToString
 public abstract class AggExpr implements Expression {
     protected final Expression child;
 
@@ -30,5 +29,10 @@ public abstract class AggExpr implements Expression {
     @Override
     public DataType getDataType() {
         return child.getDataType();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("AVG(%s)", child);
     }
 }

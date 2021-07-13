@@ -31,8 +31,8 @@ public class Literal implements LeafExprNode {
     }
 
     @Override
-    public String getDisplayName() {
+    public String toString() {
         // TODO: add a thread local name idx?
-        return "Literal_";
+        return String.format("Literal(%s)", value);
     }
 }

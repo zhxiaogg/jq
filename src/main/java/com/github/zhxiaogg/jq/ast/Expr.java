@@ -201,7 +201,7 @@ public interface Expr extends AstNode {
         @Override
         public Expression toExpression() {
             List<Expression> arguments = args == null ? Collections.emptyList() : args.stream().map(Expr::toExpression).collect(Collectors.toList());
-            return new FunctionCall(funcName.getName(), arguments);
+            return FunctionCall.create(funcName.getName(), arguments);
         }
     }
 }

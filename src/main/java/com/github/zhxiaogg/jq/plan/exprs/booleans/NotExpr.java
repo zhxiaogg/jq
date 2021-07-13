@@ -34,12 +34,14 @@ public class NotExpr implements Expression {
     }
 
     @Override
-    public String getDisplayName() {
-        return null;
+    public String toString() {
+        return String.format("NOT %s", expr);
     }
 
     @Override
     public DataType getDataType() {
         return null;
     }
+
+
 }
