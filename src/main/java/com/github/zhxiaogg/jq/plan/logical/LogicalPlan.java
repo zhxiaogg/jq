@@ -15,5 +15,5 @@ public interface LogicalPlan extends Node<LogicalPlan> {
 
     List<Expression> getExpressions();
 
-    List<Attribute> getAttributes(Catalog dataSource);
+    List<Attribute> outputs(Catalog dataSource);
 }

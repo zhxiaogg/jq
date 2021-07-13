@@ -44,7 +44,7 @@ public class SubQuery implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(Catalog dataSource) {
-        return subQuery.getAttributes(dataSource);
+    public List<Attribute> outputs(Catalog dataSource) {
+        return subQuery.outputs(dataSource);
     }
 }

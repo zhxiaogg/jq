@@ -32,7 +32,7 @@ public class ResolveAttributesRule implements Rule<LogicalPlan> {
                 Map<String, ResolvedAttribute> attributeMap = new HashMap<>();
                 int i = 0;
                 for (LogicalPlan child : children) {
-                    List<Attribute> attributes = child.getAttributes(dataSource);
+                    List<Attribute> attributes = child.outputs(dataSource);
                     for (Attribute attribute : attributes) {
                         attributeMap.put(attribute.getName(), ResolvedAttribute.create(attribute.getName(), attribute.getDataType(), i++));
                     }

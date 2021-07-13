@@ -7,16 +7,12 @@ import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Data
-@ToString
-@EqualsAndHashCode
 public class Filter implements LogicalPlan {
     private final BooleanExpression condition;
     private final LogicalPlan child;
@@ -48,8 +44,8 @@ public class Filter implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(Catalog dataSource) {
-        return child.getAttributes(dataSource);
+    public List<Attribute> outputs(Catalog dataSource) {
+        return child.outputs(dataSource);
     }
 
     @Override

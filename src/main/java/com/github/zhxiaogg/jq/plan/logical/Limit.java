@@ -36,7 +36,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(Catalog dataSource) {
+    public List<Attribute> outputs(Catalog dataSource) {
         return null;
     }
 

@@ -16,5 +16,4 @@ public interface LeafExprNode extends Expression {
     default Expression withChildren(List<Expression> children) {
         throw new IllegalStateException("");
     }
-
 }

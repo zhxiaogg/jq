@@ -78,7 +78,7 @@ public class Aggregate implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> getAttributes(Catalog dataSource) {
+    public List<Attribute> outputs(Catalog dataSource) {
         List<Attribute> attributes1 = groupingKeys.stream().map(expr -> new Attribute(expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
         List<Attribute> attributes2 = aggregators.stream().map(expr -> new Attribute(expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
         return ListUtils.concat(attributes1, attributes2);
