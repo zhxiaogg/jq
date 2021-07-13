@@ -5,15 +5,12 @@ import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@ToString
-@EqualsAndHashCode
 public class Limit implements LogicalPlan {
     private final int limit;
     private final LogicalPlan child;
@@ -30,12 +27,12 @@ public class Limit implements LogicalPlan {
 
     @Override
     public LogicalPlan withExpressions(List<Expression> expressions) {
-        return null;
+        throw new IllegalStateException("");
     }
 
     @Override
     public List<Expression> getExpressions() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -50,11 +47,11 @@ public class Limit implements LogicalPlan {
 
     @Override
     public List<LogicalPlan> getChildren() {
-        return null;
+        return Collections.singletonList(child);
     }
 
     @Override
     public LogicalPlan withChildren(List<LogicalPlan> children) {
-        return null;
+        return new Limit(limit, children.get(0));
     }
 }

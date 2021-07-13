@@ -47,6 +47,6 @@ public class ParserTest {
     @Test
     public void parse_function_call() {
         Select select = parser.parse("select id, sum(score) from users group by id having max(score) > 100");
-        System.out.println(select);
+        System.out.println(select.toPlanNode());
     }
 }

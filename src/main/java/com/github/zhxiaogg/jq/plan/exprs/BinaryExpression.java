@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.plan.exprs.binary;
+package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;

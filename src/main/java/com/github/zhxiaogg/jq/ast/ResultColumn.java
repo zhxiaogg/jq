@@ -1,11 +1,21 @@
 package com.github.zhxiaogg.jq.ast;
 
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.StarAttribute;
+
 public interface ResultColumn extends AstNode {
+
+    Expression toExpression();
 
     class ResultColumnStar implements ResultColumn {
         @Override
         public String toString() {
             return "*";
+        }
+
+        @Override
+        public Expression toExpression() {
+            return new StarAttribute(null);
         }
     }
 
@@ -24,6 +34,11 @@ public interface ResultColumn extends AstNode {
         public String toString() {
             return tableName + ".*";
         }
+
+        @Override
+        public Expression toExpression() {
+            return new StarAttribute(tableName);
+        }
     }
 
 
@@ -37,6 +52,11 @@ public interface ResultColumn extends AstNode {
         @Override
         public String toString() {
             return expr.toString();
+        }
+
+        @Override
+        public Expression toExpression() {
+            return expr.toExpression();
         }
     }
 

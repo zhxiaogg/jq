@@ -1,5 +1,6 @@
-package com.github.zhxiaogg.jq.plan.exprs.binary;
+package com.github.zhxiaogg.jq.plan.exprs.math;
 
+import com.github.zhxiaogg.jq.plan.exprs.BinaryExpression;
 import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.DataType;

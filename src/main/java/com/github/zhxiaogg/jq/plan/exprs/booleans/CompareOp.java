@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.plan.exprs;
+package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.utils.BinaryValueOp;
@@ -35,7 +35,20 @@ public enum CompareOp implements CompareOpImpl, BinaryValueOp<Boolean> {
         public <T extends Comparable<T>> boolean compareImpl(T left, T right) {
             return left.compareTo(right) == 0;
         }
+    },
+    NE {
+        @Override
+        public <T extends Comparable<T>> boolean compareImpl(T left, T right) {
+            return left.compareTo(right) != 0;
+        }
+    },
+    LIKE {
+        @Override
+        public <T extends Comparable<T>> boolean compareImpl(T left, T right) {
+            throw new UnsupportedOperationException("like is not supported!");
+        }
     };
+
 
     public Boolean applyWithDataType(DataType dataType, Object l, Object r) {
         switch (dataType) {

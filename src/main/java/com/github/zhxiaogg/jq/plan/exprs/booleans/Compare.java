@@ -1,5 +1,7 @@
-package com.github.zhxiaogg.jq.plan.exprs;
+package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
+import com.github.zhxiaogg.jq.plan.exprs.BooleanExpression;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.Data;
@@ -22,7 +24,6 @@ public class Compare implements BooleanExpression {
         this.left = left;
         this.right = right;
     }
-
 
     @Override
     public boolean apply(Record record) {

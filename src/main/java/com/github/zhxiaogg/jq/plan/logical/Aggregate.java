@@ -1,39 +1,29 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.schema.Attribute;
-import com.github.zhxiaogg.jq.utils.ListUtils;
-import com.github.zhxiaogg.jq.values.AggValue;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
 import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.utils.ListUtils;
+import com.github.zhxiaogg.jq.values.AggValue;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
-@ToString
-@EqualsAndHashCode
 public class Aggregate implements LogicalPlan {
     private final List<Expression> groupingKeys;
     private final List<Expression> aggregators;
     private final LogicalPlan child;
 
-    private Aggregate(List<Expression> groupingKeys, List<Expression> aggregators, LogicalPlan child) {
-        this.groupingKeys = groupingKeys;
-        this.aggregators = aggregators;
-        this.child = child;
-    }
-
     @Deprecated
     public static Aggregate create(List<String> groupingKeys, List<Expression> aggregators, LogicalPlan child) {
-        return new Aggregate(groupingKeys.stream().map(UnResolvedAttribute::new).collect(Collectors.toList()), aggregators, child);
+        return new Aggregate(groupingKeys.stream().map(k -> new UnResolvedAttribute(null, k)).collect(Collectors.toList()), aggregators, child);
     }
 
     private final Map<List<LiteralValue>, List<AggValue>> states = new HashMap<>();

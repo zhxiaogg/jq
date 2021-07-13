@@ -1,16 +1,18 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exprs.agg.SumAggExpr;
+import com.github.zhxiaogg.jq.plan.exprs.booleans.Compare;
+import com.github.zhxiaogg.jq.plan.exprs.booleans.CompareOp;
 
 import java.time.Instant;
 
 public class Expressions {
     public static SumAggExpr sum(String attribute) {
-        return new SumAggExpr(new UnResolvedAttribute(attribute));
+        return new SumAggExpr(new UnResolvedAttribute(null, attribute));
     }
 
     public static Expression attri(String attribute) {
-        return new UnResolvedAttribute(attribute);
+        return new UnResolvedAttribute(null, attribute);
     }
 
     public static BooleanExpression gt(Expression left, Expression right) {
@@ -23,7 +25,7 @@ public class Expressions {
 
 
     public static BooleanExpression gt(String left, Instant right) {
-        return new Compare(CompareOp.GT, new UnResolvedAttribute(left), Literal.create(right));
+        return new Compare(CompareOp.GT, new UnResolvedAttribute(null, left), Literal.create(right));
     }
 
     public static Expression alias(Expression inner, String name) {

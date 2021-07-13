@@ -1,5 +1,6 @@
 package com.github.zhxiaogg.jq.parser.utils;
 
+import com.github.zhxiaogg.jq.JoinType;
 import com.github.zhxiaogg.jq.antlr.SQLListener;
 import com.github.zhxiaogg.jq.antlr.SQLParser;
 import com.github.zhxiaogg.jq.ast.*;
@@ -170,18 +171,16 @@ public class SQLListenerImpl implements SQLListener {
     @Override
     public void enterJoin_operator(SQLParser.Join_operatorContext ctx) {
         boolean naturalJoin = ctx.NATURAL_() != null;
-        if (ctx.LEFT_() != null && ctx.OUTER_() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.LEFT_OUTER, naturalJoin));
-        } else if (ctx.LEFT_() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.LEFT, naturalJoin));
+       if (ctx.LEFT_() != null) {
+            builders.push(new JoinOpBuilder(JoinType.LEFT, naturalJoin));
         } else if (ctx.INNER_() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.INNER, naturalJoin));
+            builders.push(new JoinOpBuilder(JoinType.INNER, naturalJoin));
         } else if (ctx.CROSS_() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.CROSS, naturalJoin));
+            builders.push(new JoinOpBuilder(JoinType.CROSS, naturalJoin));
         } else if (ctx.JOIN_() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.LEFT, naturalJoin));
+            builders.push(new JoinOpBuilder(JoinType.LEFT, naturalJoin));
         } else if (ctx.COMMA() != null) {
-            builders.push(new JoinOpBuilder(JoinOp.JoinType.LEFT, naturalJoin));
+            builders.push(new JoinOpBuilder(JoinType.LEFT, naturalJoin));
         }
     }
 
@@ -204,7 +203,7 @@ public class SQLListenerImpl implements SQLListener {
             if ((op = ObjectUtils.firstNonNull(ctx.STAR(), ctx.DIV(), ctx.MOD(), ctx.PLUS(), ctx.MINUS())).isPresent()) {
                 builders.push(new ExprBinaryMathBuilder(op.get().getText()));
             } else if ((op = ObjectUtils.firstNonNull(ctx.LT(), ctx.LT_EQ(), ctx.GT(), ctx.GT_EQ(),
-                    ctx.ASSIGN(), ctx.EQ(), ctx.NOT_EQ1(), ctx.NOT_EQ2())).isPresent()) {
+                    ctx.ASSIGN(), ctx.EQ(), ctx.NOT_EQ1(), ctx.NOT_EQ2(), ctx.LIKE_())).isPresent()) {
                 builders.push(new ExprCompareBuilder(op.get().getText()));
             } else if (ctx.AND_() != null) {
                 builders.push(new ExprAndBuilder());
