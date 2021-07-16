@@ -4,7 +4,7 @@ import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.JoinType;
 import com.github.zhxiaogg.jq.plan.exprs.BooleanExpression;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 

@@ -1,16 +1,24 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-public class Negative implements Expression {
+@RequiredArgsConstructor
+public class Negative implements NonLeafExprNode {
     private final Expression child;
+    private final String id;
+
+    public Negative(Expression child) {
+        this(child, UUID.randomUUID().toString());
+    }
 
     @Override
     public boolean leafNode() {
@@ -24,16 +32,11 @@ public class Negative implements Expression {
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new Negative(children.get(0));
+        return new Negative(children.get(0), this.id);
     }
 
     @Override
     public Value eval(Record record) {
-        return null;
-    }
-
-    @Override
-    public String toString() {
         return null;
     }
 

@@ -10,16 +10,20 @@ import com.github.zhxiaogg.jq.values.agg.binary.PlusAggValue;
 import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PlusExpr extends BinaryExpression implements BinaryValueOp<Value> {
+    public PlusExpr(Expression left, Expression right, String id) {
+        super(left, right, id);
+    }
 
     public PlusExpr(Expression left, Expression right) {
-        super(left, right);
+        super(left, right, UUID.randomUUID().toString());
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new PlusExpr(children.get(0), children.get(1));
+        return new PlusExpr(children.get(0), children.get(1), id);
     }
 
     @Override

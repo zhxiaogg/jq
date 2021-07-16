@@ -7,7 +7,7 @@ import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.plan.exprs.Expressions;
 import com.github.zhxiaogg.jq.plan.logical.*;
-import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
@@ -63,6 +63,7 @@ public class MainTest {
         // select item_id, sum(price) as value from orders where time > "1h" having sum(price) >= 100 limit 10;
         LogicalPlan plan = createPlan();
         LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
+        System.out.println(analysedPlan);
         StreamingQuery streaming = ds.streamQuery(analysedPlan);
         RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
         System.out.println(r1);

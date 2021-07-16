@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.schema;
 
-import com.github.zhxiaogg.jq.plan.logical.interpreter.ObjectReader;
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;

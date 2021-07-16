@@ -11,15 +11,21 @@ import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.binary.DivAggValue;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DivExpr extends BinaryExpression implements BinaryValueOp<Value> {
+
+    public DivExpr(Expression left, Expression right, String id) {
+        super(left, right, id);
+    }
+
     public DivExpr(Expression left, Expression right) {
-        super(left, right);
+        this(left, right, UUID.randomUUID().toString());
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new DivExpr(children.get(0), children.get(1));
+        return new DivExpr(children.get(0), children.get(1), id);
     }
 
     @Override

@@ -1,21 +1,27 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-@ToString
-@EqualsAndHashCode
-public class Alias implements Expression {
+@RequiredArgsConstructor
+public class Alias implements NonLeafExprNode {
     private final Expression inner;
     private final String name;
+    private final String id;
+
+    public Alias(Expression inner, String name) {
+        this(inner, name, UUID.randomUUID().toString());
+    }
 
     @Override
     public Value eval(Record record) {
@@ -24,7 +30,9 @@ public class Alias implements Expression {
 
     @Override
     public String toString() {
+        // TODO: fix this
         return name;
+        // return String.format("%s_as_%s", inner, name);
     }
 
     @Override
@@ -44,6 +52,6 @@ public class Alias implements Expression {
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new Alias(children.get(0), name);
+        return new Alias(children.get(0), name, id);
     }
 }

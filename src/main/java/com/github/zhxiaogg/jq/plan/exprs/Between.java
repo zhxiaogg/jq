@@ -1,18 +1,26 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-public class Between implements Expression {
+@RequiredArgsConstructor
+public class Between implements NonLeafExprNode {
     private final Expression target;
     private final Expression left;
     private final Expression right;
+    private final String id;
+
+    public Between(Expression target, Expression left, Expression right) {
+        this(target, left, right, UUID.randomUUID().toString());
+    }
 
     @Override
     public boolean leafNode() {
@@ -26,7 +34,7 @@ public class Between implements Expression {
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new Between(children.get(0), children.get(1), children.get(2));
+        return new Between(children.get(0), children.get(1), children.get(2), id);
     }
 
     @Override

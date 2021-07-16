@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.plan.logical.interpreter;
+package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
@@ -15,5 +15,9 @@ public class Record {
 
     public static Record create(List<Value> values) {
         return new Record(values);
+    }
+
+    public Value indexOf(int ordinal) {
+        return values.get(ordinal);
     }
 }

@@ -4,17 +4,25 @@ import com.github.zhxiaogg.jq.plan.exprs.aggregators.Avg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.Max;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.Min;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.Sum;
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
-public class FunctionCall implements Expression {
+@RequiredArgsConstructor
+public class FunctionCall implements NonLeafExprNode {
     private final String functionName;
     private final List<Expression> arguments;
+    private final String id;
+
+    public FunctionCall(String functionName, List<Expression> arguments) {
+        this(functionName, arguments, UUID.randomUUID().toString());
+    }
 
     public static Expression create(String functionName, List<Expression> arguments) {
         switch (functionName.toUpperCase()) {
@@ -32,27 +40,17 @@ public class FunctionCall implements Expression {
     }
 
     @Override
-    public boolean leafNode() {
-        return false;
-    }
-
-    @Override
     public List<Expression> getChildren() {
         return arguments;
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new FunctionCall(functionName,children);
+        return new FunctionCall(functionName, children, id);
     }
 
     @Override
     public Value eval(Record record) {
-        return null;
-    }
-
-    @Override
-    public String toString() {
         return null;
     }
 

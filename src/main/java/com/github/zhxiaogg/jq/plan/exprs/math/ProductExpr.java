@@ -10,15 +10,20 @@ import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.binary.ProductAggValue;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ProductExpr extends BinaryExpression implements BinaryValueOp<Value> {
+    public ProductExpr(Expression left, Expression right, String id) {
+        super(left, right, id);
+    }
+
     public ProductExpr(Expression left, Expression right) {
-        super(left, right);
+        super(left, right, UUID.randomUUID().toString());
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new ProductExpr(children.get(0), children.get(1));
+        return new ProductExpr(children.get(0), children.get(1), id);
     }
 
     @Override

@@ -5,10 +5,15 @@ import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Or extends BinaryExpression {
+    public Or(Expression left, Expression right, String id) {
+        super(left, right, id);
+    }
+
     public Or(Expression left, Expression right) {
-        super(left, right);
+        super(left, right, UUID.randomUUID().toString());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq;
 
-import com.github.zhxiaogg.jq.plan.logical.interpreter.Record;
-import com.github.zhxiaogg.jq.plan.logical.interpreter.RecordBag;
+import com.github.zhxiaogg.jq.plan.exec.Record;
+import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.schema.Schema;
