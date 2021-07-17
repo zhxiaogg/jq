@@ -9,7 +9,6 @@ import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 import java.util.Optional;
 
 public class ResolveAttributesRule implements Rule<LogicalPlan> {

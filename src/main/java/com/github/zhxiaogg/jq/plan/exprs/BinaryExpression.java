@@ -6,7 +6,6 @@ import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class BinaryExpression implements NonLeafExprNode {
     protected final Expression left;

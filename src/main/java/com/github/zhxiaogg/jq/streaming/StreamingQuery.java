@@ -1,9 +1,9 @@
 package com.github.zhxiaogg.jq.streaming;
 
-import com.github.zhxiaogg.jq.Relation;
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.Relation;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
+import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 
 import java.util.Optional;
 

@@ -4,7 +4,7 @@ import com.github.zhxiaogg.jq.ast.UnaryOp;
 import lombok.Data;
 
 @Data
-class UnaryOpBuilder implements  AstBuilder<UnaryOp> {
+class UnaryOpBuilder implements AstBuilder<UnaryOp> {
     private final String op;
 
     @Override

@@ -27,7 +27,7 @@ public interface TableOrSubQuery extends AstNode {
         private final Select subQuery;
         private final TableAlias alias;
 
-        public  LogicalPlan toPlanNode() {
+        public LogicalPlan toPlanNode() {
             LogicalPlan logicalPlan = getSubQuery().toPlanNode();
             // TODO: use alias
             Optional<String> alias = Optional.of(getAlias()).map(TableAlias::getName);

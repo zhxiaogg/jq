@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.parser.utils;
 
-import com.github.zhxiaogg.jq.ast.JoinOp;
 import com.github.zhxiaogg.jq.JoinType;
+import com.github.zhxiaogg.jq.ast.JoinOp;
 import lombok.Data;
 
 @Data

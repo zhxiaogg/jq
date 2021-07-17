@@ -171,7 +171,7 @@ public class SQLListenerImpl implements SQLListener {
     @Override
     public void enterJoin_operator(SQLParser.Join_operatorContext ctx) {
         boolean naturalJoin = ctx.NATURAL_() != null;
-       if (ctx.LEFT_() != null) {
+        if (ctx.LEFT_() != null) {
             builders.push(new JoinOpBuilder(JoinType.LEFT, naturalJoin));
         } else if (ctx.INNER_() != null) {
             builders.push(new JoinOpBuilder(JoinType.INNER, naturalJoin));

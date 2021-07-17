@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Add {@link Cast} wherever data type casting is needed.
- *
+ * <p>
  * Note that a later stage in the optimizer is supposed to be responsible for finding the data type inconsistency,
  * so it's not a MUST for the implementation to perform all the cast.
  *

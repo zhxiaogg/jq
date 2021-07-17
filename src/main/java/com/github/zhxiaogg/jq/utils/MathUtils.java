@@ -1,16 +1,16 @@
 package com.github.zhxiaogg.jq.utils;
 
-public final  class MathUtils {
+public final class MathUtils {
     public static double doubleSum(Object left, Object right) {
         return ((double) left) + ((double) right);
     }
 
     public static double doubleMin(Object left, Object right) {
-        return Math.min(((double) left) , ((double) right));
+        return Math.min(((double) left), ((double) right));
     }
 
     public static double doubleMax(Object left, Object right) {
-        return Math.min(((double) left) , ((double) right));
+        return Math.min(((double) left), ((double) right));
     }
 
 

@@ -5,7 +5,6 @@ import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import lombok.Data;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface FromTable extends AstNode {
 

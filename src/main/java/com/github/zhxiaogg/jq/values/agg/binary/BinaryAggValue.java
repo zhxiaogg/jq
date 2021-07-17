@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.values.agg.binary;
 
-import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 import com.github.zhxiaogg.jq.utils.Requires;
 import com.github.zhxiaogg.jq.values.AggValue;
 
