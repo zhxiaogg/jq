@@ -8,7 +8,6 @@ import lombok.Data;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.zhxiaogg.jq.utils.Requires.require;
@@ -48,5 +47,10 @@ public class Cast implements NonLeafExprNode {
         } else {
             throw new IllegalStateException("unsupported cast!");
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s as %s)", child, dataType);
     }
 }
