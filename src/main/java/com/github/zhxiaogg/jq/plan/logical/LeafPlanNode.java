@@ -12,7 +12,7 @@ public interface LeafPlanNode extends LogicalPlan {
     }
 
     default List<Expression> getExpressions() {
-        throw new IllegalStateException();
+        return Collections.emptyList();
     }
 
     default boolean leafNode() {

@@ -2,6 +2,7 @@ package com.github.zhxiaogg.jq.plan.exprs.math;
 
 import com.github.zhxiaogg.jq.plan.exprs.BinaryExpression;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.List;
@@ -24,5 +25,10 @@ public class Mod extends BinaryExpression {
     @Override
     protected Value evalImpl(Value l, Value r) {
         return null;
+    }
+
+    @Override
+    public DataType getDataType() {
+        return left.getDataType();
     }
 }

@@ -3,6 +3,7 @@ package com.github.zhxiaogg.jq;
 
 import com.github.zhxiaogg.jq.analyzer.Analyser;
 import com.github.zhxiaogg.jq.analyzer.Batch;
+import com.github.zhxiaogg.jq.analyzer.CastDataTypesRule;
 import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.plan.exprs.Expressions;
@@ -50,7 +51,7 @@ public class MainTest {
         return new Analyser() {
             @Override
             public List<Batch> getBatches() {
-                return Arrays.asList(new Batch(Arrays.asList(new ResolveAttributesRule(dataSource))));
+                return Arrays.asList(new Batch(Arrays.asList(new ResolveAttributesRule(dataSource), new CastDataTypesRule())));
             }
         };
     }

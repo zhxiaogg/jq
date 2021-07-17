@@ -45,5 +45,4 @@ public class Not implements NonLeafExprNode, BooleanExpression {
     public String toString() {
         return String.format("NOT %s", expr);
     }
-
 }

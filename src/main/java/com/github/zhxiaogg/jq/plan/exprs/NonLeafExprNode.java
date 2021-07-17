@@ -1,6 +1,7 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
 public interface NonLeafExprNode extends Expression {
+
     @Override
     default boolean leafNode() {
         return false;

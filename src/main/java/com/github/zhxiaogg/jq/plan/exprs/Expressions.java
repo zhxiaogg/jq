@@ -8,6 +8,7 @@ import com.github.zhxiaogg.jq.plan.exprs.literals.Literal;
 
 import java.time.Instant;
 
+@Deprecated
 public class Expressions {
     public static SumAgg sum(String attribute) {
         return new SumAgg(new UnResolvedAttribute(null, attribute));

@@ -6,6 +6,7 @@ import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BinaryExpression implements NonLeafExprNode {
     protected final Expression left;
@@ -44,14 +45,6 @@ public abstract class BinaryExpression implements NonLeafExprNode {
 
     @Override
     public DataType getDataType() {
-        if (left.getDataType() == right.getDataType()) {
-            return left.getDataType();
-        } else if (left.getDataType().canCastTo(right.getDataType())) {
-            return right.getDataType();
-        } else if (right.getDataType().canCastTo(left.getDataType())) {
-            return left.getDataType();
-        } else {
-            throw new IllegalArgumentException("invalid children data types.");
-        }
+        return left.getDataType();
     }
 }
