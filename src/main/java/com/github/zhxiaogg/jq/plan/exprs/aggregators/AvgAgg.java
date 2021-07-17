@@ -3,8 +3,9 @@ package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.Literal;
+import com.github.zhxiaogg.jq.plan.exprs.literals.Literal;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Div;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
 import com.github.zhxiaogg.jq.schema.Attribute;
@@ -50,7 +51,7 @@ public class AvgAgg extends AggExpr {
             ResolvedAttribute sumInput = new ResolvedAttribute("sum", child.getDataType(), 0);
             ResolvedAttribute countInput = new ResolvedAttribute("count", DataType.Int, 1);
             this.sum = new Plus(sumInput, child);
-            this.count = new Plus(countInput, new Literal(1, DataType.Int));
+            this.count = new Plus(countInput, new LiteralImpl(1, DataType.Int));
             this.evaluate = new Div(sumInput, countInput);
         }
 

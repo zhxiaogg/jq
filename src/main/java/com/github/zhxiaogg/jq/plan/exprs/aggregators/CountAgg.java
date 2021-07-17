@@ -3,8 +3,9 @@ package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.Literal;
+import com.github.zhxiaogg.jq.plan.exprs.literals.Literal;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
@@ -23,6 +24,10 @@ public class CountAgg extends AggExpr {
         super(child, id, new CountAggFunction());
     }
 
+    @Override
+    public DataType getDataType() {
+        return DataType.Int;
+    }
 
     @Override
     public Expression withChildren(List<Expression> children) {
@@ -36,7 +41,7 @@ public class CountAgg extends AggExpr {
 
     private static class CountAggFunction implements AggregateFunction {
         private final Expression evaluate = new ResolvedAttribute("count", DataType.Int, 0);
-        private final Expression count = new Plus(evaluate, new Literal(0, DataType.Int));
+        private final Expression count = new Plus(evaluate, new LiteralImpl(1, DataType.Int));
 
         @Override
         public List<Expression> updateExpressions() {

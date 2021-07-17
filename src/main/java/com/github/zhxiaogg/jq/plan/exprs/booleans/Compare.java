@@ -1,9 +1,8 @@
 package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
-import com.github.zhxiaogg.jq.plan.exprs.BooleanExpression;
-import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -13,12 +12,11 @@ import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
-public class Compare implements BooleanExpression {
+public class Compare implements NonLeafExprNode, BooleanExpression {
     private final CompareOp op;
     private final Expression left;
     private final Expression right;
     private final String id;
-
 
     public Compare(CompareOp op, Expression left, Expression right) {
         this(op, left, right, UUID.randomUUID().toString());
@@ -42,10 +40,5 @@ public class Compare implements BooleanExpression {
     @Override
     public String toString() {
         return left + "_" + op.name() + "_" + right;
-    }
-
-    @Override
-    public DataType getDataType() {
-        return DataType.Boolean;
     }
 }

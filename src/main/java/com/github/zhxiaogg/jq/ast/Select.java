@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.ast;
 
-import com.github.zhxiaogg.jq.plan.exprs.BooleanExpression;
+import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.logical.Aggregate;
 import com.github.zhxiaogg.jq.plan.logical.Filter;

@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.ast;
 
 import com.github.zhxiaogg.jq.JoinType;
-import com.github.zhxiaogg.jq.plan.exprs.BooleanExpression;
+import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import lombok.Data;
 

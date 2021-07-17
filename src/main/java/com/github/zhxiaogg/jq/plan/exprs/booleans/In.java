@@ -1,9 +1,9 @@
-package com.github.zhxiaogg.jq.plan.exprs;
+package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
-import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
+import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
-public class In implements NonLeafExprNode {
+public class In implements NonLeafExprNode, BooleanExpression {
     private final Expression target;
     private final List<Expression> values;
     private final LogicalPlan subQuery;
@@ -22,11 +22,6 @@ public class In implements NonLeafExprNode {
 
     public In(Expression target, List<Expression> values, LogicalPlan subQuery) {
         this(target, values, subQuery, UUID.randomUUID().toString());
-    }
-
-    @Override
-    public boolean leafNode() {
-        return false;
     }
 
     @Override
@@ -51,12 +46,7 @@ public class In implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        return null;
-    }
-
-    @Override
-    public DataType getDataType() {
-        return DataType.Boolean;
+    public boolean apply(Record record) {
+        return false;
     }
 }

@@ -1,8 +1,8 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 

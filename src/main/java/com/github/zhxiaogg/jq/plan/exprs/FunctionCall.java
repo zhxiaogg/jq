@@ -1,10 +1,10 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AvgAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MinAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
-import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.github.zhxiaogg.jq.utils.Requires.require;
 
 @Data
 @RequiredArgsConstructor
@@ -29,12 +31,19 @@ public class FunctionCall implements NonLeafExprNode {
             case "SUM":
                 return new SumAgg(arguments.get(0));
             case "MAX":
-                if(arguments.size() > 1) {
-
+                require(arguments.size() > 0, "MAX functions requires at least one argument!");
+                if (arguments.size() > 1) {
+                    return new Max(arguments);
+                } else {
+                    return new MaxAgg(arguments.get(0));
                 }
-                return new MaxAgg(arguments.get(0));
             case "MIN":
-                return new MinAgg(arguments.get(0));
+                require(arguments.size() > 0, "MIN functions requires at least one argument!");
+                if (arguments.size() > 1) {
+                    return new Min(arguments);
+                } else {
+                    return new MinAgg(arguments.get(0));
+                }
             case "AVG":
                 return new AvgAgg(arguments.get(0));
             default:

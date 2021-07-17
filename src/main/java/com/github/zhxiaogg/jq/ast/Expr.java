@@ -1,7 +1,12 @@
 package com.github.zhxiaogg.jq.ast;
 
-import com.github.zhxiaogg.jq.plan.exprs.*;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.FunctionCall;
+import com.github.zhxiaogg.jq.plan.exprs.Negative;
+import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.*;
+import com.github.zhxiaogg.jq.plan.exprs.literals.BooleanLiteral;
+import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.*;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.DataType;
@@ -22,7 +27,12 @@ public interface Expr extends AstNode {
 
         @Override
         public Expression toExpression() {
-            return new com.github.zhxiaogg.jq.plan.exprs.Literal(literal.getValue(), DataType.UnKnown);
+            Object value = literal.getValue();
+            if (value instanceof Boolean) {
+                return new BooleanLiteral((Boolean) value);
+            } else {
+                return new LiteralImpl(literal.getValue(), DataType.UnKnown);
+            }
         }
     }
 
@@ -44,7 +54,7 @@ public interface Expr extends AstNode {
 
         @Override
         public Expression toExpression() {
-            return new NotExpr(expr.toExpression());
+            return new Not(expr.toExpression());
         }
     }
 
@@ -59,13 +69,14 @@ public interface Expr extends AstNode {
             Expression result;
             switch (op.getOp().toUpperCase()) {
                 case "NOT":
-                    result = new NotExpr(expr.toExpression());
+                    result = new Not(expr.toExpression());
                     break;
                 case "+":
                     result = expr.toExpression();
                     break;
                 case "-":
                     result = new Negative(expr.toExpression());
+                    break;
                 default:
                     throw new IllegalArgumentException("unsupported unary operation: " + op.getOp());
             }

@@ -42,6 +42,6 @@ public class Negative implements NonLeafExprNode {
 
     @Override
     public DataType getDataType() {
-        return null;
+        return child.getDataType();
     }
 }

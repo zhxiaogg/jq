@@ -29,6 +29,6 @@ public class StarAttribute implements LeafExprNode {
 
     @Override
     public DataType getDataType() {
-        return null;
+        return DataType.UnKnown;
     }
 }

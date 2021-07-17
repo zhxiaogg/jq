@@ -1,13 +1,13 @@
 package com.github.zhxiaogg.jq.plan.exprs.math;
 
 import com.github.zhxiaogg.jq.plan.exprs.BinaryExpression;
-import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 import com.github.zhxiaogg.jq.values.AggValue;
 import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.agg.binary.PlusAggValue;
 import com.github.zhxiaogg.jq.values.Value;
+import com.github.zhxiaogg.jq.values.agg.binary.PlusAggValue;
 
 import java.util.List;
 import java.util.UUID;

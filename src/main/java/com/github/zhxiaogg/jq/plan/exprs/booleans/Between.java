@@ -1,8 +1,8 @@
-package com.github.zhxiaogg.jq.plan.exprs;
+package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
+import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
-public class Between implements NonLeafExprNode {
+public class Between implements NonLeafExprNode, BooleanExpression {
     private final Expression target;
     private final Expression left;
     private final Expression right;
@@ -20,11 +20,6 @@ public class Between implements NonLeafExprNode {
 
     public Between(Expression target, Expression left, Expression right) {
         this(target, left, right, UUID.randomUUID().toString());
-    }
-
-    @Override
-    public boolean leafNode() {
-        return false;
     }
 
     @Override
@@ -38,17 +33,12 @@ public class Between implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        return null;
+    public boolean apply(Record record) {
+        return false;
     }
 
     @Override
     public String toString() {
         return null;
-    }
-
-    @Override
-    public DataType getDataType() {
-        return DataType.Boolean;
     }
 }
