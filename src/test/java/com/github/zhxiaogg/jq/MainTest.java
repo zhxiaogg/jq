@@ -6,9 +6,12 @@ import com.github.zhxiaogg.jq.analyzer.Batch;
 import com.github.zhxiaogg.jq.analyzer.CastDataTypesRule;
 import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.annotations.Field;
-import com.github.zhxiaogg.jq.plan.exprs.Expressions;
-import com.github.zhxiaogg.jq.plan.logical.*;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
+import com.github.zhxiaogg.jq.plan.exprs.Expressions;
+import com.github.zhxiaogg.jq.plan.logical.Aggregate;
+import com.github.zhxiaogg.jq.plan.logical.Filter;
+import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.plan.logical.Scan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
@@ -77,7 +80,7 @@ public class MainTest {
         Scan scan = Scan.from("orders");
         Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
         Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.sum("price"), "value")), filter);
-        return new Having(Expressions.gte(Expressions.attri("value"), 200), aggregate);
+        return new Filter(Expressions.gte(Expressions.attri("value"), 200), aggregate);
     }
 
 }
