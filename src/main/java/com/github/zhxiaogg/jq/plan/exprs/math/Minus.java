@@ -12,18 +12,18 @@ import com.github.zhxiaogg.jq.values.Value;
 import java.util.List;
 import java.util.UUID;
 
-public class MinusExpr extends BinaryExpression implements BinaryValueOp<Value> {
-    public MinusExpr(Expression left, Expression right, String id) {
+public class Minus extends BinaryExpression implements BinaryValueOp<Value> {
+    public Minus(Expression left, Expression right, String id) {
         super(left, right, id);
     }
 
-    public MinusExpr(Expression left, Expression right) {
+    public Minus(Expression left, Expression right) {
         super(left, right, UUID.randomUUID().toString());
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new MinusExpr(children.get(0), children.get(1), id);
+        return new Minus(children.get(0), children.get(1), id);
     }
 
     @Override

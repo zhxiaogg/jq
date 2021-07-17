@@ -4,20 +4,20 @@ import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @EqualsAndHashCode
 public abstract class AggExpr implements NonLeafExprNode {
     protected final Expression child;
     protected final String id;
+    protected final AggregateFunction aggregateFunction;
 
-    public AggExpr(Expression child, String id) {
+    public AggExpr(Expression child, String id, AggregateFunction aggregateFunction) {
         this.child = child;
         this.id = id;
+        this.aggregateFunction = aggregateFunction;
     }
 
     @Override

@@ -5,8 +5,6 @@ import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.time.Instant;
 import java.util.UUID;

@@ -1,14 +1,14 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.exprs.aggregators.Sum;
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.Compare;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.CompareOp;
 
 import java.time.Instant;
 
 public class Expressions {
-    public static Sum sum(String attribute) {
-        return new Sum(new UnResolvedAttribute(null, attribute));
+    public static SumAgg sum(String attribute) {
+        return new SumAgg(new UnResolvedAttribute(null, attribute));
     }
 
     public static Expression attri(String attribute) {

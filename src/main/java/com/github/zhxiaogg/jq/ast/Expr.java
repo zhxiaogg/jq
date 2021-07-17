@@ -84,19 +84,19 @@ public interface Expr extends AstNode {
             Expression result;
             switch (op) {
                 case "*":
-                    result = new ProductExpr(left.toExpression(), right.toExpression());
+                    result = new Product(left.toExpression(), right.toExpression());
                     break;
                 case "/":
-                    result = new DivExpr(left.toExpression(), right.toExpression());
+                    result = new Div(left.toExpression(), right.toExpression());
                     break;
                 case "%":
-                    result = new ModExpr(left.toExpression(), right.toExpression());
+                    result = new Mod(left.toExpression(), right.toExpression());
                     break;
                 case "-":
-                    result = new MinusExpr(left.toExpression(), right.toExpression());
+                    result = new Minus(left.toExpression(), right.toExpression());
                     break;
                 case "+":
-                    result = new PlusExpr(left.toExpression(), right.toExpression());
+                    result = new Plus(left.toExpression(), right.toExpression());
                     break;
                 default:
                     throw new IllegalArgumentException("unsupported math opeartion: " + op);

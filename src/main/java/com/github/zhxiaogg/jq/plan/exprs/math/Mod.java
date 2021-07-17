@@ -7,18 +7,18 @@ import com.github.zhxiaogg.jq.values.Value;
 import java.util.List;
 import java.util.UUID;
 
-public class ModExpr extends BinaryExpression {
-    public ModExpr(Expression left, Expression right, String id) {
+public class Mod extends BinaryExpression {
+    public Mod(Expression left, Expression right, String id) {
         super(left, right, id);
     }
 
-    public ModExpr(Expression left, Expression right) {
+    public Mod(Expression left, Expression right) {
         super(left, right, UUID.randomUUID().toString());
     }
 
     @Override
     public Expression withChildren(List<Expression> children) {
-        return new ModExpr(children.get(0), children.get(1), id);
+        return new Mod(children.get(0), children.get(1), id);
     }
 
     @Override

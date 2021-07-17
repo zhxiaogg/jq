@@ -63,7 +63,7 @@ public class Aggregate implements LogicalPlan {
             newGroupingKeys.add(expressions.get(i));
         }
         List<Expression> newAggregators = new ArrayList<>(groupingKeys.size());
-        for (int i = 0; i < groupingKeys.size(); i++) {
+        for (int i = 0; i < aggregators.size(); i++) {
             newAggregators.add(expressions.get(i + groupingKeys.size()));
         }
         return new Aggregate(newGroupingKeys, newAggregators, child);

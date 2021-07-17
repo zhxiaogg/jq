@@ -1,9 +1,9 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
-import com.github.zhxiaogg.jq.plan.exprs.aggregators.Avg;
-import com.github.zhxiaogg.jq.plan.exprs.aggregators.Max;
-import com.github.zhxiaogg.jq.plan.exprs.aggregators.Min;
-import com.github.zhxiaogg.jq.plan.exprs.aggregators.Sum;
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.AvgAgg;
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.MinAgg;
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.Value;
@@ -27,13 +27,16 @@ public class FunctionCall implements NonLeafExprNode {
     public static Expression create(String functionName, List<Expression> arguments) {
         switch (functionName.toUpperCase()) {
             case "SUM":
-                return new Sum(arguments.get(0));
+                return new SumAgg(arguments.get(0));
             case "MAX":
-                return new Max(arguments.get(0));
+                if(arguments.size() > 1) {
+
+                }
+                return new MaxAgg(arguments.get(0));
             case "MIN":
-                return new Min(arguments.get(0));
+                return new MinAgg(arguments.get(0));
             case "AVG":
-                return new Avg(arguments.get(0));
+                return new AvgAgg(arguments.get(0));
             default:
                 return new FunctionCall(functionName, arguments);
         }
