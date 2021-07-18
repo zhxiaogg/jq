@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-public class SumAgg extends AggExpr {
+public class SumAgg extends AggExpression {
     public SumAgg(Expression child, String id) {
         super(child, id, new SumAggFunction(child));
     }

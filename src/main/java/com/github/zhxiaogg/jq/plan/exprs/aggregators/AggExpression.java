@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @EqualsAndHashCode
-public abstract class AggExpr implements NonLeafExprNode {
+public abstract class AggExpression implements NonLeafExprNode {
     protected final Expression child;
     protected final String id;
     protected final AggregateFunction aggregateFunction;
 
-    public AggExpr(Expression child, String id, AggregateFunction aggregateFunction) {
+    public AggExpression(Expression child, String id, AggregateFunction aggregateFunction) {
         this.child = child;
         this.id = id;
         this.aggregateFunction = aggregateFunction;

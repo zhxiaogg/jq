@@ -9,17 +9,17 @@ import java.util.Optional;
 
 public class StreamingQuery {
     private final LogicalPlan plan;
-    private final Catalog dataSource;
+    private final Catalog catalog;
 
-    public StreamingQuery(LogicalPlan plan, Catalog dataSource) {
+    public StreamingQuery(LogicalPlan plan, Catalog catalog) {
         this.plan = plan;
-        this.dataSource = dataSource;
+        this.catalog = catalog;
     }
 
     public RecordBag fire(Object data) {
-        Optional<Relation> relation = dataSource.relationOf(data.getClass());
+        Optional<Relation> relation = catalog.relationOf(data.getClass());
         if (!relation.isPresent()) throw new IllegalArgumentException("dataset not found for input data.");
         relation.get().add(data);
-        return plan.partialEval(dataSource);
+        return plan.partialEval(catalog);
     }
 }

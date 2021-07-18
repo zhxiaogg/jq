@@ -21,8 +21,8 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
-        return RecordBag.of(child.partialEval(dataSource).getRecords().stream().limit(limit).collect(Collectors.toList()));
+    public RecordBag partialEval(Catalog catalog) {
+        return RecordBag.of(child.partialEval(catalog).getRecords().stream().limit(limit).collect(Collectors.toList()));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
+    public List<Attribute> outputs(Catalog catalog) {
         return null;
     }
 

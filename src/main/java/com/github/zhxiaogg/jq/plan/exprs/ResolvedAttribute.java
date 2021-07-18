@@ -14,6 +14,7 @@ public class ResolvedAttribute implements LeafExprNode {
     private final String id;
     private final String name;
     private final DataType dataType;
+    @Deprecated
     private final int ordinal;
 
     public ResolvedAttribute(String name, DataType dataType, int ordinal) {

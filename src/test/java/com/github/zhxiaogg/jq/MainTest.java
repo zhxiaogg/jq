@@ -1,11 +1,10 @@
 package com.github.zhxiaogg.jq;
 
 
-import com.github.zhxiaogg.jq.analyzer.Analyser;
-import com.github.zhxiaogg.jq.analyzer.Batch;
-import com.github.zhxiaogg.jq.analyzer.CastDataTypesRule;
-import com.github.zhxiaogg.jq.analyzer.ResolveAttributesRule;
+import com.github.zhxiaogg.jq.analyzer.*;
 import com.github.zhxiaogg.jq.annotations.Field;
+import com.github.zhxiaogg.jq.ast.Select;
+import com.github.zhxiaogg.jq.parser.Parser;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expressions;
 import com.github.zhxiaogg.jq.plan.logical.Aggregate;
@@ -50,11 +49,17 @@ public class MainTest {
         }
     }
 
-    Analyser getAnalyser(Catalog dataSource) {
+    Analyser getAnalyser(Catalog catalog) {
         return new Analyser() {
             @Override
             public List<Batch> getBatches() {
-                return Arrays.asList(new Batch(Arrays.asList(new ResolveAttributesRule(dataSource), new CastDataTypesRule())));
+                return Arrays.asList(
+                        new Batch(Arrays.asList(
+                                new ResolveAttributesRule(catalog),
+                                new CastDataTypesRule(),
+                                new ResolveHavingCondition(catalog)
+                        ))
+                );
             }
         };
     }
@@ -77,10 +82,14 @@ public class MainTest {
 
     // select item_id, sum(price) as value from orders where time > "1h" having sum(price) > 100 limit 10;
     private LogicalPlan createPlan() {
+//        Parser parser = new Parser();
+//        Select select = parser.parse("select item_id, sum(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having max(price) >= 100");
+//        LogicalPlan plan = select.toPlanNode();
+
         Scan scan = Scan.from("orders");
         Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
-        Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.sum("price"), "value")), filter);
-        return new Filter(Expressions.gte(Expressions.attri("value"), 200), aggregate);
+        Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.max("price"), "value")), filter);
+        return new Filter(Expressions.gt(Expressions.sum("price"), 100), aggregate);
     }
 
 }

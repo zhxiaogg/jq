@@ -7,6 +7,7 @@ import com.github.zhxiaogg.jq.plan.exprs.Max;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.MaxAggValue;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-public class MaxAgg extends AggExpr {
+public class MaxAgg extends AggExpression {
     public MaxAgg(Expression child, String id) {
         super(child, id, new MaxAggFunction(child));
     }
@@ -33,8 +34,8 @@ public class MaxAgg extends AggExpr {
 
     @Override
     public Value eval(Record record) {
-        Value v = child.eval(record);
-        return new MaxAggValue(v, getDataType());
+        LiteralValue v = (LiteralValue) child.eval(record);
+        return new MaxAggValue(v.getValue(), getDataType());
     }
 
     @Override

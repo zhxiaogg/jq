@@ -19,8 +19,8 @@ public class Scan implements LeafPlanNode {
     }
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
-        Optional<Relation> dataSet = dataSource.relationOf(relation);
+    public RecordBag partialEval(Catalog catalog) {
+        Optional<Relation> dataSet = catalog.relationOf(relation);
         if (dataSet.isPresent()) {
             return dataSet.get().records();
         } else {
@@ -29,8 +29,8 @@ public class Scan implements LeafPlanNode {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
-        Optional<Relation> relation = dataSource.relationOf(this.relation);
+    public List<Attribute> outputs(Catalog catalog) {
+        Optional<Relation> relation = catalog.relationOf(this.relation);
         if (relation.isPresent()) {
             return Collections.unmodifiableList(relation.get().getSchema().getAttributes());
         } else {

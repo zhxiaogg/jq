@@ -35,7 +35,7 @@ public class Join implements LogicalPlan {
     }
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
+    public RecordBag partialEval(Catalog catalog) {
         return null;
     }
 
@@ -50,7 +50,7 @@ public class Join implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
+    public List<Attribute> outputs(Catalog catalog) {
         return null;
     }
 }

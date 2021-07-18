@@ -13,13 +13,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public interface LogicalPlan extends Node<LogicalPlan> {
-    RecordBag partialEval(Catalog dataSource);
+    RecordBag partialEval(Catalog catalog);
 
     LogicalPlan withExpressions(List<Expression> expressions);
 
     List<Expression> getExpressions();
 
-    List<Attribute> outputs(Catalog dataSource);
+    List<Attribute> outputs(Catalog catalog);
 
     default Optional<LogicalPlan> transformExpressionsUp(Rule<Expression> rule) {
         List<Optional<Expression>> optExpressions = getExpressions().stream().map(expr -> expr.transformUp(rule)).collect(Collectors.toList());

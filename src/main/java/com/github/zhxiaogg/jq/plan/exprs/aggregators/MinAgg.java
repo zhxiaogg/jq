@@ -7,6 +7,7 @@ import com.github.zhxiaogg.jq.plan.exprs.Min;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.MinAggValue;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-public class MinAgg extends AggExpr {
+public class MinAgg extends AggExpression {
     public MinAgg(Expression child, String id) {
         super(child, id, new MinAggFunction(child));
     }
@@ -33,8 +34,8 @@ public class MinAgg extends AggExpr {
 
     @Override
     public Value eval(Record record) {
-        Value v = child.eval(record);
-        return new MinAggValue(v, getDataType());
+        LiteralValue v = (LiteralValue) child.eval(record);
+        return new MinAggValue(v.getValue(), getDataType());
     }
 
     @Override

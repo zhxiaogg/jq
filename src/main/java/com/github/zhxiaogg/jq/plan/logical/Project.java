@@ -1,6 +1,9 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.Projection;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.Attribute;
@@ -9,6 +12,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class Project implements LogicalPlan {
@@ -31,8 +35,12 @@ public class Project implements LogicalPlan {
     }
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
-        return null;
+    public RecordBag partialEval(Catalog catalog) {
+        RecordBag inputs = child.partialEval(catalog);
+        Projection projection = Projection.create(projections, new AttributeSet(child.outputs(catalog).toArray(new Attribute[0])));
+        List<Record> outputs = inputs.getRecords().stream().map(projection::apply).collect(Collectors.toList());
+        return new RecordBag(outputs);
+
     }
 
     @Override
@@ -46,7 +54,7 @@ public class Project implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
-        return null;
+    public List<Attribute> outputs(Catalog catalog) {
+        return projections.stream().map(Expression::toAttribute).collect(Collectors.toList());
     }
 }

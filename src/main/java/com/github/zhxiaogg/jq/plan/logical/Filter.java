@@ -22,8 +22,8 @@ public class Filter implements LogicalPlan {
     }
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
-        RecordBag recordBag = child.partialEval(dataSource);
+    public RecordBag partialEval(Catalog catalog) {
+        RecordBag recordBag = child.partialEval(catalog);
         List<Record> records = new ArrayList<>(recordBag.getRecords().size());
         for (Record r : recordBag.getRecords()) {
             if (condition.apply(r)) {
@@ -44,8 +44,8 @@ public class Filter implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
-        return child.outputs(dataSource);
+    public List<Attribute> outputs(Catalog catalog) {
+        return child.outputs(catalog);
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-public class AvgAgg extends AggExpr {
+public class AvgAgg extends AggExpression {
     public AvgAgg(Expression child, String id) {
         super(child, id, new AvgAggFunction(child));
     }

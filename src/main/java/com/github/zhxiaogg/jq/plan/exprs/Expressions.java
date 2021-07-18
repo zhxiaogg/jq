@@ -1,5 +1,6 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
+import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.Compare;
@@ -37,5 +38,9 @@ public class Expressions {
 
     public static BooleanExpression gte(Expression left, int right) {
         return new Compare(CompareOp.GTE, left, Literal.create(right));
+    }
+
+    public static Expression max(String attribute) {
+        return new MaxAgg(new UnResolvedAttribute(null, attribute));
     }
 }

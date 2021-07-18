@@ -29,8 +29,8 @@ public class Aggregate implements LogicalPlan {
     private final Map<List<LiteralValue>, List<AggValue>> states = new HashMap<>();
 
     @Override
-    public RecordBag partialEval(Catalog dataSource) {
-        RecordBag recordBag = child.partialEval(dataSource);
+    public RecordBag partialEval(Catalog catalog) {
+        RecordBag recordBag = child.partialEval(catalog);
         List<Record> rs = new ArrayList<>();
         for (Record record : recordBag.getRecords()) {
             // assembly a record based on  groupingKeys and aggregators
@@ -69,6 +69,10 @@ public class Aggregate implements LogicalPlan {
         return new Aggregate(newGroupingKeys, newAggregators, child);
     }
 
+    public Aggregate withAggregators(List<Expression> aggregators) {
+        return new Aggregate(this.groupingKeys, aggregators, child);
+    }
+
     @Override
     public List<Expression> getExpressions() {
         ArrayList<Expression> expressions = new ArrayList<>(groupingKeys.size() + aggregators.size());
@@ -78,7 +82,7 @@ public class Aggregate implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog dataSource) {
+    public List<Attribute> outputs(Catalog catalog) {
         List<Attribute> attributes1 = groupingKeys.stream().map(expr -> new Attribute(expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
         List<Attribute> attributes2 = aggregators.stream().map(expr -> new Attribute(expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
         return ListUtils.concat(attributes1, attributes2);

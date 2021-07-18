@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class CountAgg extends AggExpr {
+public class CountAgg extends AggExpression {
     public CountAgg(Expression child) {
         this(child, UUID.randomUUID().toString());
     }
