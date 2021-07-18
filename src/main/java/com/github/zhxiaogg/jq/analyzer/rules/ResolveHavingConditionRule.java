@@ -1,9 +1,9 @@
-package com.github.zhxiaogg.jq.analyzer;
+package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * cannot be resolved. A {@link com.github.zhxiaogg.jq.plan.logical.Project} will also be created simultaneously.
  */
 @RequiredArgsConstructor
-public class ResolveHavingCondition implements Rule<LogicalPlan> {
+public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
     private final Catalog catalog;
 
     @Override

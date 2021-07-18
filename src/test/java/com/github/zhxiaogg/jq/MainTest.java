@@ -2,15 +2,15 @@ package com.github.zhxiaogg.jq;
 
 
 import com.github.zhxiaogg.jq.analyzer.*;
+import com.github.zhxiaogg.jq.analyzer.rules.CastDataTypesRule;
+import com.github.zhxiaogg.jq.analyzer.rules.CleanGroupByAggregatorsRule;
+import com.github.zhxiaogg.jq.analyzer.rules.ResolveAttributesRule;
+import com.github.zhxiaogg.jq.analyzer.rules.ResolveHavingConditionRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.ast.Select;
 import com.github.zhxiaogg.jq.parser.Parser;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
-import com.github.zhxiaogg.jq.plan.exprs.Expressions;
-import com.github.zhxiaogg.jq.plan.logical.Aggregate;
-import com.github.zhxiaogg.jq.plan.logical.Filter;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
-import com.github.zhxiaogg.jq.plan.logical.Scan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
@@ -57,7 +57,7 @@ public class MainTest {
                         new Batch(Arrays.asList(
                                 new ResolveAttributesRule(catalog),
                                 new CastDataTypesRule(),
-                                new ResolveHavingCondition(catalog),
+                                new ResolveHavingConditionRule(catalog),
                                 new CleanGroupByAggregatorsRule()
                         ))
                 );

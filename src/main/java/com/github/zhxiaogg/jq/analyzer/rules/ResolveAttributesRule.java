@@ -1,6 +1,7 @@
-package com.github.zhxiaogg.jq.analyzer;
+package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.schema.Attribute;

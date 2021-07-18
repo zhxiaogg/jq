@@ -1,5 +1,6 @@
-package com.github.zhxiaogg.jq.analyzer;
+package com.github.zhxiaogg.jq.analyzer.rules;
 
+import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exprs.Cast;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.FunctionCall;
