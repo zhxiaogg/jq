@@ -3,7 +3,7 @@ grammar SQL;
 sql: select_stmt;
 select_stmt: SELECT_ result_column (COMMA result_column)* (from_clause)? (where_clause)? (group_by_clause)?;
 
-result_column: STAR | table_name DOT STAR | expr;
+result_column: STAR | table_name DOT STAR | expr (AS_ expr_alias)?;
 
 from_clause: FROM_ (table_or_subquery (COMMA table_or_subquery)* | join_clause);
 
@@ -54,6 +54,7 @@ literal_value:
 table_name: any_name;
 column_name: any_name;
 table_alias: any_name;
+expr_alias: any_name;
 
 any_name: IDENTIFIER| STRING_LITERAL;
 

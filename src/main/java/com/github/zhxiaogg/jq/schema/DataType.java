@@ -1,5 +1,7 @@
 package com.github.zhxiaogg.jq.schema;
 
+import java.time.Instant;
+
 public enum DataType implements DataTypeSupport, Comparable<DataType> {
     UnKnown {
         @Override
@@ -41,12 +43,16 @@ public enum DataType implements DataTypeSupport, Comparable<DataType> {
     String {
         @Override
         public Object castTo(DataType dataType, Object value) {
-            throw new UnsupportedOperationException("");
+            if (dataType.equals(DateTime)) {
+               return Instant.parse(value.toString());
+            } else {
+                throw new UnsupportedOperationException("");
+            }
         }
 
         @Override
         public boolean canCastTo(DataType dataType) {
-            return false;
+            return dataType.equals(DateTime);
         }
     },
     Boolean {

@@ -57,7 +57,8 @@ public class MainTest {
                         new Batch(Arrays.asList(
                                 new ResolveAttributesRule(catalog),
                                 new CastDataTypesRule(),
-                                new ResolveHavingCondition(catalog)
+                                new ResolveHavingCondition(catalog),
+                                new CleanGroupByAggregatorsRule()
                         ))
                 );
             }
@@ -82,14 +83,15 @@ public class MainTest {
 
     // select item_id, sum(price) as value from orders where time > "1h" having sum(price) > 100 limit 10;
     private LogicalPlan createPlan() {
-//        Parser parser = new Parser();
-//        Select select = parser.parse("select item_id, sum(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having max(price) >= 100");
-//        LogicalPlan plan = select.toPlanNode();
+        Parser parser = new Parser();
+        Select select = parser.parse("select item_id, max(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having sum(price) > 100");
+        LogicalPlan plan = select.toPlanNode();
 
-        Scan scan = Scan.from("orders");
-        Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
-        Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.max("price"), "value")), filter);
-        return new Filter(Expressions.gt(Expressions.sum("price"), 100), aggregate);
+        return plan;
+//        Scan scan = Scan.from("orders");
+//        Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
+//        Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.max("price"), "value")), filter);
+//        return new Filter(Expressions.gt(Expressions.sum("price"), 100), aggregate);
     }
 
 }

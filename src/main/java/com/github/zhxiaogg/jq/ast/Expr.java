@@ -1,9 +1,6 @@
 package com.github.zhxiaogg.jq.ast;
 
-import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.FunctionCall;
-import com.github.zhxiaogg.jq.plan.exprs.Negative;
-import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.*;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.*;
 import com.github.zhxiaogg.jq.plan.exprs.literals.BooleanLiteral;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
@@ -30,6 +27,15 @@ public interface Expr extends AstNode {
             Object value = literal.getValue();
             if (value instanceof Boolean) {
                 return new BooleanLiteral((Boolean) value);
+            } else if (value instanceof String) {
+                // stripping "\'" from the beginning and end of the string.
+                String str = literal.getValue().toString();
+                String stripped = str.substring(1, str.length() - 1);
+                return new LiteralImpl(stripped, DataType.String);
+            } else if (value instanceof Integer || value instanceof Long) {
+                return new LiteralImpl(literal.getValue(), DataType.Int);
+            } else if (value instanceof Float || value instanceof Double) {
+                return new LiteralImpl(literal.getValue(), DataType.Float);
             } else {
                 return new LiteralImpl(literal.getValue(), DataType.UnKnown);
             }
@@ -213,6 +219,17 @@ public interface Expr extends AstNode {
         public Expression toExpression() {
             List<Expression> arguments = args == null ? Collections.emptyList() : args.stream().map(Expr::toExpression).collect(Collectors.toList());
             return FunctionCall.create(funcName.getName(), arguments);
+        }
+    }
+
+    @Data
+    class ExprAlias implements Expr {
+        private final Expr expr;
+        private final String alias;
+
+        @Override
+        public Expression toExpression() {
+            return new Alias(expr.toExpression(), alias);
         }
     }
 }

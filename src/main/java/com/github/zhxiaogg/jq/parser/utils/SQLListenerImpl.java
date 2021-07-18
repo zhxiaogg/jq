@@ -69,7 +69,11 @@ public class SQLListenerImpl implements SQLListener {
             }
             builders.push(new ResultColumnTableStarBuilder(tableName));
         } else {
-            builders.push(new ResultColumnExprBuilder());
+            String alias = null;
+            if (ctx.expr_alias() != null) {
+                alias = ctx.expr_alias().getText();
+            }
+            builders.push(new ResultColumnExprBuilder(alias));
         }
     }
 
@@ -318,6 +322,16 @@ public class SQLListenerImpl implements SQLListener {
     public void exitTable_alias(SQLParser.Table_aliasContext ctx) {
         AstBuilder<TableAlias> builder = builders.pop();
         ((AcceptTableAlias) builders.peek()).accept(builder.build());
+    }
+
+    @Override
+    public void enterExpr_alias(SQLParser.Expr_aliasContext ctx) {
+
+    }
+
+    @Override
+    public void exitExpr_alias(SQLParser.Expr_aliasContext ctx) {
+
     }
 
     @Override
