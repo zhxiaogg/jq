@@ -1,28 +1,28 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import com.github.zhxiaogg.jq.schema.DataType;
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 
 import java.util.Arrays;
 import java.util.List;
 
-@EqualsAndHashCode
+@Data
 public abstract class AggExpression implements NonLeafExprNode {
     protected final Expression child;
     protected final String id;
     protected final AggregateFunction aggregateFunction;
 
-    public AggExpression(Expression child, String id, AggregateFunction aggregateFunction) {
-        this.child = child;
-        this.id = id;
-        this.aggregateFunction = aggregateFunction;
-    }
-
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Object evaluate(Record record) {
+        throw new IllegalStateException("unsupported!");
     }
 
     @Override

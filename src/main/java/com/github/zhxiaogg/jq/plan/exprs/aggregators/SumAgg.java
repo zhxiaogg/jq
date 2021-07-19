@@ -4,8 +4,10 @@ import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
 import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.LiteralValue;
 import com.github.zhxiaogg.jq.values.Value;
 import com.github.zhxiaogg.jq.values.agg.SumAggValue;
@@ -44,11 +46,29 @@ public class SumAgg extends AggExpression {
     private static class SumAggFunction implements AggregateFunction {
         private final Expression plus;
         private final Expression evaluate;
+        private final Expression input;
 
-        public SumAggFunction(Expression target) {
-            ResolvedAttribute result = new ResolvedAttribute("sum", target.getDataType(), 0);
-            this.plus = new Plus(result, target);
+        public SumAggFunction(Expression input) {
+            ResolvedAttribute result = new ResolvedAttribute("sum", input.getDataType(), 0);
+            this.plus = new Plus(result, input);
             this.evaluate = result;
+            this.input = input;
+        }
+
+        @Override
+        public List<Expression> initExpressions() {
+            return Collections.singletonList(new LiteralImpl(getInitValue(input.getDataType()), input.getDataType()));
+        }
+
+        public Object getInitValue(DataType dataType) {
+            switch (dataType) {
+                case Float:
+                    return 0.0D;
+                case Int:
+                    return 0L;
+                default:
+                    throw new IllegalStateException("unsupported data type " + dataType);
+            }
         }
 
         @Override

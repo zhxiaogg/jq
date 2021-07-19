@@ -50,6 +50,11 @@ public class Cast implements NonLeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return eval(record).getValue();
+    }
+
+    @Override
     public String toString() {
         return String.format("(%s as %s)", child, dataType);
     }

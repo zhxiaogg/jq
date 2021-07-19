@@ -1,23 +1,25 @@
 package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.values.Value;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.List;
 
-@Data
-@ToString
-@EqualsAndHashCode
-public class Record {
-    private final List<Value> values;
+public interface Record {
 
-    public static Record create(List<Value> values) {
-        return new Record(values);
+    static Record create(List<Value> values) {
+        return new SimpleRecord(values);
     }
 
-    public Value indexOf(int ordinal) {
-        return values.get(ordinal);
+    Value indexOf(int ordinal);
+
+    /**
+     * @return num values.
+     */
+    int size();
+
+    default boolean getBoolean(int ordinal) {
+        return (boolean) indexOf(ordinal).getValue();
     }
+
+    MutableRecord toMutable();
 }

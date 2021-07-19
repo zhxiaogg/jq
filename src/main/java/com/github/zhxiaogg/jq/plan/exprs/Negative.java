@@ -50,6 +50,11 @@ public class Negative implements NonLeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return eval(record).getValue();
+    }
+
+    @Override
     public DataType getDataType() {
         return child.getDataType();
     }

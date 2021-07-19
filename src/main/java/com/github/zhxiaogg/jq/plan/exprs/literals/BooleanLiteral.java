@@ -41,6 +41,11 @@ public class BooleanLiteral implements Literal, BooleanExpression {
     }
 
     @Override
+    public Boolean evaluate(Record record) {
+        return value;
+    }
+
+    @Override
     public DataType getDataType() {
         return DataType.Boolean;
     }

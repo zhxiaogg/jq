@@ -1,6 +1,7 @@
 package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.analyzer.AggregatorUtil;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
@@ -39,13 +40,12 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                     Optional<Expression> resolvedCondition = condition.transformUp(new ResolveExpressionAttributeRule(attributes));
                     // find all AggExpressions in resolvedCondition
                     if (resolvedCondition.isPresent()) {
-                        Pair<Optional<Expression>, Set<AggExpression>> aggExpressions = extractAggExpressions(aggregate, resolvedCondition.get());
-                        Optional<Expression> furtherResolvedCondition = aggExpressions.getLeft();
-                        Set<AggExpression> aggregatorsFromCondition = aggExpressions.getRight();
-                        if (furtherResolvedCondition.isPresent()) {
-                            BooleanExpression newCondition = (BooleanExpression) furtherResolvedCondition.get();
+                        Map<String, AggExpression> aggregationMap = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
+                        Pair<Optional<Expression>, Map<String, AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.get(), aggregationMap);
+                        if (extractResult.getLeft().isPresent()) {
+                            BooleanExpression newCondition = (BooleanExpression) extractResult.getLeft().get();
                             List<Expression> newAggregators = new ArrayList<>(aggregate.getAggregators());
-                            newAggregators.addAll(aggregatorsFromCondition);
+                            newAggregators.addAll(extractResult.getRight().values());
                             Aggregate newAggregate = aggregate.withAggregators(newAggregators);
                             LogicalPlan newFilter = filter.withExpressions(Collections.singletonList(newCondition)).withChildren(Collections.singletonList(newAggregate));
                             // TODO: use ResolvedAttribute after deprecating ordinal field from ResolvedAttribute

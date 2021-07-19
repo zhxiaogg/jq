@@ -63,7 +63,7 @@ public class Relation {
         ArrayList<Record> result = new ArrayList<>(records.size());
         result.addAll(records);
         RecordBag bag = RecordBag.of(result);
-        records.clear();
+        // records.clear();
         return bag;
     }
 

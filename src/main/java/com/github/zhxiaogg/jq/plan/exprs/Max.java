@@ -48,6 +48,11 @@ public class Max implements NonLeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return eval(record).getValue();
+    }
+
+    @Override
     public DataType getDataType() {
         return children.get(0).getDataType();
     }

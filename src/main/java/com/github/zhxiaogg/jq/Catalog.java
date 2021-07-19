@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq;
 
-import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ public class Catalog {
         return new Catalog(Arrays.asList(relations.clone()));
     }
 
-    public StreamingQuery streamQuery(LogicalPlan plan) {
+    public StreamingQuery streamQuery(PhysicalPlan plan) {
         // change the logical plan into physical plan
         // optional: code gen
         // return the streaming object:

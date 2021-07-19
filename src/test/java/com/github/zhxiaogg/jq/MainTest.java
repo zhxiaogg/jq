@@ -1,7 +1,9 @@
 package com.github.zhxiaogg.jq;
 
 
-import com.github.zhxiaogg.jq.analyzer.*;
+import com.github.zhxiaogg.jq.analyzer.Analyser;
+import com.github.zhxiaogg.jq.analyzer.Batch;
+import com.github.zhxiaogg.jq.analyzer.PhysicalPlanner;
 import com.github.zhxiaogg.jq.analyzer.rules.CastDataTypesRule;
 import com.github.zhxiaogg.jq.analyzer.rules.CleanGroupByAggregatorsRule;
 import com.github.zhxiaogg.jq.analyzer.rules.ResolveAttributesRule;
@@ -11,6 +13,7 @@ import com.github.zhxiaogg.jq.ast.Select;
 import com.github.zhxiaogg.jq.parser.Parser;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
 import org.junit.Test;
 
@@ -57,8 +60,9 @@ public class MainTest {
                         new Batch(Arrays.asList(
                                 new ResolveAttributesRule(catalog),
                                 new CastDataTypesRule(),
-                                new ResolveHavingConditionRule(catalog),
-                                new CleanGroupByAggregatorsRule()
+                                new CleanGroupByAggregatorsRule(),
+                                new ResolveHavingConditionRule(catalog)
+
                         ))
                 );
             }
@@ -70,28 +74,19 @@ public class MainTest {
         Relation relation = Relation.create("orders", Order.class);
         Catalog ds = Catalog.create(relation);
 
-        // select item_id, sum(price) as value from orders where time > "1h" having sum(price) >= 100 limit 10;
-        LogicalPlan plan = createPlan();
+        Parser parser = new Parser();
+        Select select = parser.parse("select item_id, max(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having sum(price) > 100");
+        LogicalPlan plan = select.toPlanNode();
         LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
         System.out.println(analysedPlan);
-        StreamingQuery streaming = ds.streamQuery(analysedPlan);
+
+        PhysicalPlanner physicalPlanner = new PhysicalPlanner(ds);
+        PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
+        StreamingQuery streaming = ds.streamQuery(executablePlan);
         RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
         System.out.println(r1);
         RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now()));
         System.out.println(r2);
-    }
-
-    // select item_id, sum(price) as value from orders where time > "1h" having sum(price) > 100 limit 10;
-    private LogicalPlan createPlan() {
-        Parser parser = new Parser();
-        Select select = parser.parse("select item_id, max(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having sum(price) > 100");
-        LogicalPlan plan = select.toPlanNode();
-
-        return plan;
-//        Scan scan = Scan.from("orders");
-//        Filter filter = Filter.create(Expressions.gt("time", Instant.parse("2021-05-31T00:00:00Z")), scan);
-//        Aggregate aggregate = Aggregate.create(Arrays.asList("item_id"), Arrays.asList(Expressions.alias(Expressions.max("price"), "value")), filter);
-//        return new Filter(Expressions.gt(Expressions.sum("price"), 100), aggregate);
     }
 
 }

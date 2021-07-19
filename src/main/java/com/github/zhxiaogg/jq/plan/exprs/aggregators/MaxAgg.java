@@ -5,6 +5,7 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.Max;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.values.LiteralValue;
@@ -46,14 +47,32 @@ public class MaxAgg extends AggExpression {
     private static class MaxAggFunction implements AggregateFunction {
         private final Expression evaluate = new ResolvedAttribute("max", DataType.Int, 0);
         private final Expression max;
+        private final Expression input;
 
         public MaxAggFunction(Expression input) {
             this.max = new Max(Arrays.asList(input, evaluate));
+            this.input = input;
         }
 
         @Override
         public List<Expression> updateExpressions() {
             return Collections.singletonList(max);
+        }
+
+        @Override
+        public List<Expression> initExpressions() {
+            return Collections.singletonList(new LiteralImpl(getInitValue(input.getDataType()), input.getDataType()));
+        }
+
+        public Object getInitValue(DataType dataType) {
+            switch (dataType) {
+                case Float:
+                    return Double.NEGATIVE_INFINITY;
+                case Int:
+                    return Long.MIN_VALUE;
+                default:
+                    throw new IllegalStateException("unsupported data type " + dataType);
+            }
         }
 
         @Override
@@ -63,7 +82,7 @@ public class MaxAgg extends AggExpression {
 
         @Override
         public AttributeSet updateOutputs() {
-            return new AttributeSet(new Attribute[]{max.toAttribute()});
+            return new AttributeSet(new Attribute[]{evaluate.toAttribute()});
         }
     }
 }

@@ -44,7 +44,7 @@ public enum DataType implements DataTypeSupport, Comparable<DataType> {
         @Override
         public Object castTo(DataType dataType, Object value) {
             if (dataType.equals(DateTime)) {
-               return Instant.parse(value.toString());
+                return Instant.parse(value.toString());
             } else {
                 throw new UnsupportedOperationException("");
             }

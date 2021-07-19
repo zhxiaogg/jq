@@ -48,6 +48,11 @@ public class CountAgg extends AggExpression {
         }
 
         @Override
+        public List<Expression> initExpressions() {
+            return Collections.singletonList(new LiteralImpl(0, DataType.Int));
+        }
+
+        @Override
         public Expression evaluateExpression() {
             return evaluate;
         }

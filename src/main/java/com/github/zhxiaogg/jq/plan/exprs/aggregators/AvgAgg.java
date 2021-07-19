@@ -45,10 +45,12 @@ public class AvgAgg extends AggExpression {
         private final Expression sum;
         private final Expression count;
         private final Expression evaluate;
+        private final Expression child;
 
         public AvgAggFunction(Expression child) {
             ResolvedAttribute sumInput = new ResolvedAttribute("sum", child.getDataType(), 0);
             ResolvedAttribute countInput = new ResolvedAttribute("count", DataType.Int, 1);
+            this.child = child;
             this.sum = new Plus(sumInput, child);
             this.count = new Plus(countInput, new LiteralImpl(1, DataType.Int));
             this.evaluate = new Div(sumInput, countInput);
@@ -57,6 +59,25 @@ public class AvgAgg extends AggExpression {
         @Override
         public List<Expression> updateExpressions() {
             return Arrays.asList(sum, count);
+        }
+
+        @Override
+        public List<Expression> initExpressions() {
+            return Arrays.asList(
+                    new LiteralImpl(getInitValue(child.getDataType()), child.getDataType()),
+                    new LiteralImpl(0, DataType.Int)
+            );
+        }
+
+        public Object getInitValue(DataType dataType) {
+            switch (dataType) {
+                case Float:
+                    return 0.0D;
+                case Int:
+                    return 0L;
+                default:
+                    throw new IllegalStateException("unsupported data type " + dataType);
+            }
         }
 
         @Override

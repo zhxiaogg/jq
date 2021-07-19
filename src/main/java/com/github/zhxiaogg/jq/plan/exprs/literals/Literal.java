@@ -30,4 +30,9 @@ public interface Literal extends LeafExprNode {
     default Value eval(Record record) {
         return new LiteralValue(getValue(), getDataType());
     }
+
+    @Override
+    default Object evaluate(Record record) {
+        return getValue();
+    }
 }

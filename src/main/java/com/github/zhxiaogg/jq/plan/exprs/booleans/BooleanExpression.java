@@ -17,5 +17,10 @@ public interface BooleanExpression extends Expression {
         return new LiteralValue(this.apply(record), DataType.Boolean);
     }
 
+    @Override
+    default Boolean evaluate(Record record) {
+        return this.apply(record);
+    }
+
     boolean apply(Record record);
 }

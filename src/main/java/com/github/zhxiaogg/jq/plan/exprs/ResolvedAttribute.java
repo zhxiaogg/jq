@@ -28,7 +28,12 @@ public class ResolvedAttribute implements LeafExprNode {
 
     @Override
     public Value eval(Record record) {
-        return record.getValues().get(ordinal);
+        return record.indexOf(ordinal);
+    }
+
+    @Override
+    public Object evaluate(Record record) {
+        return eval(record).getValue();
     }
 
     @Override

@@ -30,6 +30,11 @@ public class UnResolvedAttribute implements LeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return name;
     }

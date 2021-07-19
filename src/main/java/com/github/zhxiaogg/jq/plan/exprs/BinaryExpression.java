@@ -35,6 +35,11 @@ public abstract class BinaryExpression implements NonLeafExprNode {
         return evalImpl(l, r);
     }
 
+    @Override
+    public Object evaluate(Record record) {
+        return eval(record).getValue();
+    }
+
     abstract protected Value evalImpl(Value l, Value r);
 
     @Override

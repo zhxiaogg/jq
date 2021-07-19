@@ -27,6 +27,11 @@ public class Alias implements NonLeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return inner.evaluate(record);
+    }
+
+    @Override
     public String toString() {
         // TODO: fix this
         return name;

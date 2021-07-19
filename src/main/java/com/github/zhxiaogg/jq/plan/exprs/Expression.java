@@ -19,5 +19,7 @@ public interface Expression extends Node<Expression> {
 
     Value eval(Record record);
 
+    Object evaluate(Record record);
+
     DataType getDataType();
 }

@@ -67,6 +67,11 @@ public class FunctionCall implements NonLeafExprNode {
     }
 
     @Override
+    public Object evaluate(Record record) {
+        return null;
+    }
+
+    @Override
     public DataType getDataType() {
         return null;
     }
