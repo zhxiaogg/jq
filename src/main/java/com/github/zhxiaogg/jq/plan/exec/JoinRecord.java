@@ -8,7 +8,7 @@ public class JoinRecord implements Record {
     private final Record right;
 
     @Override
-    public Value indexOf(int ordinal) {
+    public Object indexOf(int ordinal) {
         if (ordinal >= left.size()) {
             return right.indexOf(ordinal - left.size());
         } else {

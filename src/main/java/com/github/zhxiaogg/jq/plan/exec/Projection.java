@@ -20,7 +20,7 @@ public interface Projection {
         return new Projection() {
             @Override
             public Record apply(Record input) {
-                List<Value> values = resolvedExpressions.stream().map(e -> new Value(e.evaluate(input), e.getDataType())).collect(Collectors.toList());
+                List<Object> values = resolvedExpressions.stream().map(e -> e.evaluate(input)).collect(Collectors.toList());
                 return Record.create(values);
             }
         };

@@ -6,9 +6,9 @@ import java.util.List;
 
 @Data
 public class SimpleRecord implements Record {
-    private final List<Value> values;
+    private final List<Object> values;
 
-    public Value indexOf(int ordinal) {
+    public Object indexOf(int ordinal) {
         return values.get(ordinal);
     }
 

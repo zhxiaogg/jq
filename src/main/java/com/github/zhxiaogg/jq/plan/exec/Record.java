@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface Record {
 
-    static Record create(List<Value> values) {
+    static Record create(List<Object> values) {
         return new SimpleRecord(values);
     }
 
-    Value indexOf(int ordinal);
+    Object indexOf(int ordinal);
 
     /**
      * @return num values.
@@ -16,7 +16,7 @@ public interface Record {
     int size();
 
     default boolean getBoolean(int ordinal) {
-        return (boolean) indexOf(ordinal).getValue();
+        return (boolean) indexOf(ordinal);
     }
 
     MutableRecord toMutable();

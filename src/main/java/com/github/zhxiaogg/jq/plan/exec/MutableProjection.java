@@ -12,12 +12,12 @@ public class MutableProjection implements Projection {
 
     @Override
     public Record apply(Record input) {
-        List<Value> values = expressions.stream().map(e -> new Value(e.evaluate(input), e.getDataType())).collect(Collectors.toList());
+        List<Object> values = expressions.stream().map(e -> e.evaluate(input)).collect(Collectors.toList());
         return Record.create(values);
     }
 
     public void apply(MutableRecord target, JoinRecord input) {
-        List<Value> values = expressions.stream().map(e -> new Value(e.evaluate(input), e.getDataType())).collect(Collectors.toList());
+        List<Object> values = expressions.stream().map(e -> e.evaluate(input)).collect(Collectors.toList());
         target.setValues(values);
     }
 }

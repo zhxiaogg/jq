@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.schema;
 
 import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.plan.exec.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -27,14 +26,14 @@ public class Schema {
         return new ObjectReader() {
             @Override
             public Record read(Object data) {
-                List<Value> values = new ArrayList<>(attributes.size());
+                List<Object> values = new ArrayList<>(attributes.size());
                 int i = 0;
                 for (Attribute attribute : attributes) {
                     try {
                         Field f = attribute.getField();
                         f.setAccessible(true);
                         Object value = f.get(data);
-                        values.add(new Value(value, attribute.getDataType()));
+                        values.add(value);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
