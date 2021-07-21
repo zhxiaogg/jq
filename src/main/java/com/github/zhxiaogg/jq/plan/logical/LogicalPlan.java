@@ -3,7 +3,6 @@ package com.github.zhxiaogg.jq.plan.logical;
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.Node;
-import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public interface LogicalPlan extends Node<LogicalPlan> {
-    RecordBag partialEval(Catalog catalog);
 
     LogicalPlan withExpressions(List<Expression> expressions);
 

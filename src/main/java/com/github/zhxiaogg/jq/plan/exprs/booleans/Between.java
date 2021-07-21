@@ -33,8 +33,8 @@ public class Between implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
-    public boolean apply(Record record) {
-        return false;
+    public Boolean evaluate(Record record) {
+        return null;
     }
 
     @Override

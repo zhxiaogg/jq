@@ -4,8 +4,6 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.LeafExprNode;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 
 import java.time.Instant;
 
@@ -24,11 +22,6 @@ public interface Literal extends LeafExprNode {
     @Override
     default boolean isResolved() {
         return true;
-    }
-
-    @Override
-    default Value eval(Record record) {
-        return new LiteralValue(getValue(), getDataType());
     }
 
     @Override

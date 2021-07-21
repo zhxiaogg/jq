@@ -2,8 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 
 import java.util.Collections;
@@ -40,18 +38,9 @@ public class Cast implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        Value value = child.eval(record);
-        if (value instanceof LiteralValue) {
-            return new LiteralValue(value.getDataType().castTo(dataType, value.getValue()), dataType);
-        } else {
-            throw new IllegalStateException("unsupported cast!");
-        }
-    }
-
-    @Override
     public Object evaluate(Record record) {
-        return eval(record).getValue();
+        Object value = child.evaluate(record);
+        return child.getDataType().castTo(getDataType(), value);
     }
 
     @Override

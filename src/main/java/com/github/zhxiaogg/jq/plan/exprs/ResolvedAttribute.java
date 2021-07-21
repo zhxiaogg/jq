@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -27,13 +26,8 @@ public class ResolvedAttribute implements LeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        return record.indexOf(ordinal);
-    }
-
-    @Override
     public Object evaluate(Record record) {
-        return eval(record).getValue();
+        return record.indexOf(ordinal).getValue();
     }
 
     @Override

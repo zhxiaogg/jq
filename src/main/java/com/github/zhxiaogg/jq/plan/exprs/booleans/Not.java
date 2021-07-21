@@ -37,8 +37,8 @@ public class Not implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
-    public boolean apply(Record record) {
-        return !expr.apply(record);
+    public Boolean evaluate(Record record) {
+        return !expr.evaluate(record);
     }
 
     @Override

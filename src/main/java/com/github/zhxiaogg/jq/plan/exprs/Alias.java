@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -19,11 +18,6 @@ public class Alias implements NonLeafExprNode {
 
     public Alias(Expression inner, String name) {
         this(inner, name, UUID.randomUUID().toString());
-    }
-
-    @Override
-    public Value eval(Record record) {
-        return inner.eval(record);
     }
 
     @Override

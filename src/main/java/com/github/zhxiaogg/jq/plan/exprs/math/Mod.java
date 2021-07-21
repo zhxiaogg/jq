@@ -3,7 +3,6 @@ package com.github.zhxiaogg.jq.plan.exprs.math;
 import com.github.zhxiaogg.jq.plan.exprs.BinaryExpression;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +22,15 @@ public class Mod extends BinaryExpression {
     }
 
     @Override
-    protected Value evalImpl(Value l, Value r) {
-        return null;
+    protected Object evalImpl(Object l, Object r) {
+        switch (getDataType()) {
+            case Float:
+                return (Double) l - (Double) r;
+            case Int:
+                return (Long) l % (Long) r;
+            default:
+                throw new IllegalArgumentException("unsupported mod on data type of " + getDataType().name());
+        }
     }
 
     @Override

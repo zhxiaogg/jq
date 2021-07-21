@@ -4,7 +4,6 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -48,9 +47,9 @@ public class In implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
-    public boolean apply(Record record) {
-        List<Value> values = this.values.stream().map(e -> e.eval(record)).collect(Collectors.toList());
-        Value targetValue = target.eval(record);
+    public Boolean evaluate(Record record) {
+        List<Object> values = this.values.stream().map(e -> e.evaluate(record)).collect(Collectors.toList());
+        Object targetValue = target.evaluate(record);
         return values.contains(targetValue);
     }
 }

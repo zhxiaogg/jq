@@ -21,14 +21,4 @@ public class LiteralValue implements Value {
             return value;
         }
     }
-
-    @Override
-    public boolean isAggregator() {
-        return false;
-    }
-
-    @Override
-    public boolean isLiteral() {
-        return true;
-    }
 }

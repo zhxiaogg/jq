@@ -1,14 +1,12 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class Limit implements LogicalPlan {
@@ -18,11 +16,6 @@ public class Limit implements LogicalPlan {
     public Limit(int limit, LogicalPlan child) {
         this.limit = limit;
         this.child = child;
-    }
-
-    @Override
-    public RecordBag partialEval(Catalog catalog) {
-        return RecordBag.of(child.partialEval(catalog).getRecords().stream().limit(limit).collect(Collectors.toList()));
     }
 
     @Override

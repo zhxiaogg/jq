@@ -1,14 +1,11 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,18 +16,6 @@ public class Filter implements LogicalPlan {
 
     public static Filter create(BooleanExpression condition, LogicalPlan child) {
         return new Filter(condition, child);
-    }
-
-    @Override
-    public RecordBag partialEval(Catalog catalog) {
-        RecordBag recordBag = child.partialEval(catalog);
-        List<Record> records = new ArrayList<>(recordBag.getRecords().size());
-        for (Record r : recordBag.getRecords()) {
-            if (condition.apply(r)) {
-                records.add(r);
-            }
-        }
-        return RecordBag.of(records);
     }
 
     @Override

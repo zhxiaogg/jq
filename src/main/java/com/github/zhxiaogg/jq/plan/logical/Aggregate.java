@@ -1,18 +1,15 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
-import com.github.zhxiaogg.jq.values.AggValue;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -24,36 +21,6 @@ public class Aggregate implements LogicalPlan {
     @Deprecated
     public static Aggregate create(List<String> groupingKeys, List<Expression> aggregators, LogicalPlan child) {
         return new Aggregate(groupingKeys.stream().map(k -> new UnResolvedAttribute(null, k)).collect(Collectors.toList()), aggregators, child);
-    }
-
-    private final Map<List<LiteralValue>, List<AggValue>> states = new HashMap<>();
-
-    @Override
-    public RecordBag partialEval(Catalog catalog) {
-        RecordBag recordBag = child.partialEval(catalog);
-        List<Record> rs = new ArrayList<>();
-        for (Record record : recordBag.getRecords()) {
-            // assembly a record based on  groupingKeys and aggregators
-            List<LiteralValue> keys = groupingKeys.stream().map(e -> (LiteralValue) e.eval(record)).collect(Collectors.toList());
-            List<AggValue> aggregated = aggregators.stream().map(e -> (AggValue) e.eval(record)).collect(Collectors.toList());
-            List<AggValue> existing = states.get(keys);
-            final Record r;
-            if (existing == null) {
-                states.put(keys, aggregated);
-                r = Record.create((List<Value>) (ListUtils.concat((List) keys, (List) aggregated)));
-            } else {
-                List<AggValue> updated = new ArrayList<>(existing.size());
-                for (int i = 0; i < existing.size(); i++) {
-                    AggValue merged = existing.get(i).merge(aggregated.get(i));
-                    updated.add(merged);
-                }
-                states.put(keys, updated);
-                r = Record.create((List<Value>) (ListUtils.concat((List) keys, (List) updated)));
-            }
-            // only emit those updated records
-            rs.add(r);
-        }
-        return RecordBag.of(rs);
     }
 
     @Override

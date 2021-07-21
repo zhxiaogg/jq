@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,18 +28,13 @@ public abstract class BinaryExpression implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        Value l = left.eval(record);
-        Value r = right.eval(record);
+    public Object evaluate(Record record) {
+        Object l = left.evaluate(record);
+        Object r = right.evaluate(record);
         return evalImpl(l, r);
     }
 
-    @Override
-    public Object evaluate(Record record) {
-        return eval(record).getValue();
-    }
-
-    abstract protected Value evalImpl(Value l, Value r);
+    abstract protected Object evalImpl(Object l, Object r);
 
     @Override
     public String toString() {

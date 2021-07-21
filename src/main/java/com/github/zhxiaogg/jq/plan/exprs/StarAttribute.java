@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 
 import java.util.UUID;
@@ -15,11 +14,6 @@ public class StarAttribute implements LeafExprNode {
     @Override
     public boolean isResolved() {
         return false;
-    }
-
-    @Override
-    public Value eval(Record record) {
-        return null;
     }
 
     @Override

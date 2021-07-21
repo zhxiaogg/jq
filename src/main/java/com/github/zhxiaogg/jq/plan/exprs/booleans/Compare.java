@@ -23,8 +23,8 @@ public class Compare implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
-    public boolean apply(Record record) {
-        return op.apply(left.eval(record), right.eval(record));
+    public Boolean evaluate(Record record) {
+        return op.applyWithDataType(left.getDataType(), left.evaluate(record), right.evaluate(record));
     }
 
     @Override

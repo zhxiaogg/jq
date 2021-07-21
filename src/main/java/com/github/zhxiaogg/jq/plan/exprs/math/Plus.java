@@ -2,17 +2,11 @@ package com.github.zhxiaogg.jq.plan.exprs.math;
 
 import com.github.zhxiaogg.jq.plan.exprs.BinaryExpression;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.utils.BinaryValueOp;
-import com.github.zhxiaogg.jq.values.AggValue;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
-import com.github.zhxiaogg.jq.values.agg.binary.PlusAggValue;
 
 import java.util.List;
 import java.util.UUID;
 
-public class Plus extends BinaryExpression implements BinaryValueOp<Value> {
+public class Plus extends BinaryExpression {
     public Plus(Expression left, Expression right, String id) {
         super(left, right, id);
     }
@@ -27,27 +21,16 @@ public class Plus extends BinaryExpression implements BinaryValueOp<Value> {
     }
 
     @Override
-    protected Value evalImpl(Value l, Value r) {
-        if (l instanceof AggValue && r instanceof AggValue) {
-            return new PlusAggValue((AggValue) l, (AggValue) r);
-        } else if (l instanceof LiteralValue && r instanceof LiteralValue) {
-            return this.apply(l, r);
-        } else {
-            throw new IllegalArgumentException("not supported for now!");
-        }
-    }
-
-    @Override
-    public Value applyWithDataType(DataType dataType, Object l, Object r) {
-        switch (dataType) {
+    public Object evalImpl(Object l, Object r) {
+        switch (getDataType()) {
             case Float:
-                return new LiteralValue((Double) l + (Double) r, dataType);
+                return (Double) l + (Double) r;
             case Int:
-                return new LiteralValue((Long) l + (Long) r, dataType);
+                return (Long) l + (Long) r;
             case String:
-                return new LiteralValue((String) l + (String) r, dataType);
+                return (String) l + (String) r;
             default:
-                throw new IllegalArgumentException("unsupported sum on data type of " + dataType.name());
+                throw new IllegalArgumentException("unsupported plus on data type of " + getDataType().name());
         }
     }
 }

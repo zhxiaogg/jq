@@ -1,16 +1,12 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
-import com.github.zhxiaogg.jq.values.agg.SumAggValue;
 import lombok.EqualsAndHashCode;
 
 import java.util.Collections;
@@ -25,12 +21,6 @@ public class SumAgg extends AggExpression {
 
     public SumAgg(Expression child) {
         super(child, UUID.randomUUID().toString(), new SumAggFunction(child));
-    }
-
-    @Override
-    public Value eval(Record record) {
-        LiteralValue value = (LiteralValue) child.eval(record);
-        return SumAggValue.from(value);
     }
 
     @Override

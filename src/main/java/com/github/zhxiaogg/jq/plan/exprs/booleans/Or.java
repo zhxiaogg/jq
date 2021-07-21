@@ -46,7 +46,7 @@ public class Or implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
-    public boolean apply(Record record) {
-        return left.apply(record) || right.apply(record);
+    public Boolean evaluate(Record record) {
+        return left.evaluate(record) || right.evaluate(record);
     }
 }

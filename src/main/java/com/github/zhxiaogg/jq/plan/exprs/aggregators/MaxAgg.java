@@ -1,16 +1,12 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.Max;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
-import com.github.zhxiaogg.jq.values.agg.MaxAggValue;
 import lombok.EqualsAndHashCode;
 
 import java.util.Arrays;
@@ -33,11 +29,6 @@ public class MaxAgg extends AggExpression {
         return new MaxAgg(children.get(0), id);
     }
 
-    @Override
-    public Value eval(Record record) {
-        LiteralValue v = (LiteralValue) child.eval(record);
-        return new MaxAggValue(v.getValue(), getDataType());
-    }
 
     @Override
     public String toString() {

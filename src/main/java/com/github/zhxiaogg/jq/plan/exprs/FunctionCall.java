@@ -6,7 +6,6 @@ import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MinAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -59,11 +58,6 @@ public class FunctionCall implements NonLeafExprNode {
     @Override
     public Expression withChildren(List<Expression> children) {
         return new FunctionCall(functionName, children, id);
-    }
-
-    @Override
-    public Value eval(Record record) {
-        return null;
     }
 
     @Override

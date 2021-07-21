@@ -2,8 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 
 import java.util.List;
@@ -33,23 +31,16 @@ public class Min implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        List<Value> values = children.stream().map(e -> e.eval(record)).collect(Collectors.toList());
+    public Object evaluate(Record record) {
+        List<Object> values = children.stream().map(e -> e.evaluate(record)).collect(Collectors.toList());
         switch (this.getDataType()) {
             case Int:
-                int i = values.stream().mapToInt(v -> (int) v.getValue()).min().getAsInt();
-                return new LiteralValue(i, DataType.Int);
+                return values.stream().mapToInt(v1 -> (int) v1).min().getAsInt();
             case Float:
-                double d = values.stream().mapToDouble(v -> (double) v.getValue()).min().getAsDouble();
-                return new LiteralValue(d, DataType.Float);
+                return values.stream().mapToDouble(v -> (double) v).min().getAsDouble();
             default:
                 throw new IllegalStateException("unsupported data type: " + this.getDataType());
         }
-    }
-
-    @Override
-    public Object evaluate(Record record) {
-        return eval(record).getValue();
     }
 
     @Override

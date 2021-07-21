@@ -2,8 +2,6 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -37,21 +35,16 @@ public class Negative implements NonLeafExprNode {
     }
 
     @Override
-    public Value eval(Record record) {
-        Value value = child.eval(record);
+    public Object evaluate(Record record) {
+        Object value = child.evaluate(record);
         switch (getDataType()) {
             case Int:
-                return new LiteralValue(-(int) value.getValue(), DataType.Int);
+                return -(int) value;
             case Float:
-                return new LiteralValue(-(double) value.getValue(), DataType.Float);
+                return -(double) value;
             default:
                 throw new IllegalStateException("unsupported data type: " + getDataType());
         }
-    }
-
-    @Override
-    public Object evaluate(Record record) {
-        return eval(record).getValue();
     }
 
     @Override

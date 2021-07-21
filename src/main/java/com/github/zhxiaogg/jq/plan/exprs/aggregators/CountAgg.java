@@ -1,14 +1,12 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
-import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,11 +29,6 @@ public class CountAgg extends AggExpression {
     @Override
     public Expression withChildren(List<Expression> children) {
         return new CountAgg(children.get(0), id);
-    }
-
-    @Override
-    public Value eval(Record record) {
-        return null;
     }
 
     private static class CountAggFunction implements AggregateFunction {
