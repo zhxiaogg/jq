@@ -1,14 +1,10 @@
-package com.github.zhxiaogg.jq.values;
+package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
-@ToString
-@EqualsAndHashCode
-public class LiteralValue implements Value {
+public class Value {
     private final Object value;
     private final DataType dataType;
 

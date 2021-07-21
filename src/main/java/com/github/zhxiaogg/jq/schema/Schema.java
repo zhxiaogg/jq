@@ -2,8 +2,7 @@ package com.github.zhxiaogg.jq.schema;
 
 import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
+import com.github.zhxiaogg.jq.plan.exec.Value;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,7 +34,7 @@ public class Schema {
                         Field f = attribute.getField();
                         f.setAccessible(true);
                         Object value = f.get(data);
-                        values.add(new LiteralValue(value, attribute.getDataType()));
+                        values.add(new Value(value, attribute.getDataType()));
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }

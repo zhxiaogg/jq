@@ -2,8 +2,6 @@ package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.analyzer.rules.ResolveExpressionAttributeRule;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.values.LiteralValue;
-import com.github.zhxiaogg.jq.values.Value;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +20,7 @@ public interface Projection {
         return new Projection() {
             @Override
             public Record apply(Record input) {
-                List<Value> values = resolvedExpressions.stream().map(e -> new LiteralValue(e.evaluate(input), e.getDataType())).collect(Collectors.toList());
+                List<Value> values = resolvedExpressions.stream().map(e -> new Value(e.evaluate(input), e.getDataType())).collect(Collectors.toList());
                 return Record.create(values);
             }
         };

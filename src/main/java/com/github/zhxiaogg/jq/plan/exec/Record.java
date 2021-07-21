@@ -1,7 +1,5 @@
 package com.github.zhxiaogg.jq.plan.exec;
 
-import com.github.zhxiaogg.jq.values.Value;
-
 import java.util.List;
 
 public interface Record {
