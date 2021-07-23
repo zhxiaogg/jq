@@ -20,6 +20,6 @@ public class BinaryExpressionTest {
     public void div_not_equals_plus() {
         boolean result = new Div(new LiteralImpl(0, DataType.Int), new LiteralImpl(1, DataType.Int))
                 .semanticEqual(new Plus(new LiteralImpl(0, DataType.Int), new LiteralImpl(1, DataType.Int)));
-        Assert.assertTrue(result);
+        Assert.assertFalse(result);
     }
 }
