@@ -5,7 +5,7 @@ import com.github.zhxiaogg.jq.plan.exec.Projection;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import lombok.Data;
 
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class ProjectExec implements PhysicalPlan {
 
     @Override
     public AttributeSet outputs() {
-        Attribute[] attributes = projections.stream().map(Expression::toAttribute).toArray(Attribute[]::new);
+        ResolvedAttribute[] attributes = projections.stream().map(Expression::toAttribute).toArray(ResolvedAttribute[]::new);
         return new AttributeSet(attributes);
     }
 }

@@ -1,9 +1,10 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 
@@ -49,10 +50,10 @@ public class Aggregate implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog catalog) {
-        List<Attribute> attributes1 = groupingKeys.stream().map(expr -> new Attribute(expr.getId(), expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
-        List<Attribute> attributes2 = aggregators.stream().map(expr -> new Attribute(expr.getId(), expr.toString(), expr.getDataType(), null)).collect(Collectors.toList());
-        return ListUtils.concat(attributes1, attributes2);
+    public AttributeSet outputs(Catalog catalog) {
+        List<ResolvedAttribute> attributes1 = groupingKeys.stream().map(Expression::toAttribute).collect(Collectors.toList());
+        List<ResolvedAttribute> attributes2 = aggregators.stream().map(Expression::toAttribute).collect(Collectors.toList());
+        return new AttributeSet(ListUtils.concat(attributes1, attributes2));
     }
 
     @Override

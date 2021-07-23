@@ -1,7 +1,6 @@
 package com.github.zhxiaogg.jq.analyzer;
 
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
 import com.github.zhxiaogg.jq.utils.Pair;
 
@@ -49,7 +48,7 @@ public class AggregatorUtil {
                     newAggExpressions.add((AggExpression) e);
                 }
                 AggExpression expr = existing.orElse((AggExpression) e);
-                return Optional.of(new ResolvedAttribute(expr.getId(), expr.toString(), expr.getDataType(), -1));
+                return Optional.of(expr.toAttribute());
             } else {
                 return Optional.empty();
             }

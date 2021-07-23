@@ -6,7 +6,6 @@ import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Div;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.EqualsAndHashCode;
 
@@ -80,7 +79,7 @@ public class AvgAgg extends AggExpression {
 
         @Override
         public AttributeSet updateOutputs() {
-            return new AttributeSet(new Attribute[]{
+            return new AttributeSet(new ResolvedAttribute[]{
                     this.sum.toAttribute(),
                     this.count.toAttribute()}
             );

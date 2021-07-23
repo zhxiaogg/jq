@@ -3,8 +3,8 @@ package com.github.zhxiaogg.jq.plan.logical;
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.Node;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface LogicalPlan extends Node<LogicalPlan> {
 
     List<Expression> getExpressions();
 
-    List<Attribute> outputs(Catalog catalog);
+    AttributeSet outputs(Catalog catalog);
 
     default Optional<LogicalPlan> transformExpressionsUp(Rule<Expression> rule) {
         List<Optional<Expression>> optExpressions = getExpressions().stream().map(expr -> expr.transformUp(rule)).collect(Collectors.toList());

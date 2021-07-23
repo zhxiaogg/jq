@@ -1,9 +1,10 @@
 package com.github.zhxiaogg.jq;
 
+import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.Schema;
 import com.github.zhxiaogg.jq.schema.SchemaName;
 import lombok.Data;
@@ -29,9 +30,12 @@ public class Relation {
     }
 
     public static Relation create(String name, Class<?> clazz) {
-        List<Attribute> attributes = new ArrayList<>();
+        List<ResolvedAttribute> attributes = new ArrayList<>();
+        List<Field> fields = new ArrayList<>();
+        int idx = 0;
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
+            fields.add(field);
             com.github.zhxiaogg.jq.annotations.Field annotation = field.getAnnotation(com.github.zhxiaogg.jq.annotations.Field.class);
             if (annotation == null) continue;
             final String fieldName = Optional.of(annotation.name()).filter(s -> !s.isEmpty()).orElseGet(field::getName);
@@ -49,9 +53,32 @@ public class Relation {
             } else {
                 throw new IllegalArgumentException("unsupported field type: " + field.getType().getCanonicalName());
             }
-            attributes.add(new Attribute(fieldName, datatype, field));
+            attributes.add(new ResolvedAttribute(fieldName, datatype, idx++));
         }
-        return new Relation(new Schema(new SchemaName(clazz, name), attributes));
+        ObjectReader reader = new ObjectReader() {
+            @Override
+            public Record read(Object data) {
+                List<Object> values = new ArrayList<>(attributes.size());
+                int i = 0;
+                for (ResolvedAttribute attribute : attributes) {
+                    try {
+                        Field f = fields.get(attribute.getOrdinal());
+                        f.setAccessible(true);
+                        Object value = f.get(data);
+                        values.add(value);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return Record.create(values);
+            }
+
+            @Override
+            public List<ResolvedAttribute> getAttributes() {
+                return attributes;
+            }
+        };
+        return new Relation(new Schema(new SchemaName(clazz, name), reader));
     }
 
     /**
@@ -71,7 +98,7 @@ public class Relation {
         if (data.getClass() != schema.getName().getClazz()) {
             throw new IllegalArgumentException("expected " + schema.getName().getClazz());
         }
-        Record record = schema.reader().read(data);
+        Record record = schema.getReader().read(data);
         records.add(record);
     }
 }

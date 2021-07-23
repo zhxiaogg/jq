@@ -4,7 +4,7 @@ import com.github.zhxiaogg.jq.plan.exec.*;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggregateFunction;
-import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 
@@ -66,7 +66,7 @@ public class AggregateExec implements PhysicalPlan {
 
     @Override
     public AttributeSet outputs() {
-        Attribute[] attributes = ListUtils.concat(groupings, aggregators).stream().map(Expression::toAttribute).toArray(Attribute[]::new);
+        ResolvedAttribute[] attributes = ListUtils.concat(groupings, aggregators).stream().map(Expression::toAttribute).toArray(ResolvedAttribute[]::new);
         return new AttributeSet(attributes);
     }
 }

@@ -3,7 +3,7 @@ package com.github.zhxiaogg.jq.plan.physical;
 import com.github.zhxiaogg.jq.Relation;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
-import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import lombok.Data;
 
 import java.util.Collections;
@@ -36,6 +36,6 @@ public class ScanExec implements PhysicalPlan {
     @Override
     public AttributeSet outputs() {
         // TODO: simplify this
-        return new AttributeSet(relation.getSchema().getAttributes().toArray(new Attribute[0]));
+        return new AttributeSet(relation.getSchema().getAttributes().toArray(new ResolvedAttribute[0]));
     }
 }

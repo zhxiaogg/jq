@@ -12,7 +12,6 @@ import com.github.zhxiaogg.jq.plan.logical.Aggregate;
 import com.github.zhxiaogg.jq.plan.logical.Filter;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.logical.Project;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +35,7 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                 BooleanExpression condition = filter.getCondition();
 
                 if (aggregate.getExpressions().stream().allMatch(Expression::isResolved) && !condition.isResolved()) {
-                    AttributeSet attributes = new AttributeSet(aggregate.getChild().outputs(catalog).toArray(new Attribute[0]));
+                    AttributeSet attributes = aggregate.getChild().outputs(catalog);
                     Optional<Expression> resolvedCondition = condition.transformUp(new ResolveExpressionAttributeRule(attributes));
                     // find all AggExpressions in resolvedCondition
                     if (resolvedCondition.isPresent() && resolvedCondition.get().isResolved()) {

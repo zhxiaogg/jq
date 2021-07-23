@@ -1,8 +1,8 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class Project implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog catalog) {
-        return projections.stream().map(Expression::toAttribute).collect(Collectors.toList());
+    public AttributeSet outputs(Catalog catalog) {
+        return new AttributeSet(projections.stream().map(Expression::toAttribute).collect(Collectors.toList()));
     }
 }

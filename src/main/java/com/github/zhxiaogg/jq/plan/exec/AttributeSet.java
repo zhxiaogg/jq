@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.plan.exec;
 
-import com.github.zhxiaogg.jq.schema.Attribute;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -10,19 +10,23 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class AttributeSet {
-    private final Attribute[] attributes;
+    private final ResolvedAttribute[] attributes;
 
-    public static AttributeSet create(List<Attribute> left, List<Attribute> right) {
-        List<Attribute> outputs = new ArrayList<>(left);
-        outputs.addAll(right);
-        return new AttributeSet(outputs.toArray(new Attribute[0]));
+    public AttributeSet(List<ResolvedAttribute> attributes) {
+        this(attributes.toArray(new ResolvedAttribute[0]));
     }
 
-    public Attribute getAttribute(int ordinal) {
+    public static AttributeSet create(List<ResolvedAttribute> left, List<ResolvedAttribute> right) {
+        List<ResolvedAttribute> outputs = new ArrayList<>(left);
+        outputs.addAll(right);
+        return new AttributeSet(outputs.toArray(new ResolvedAttribute[0]));
+    }
+
+    public ResolvedAttribute getAttribute(int ordinal) {
         return attributes[ordinal];
     }
 
-    public List<Attribute> allAttributes() {
+    public List<ResolvedAttribute> allAttributes() {
         return Arrays.stream(attributes).collect(Collectors.toList());
     }
 

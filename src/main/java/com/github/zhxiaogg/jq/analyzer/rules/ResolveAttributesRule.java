@@ -3,8 +3,8 @@ package com.github.zhxiaogg.jq.analyzer.rules;
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
-import com.github.zhxiaogg.jq.schema.Attribute;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class ResolveAttributesRule implements Rule<LogicalPlan> {
         return node.transformUp(n -> {
             if (!n.leafNode()) {
                 // read attributes from children and resolve expressions against the attributes
-                Attribute[] childrenOutputs = n.getChildren().stream().flatMap(p -> p.outputs(dataSource).stream()).toArray(Attribute[]::new);
+                ResolvedAttribute[] childrenOutputs = n.getChildren().stream().flatMap(p -> p.outputs(dataSource).allAttributes().stream()).toArray(ResolvedAttribute[]::new);
                 AttributeSet attributes = new AttributeSet(childrenOutputs);
                 // TODO: make sure children outputs are all resolved before resolving current expressions
                 ResolveExpressionAttributeRule expressionRule = new ResolveExpressionAttributeRule(attributes);

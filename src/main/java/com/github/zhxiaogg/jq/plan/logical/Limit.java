@@ -1,8 +1,8 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.Data;
 
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public List<Attribute> outputs(Catalog catalog) {
+    public AttributeSet outputs(Catalog catalog) {
         return null;
     }
 
