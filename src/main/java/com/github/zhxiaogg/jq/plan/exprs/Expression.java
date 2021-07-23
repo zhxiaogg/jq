@@ -1,8 +1,8 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.Node;
 import com.github.zhxiaogg.jq.plan.exec.Record;
-import com.github.zhxiaogg.jq.schema.DataType;
 
 public interface Expression extends Node<Expression> {
 

@@ -1,11 +1,11 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AvgAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MinAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
-import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

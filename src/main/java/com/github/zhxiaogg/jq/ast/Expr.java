@@ -1,12 +1,12 @@
 package com.github.zhxiaogg.jq.ast;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exprs.*;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.*;
 import com.github.zhxiaogg.jq.plan.exprs.literals.BooleanLiteral;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.*;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
-import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

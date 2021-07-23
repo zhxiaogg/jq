@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.plan.exprs.literals;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.Data;
 
 import java.util.Objects;
@@ -22,6 +22,6 @@ public class LiteralImpl implements Literal {
     public boolean semanticEqual(Expression other) {
         return other instanceof LiteralImpl &&
                 Objects.equals(value, ((LiteralImpl) other).value) &&
-                Objects.equals(dataType,other.getDataType());
+                Objects.equals(dataType, other.getDataType());
     }
 }

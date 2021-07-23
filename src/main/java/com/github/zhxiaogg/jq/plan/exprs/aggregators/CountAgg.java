@@ -1,11 +1,11 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
-import com.github.zhxiaogg.jq.schema.DataType;
 
 import java.util.Collections;
 import java.util.List;

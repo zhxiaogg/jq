@@ -1,9 +1,9 @@
 package com.github.zhxiaogg.jq.plan.exprs.aggregators;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
-import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.Data;
 
 import java.util.Arrays;

@@ -1,17 +1,14 @@
 package com.github.zhxiaogg.jq.schema;
 
-import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
-import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class Schema {
     private final SchemaName name;
-    private final ObjectReader reader;
+    private final RecordReader reader;
 
-    public List<ResolvedAttribute> getAttributes() {
+    public AttributeSet getAttributes() {
         return reader.getAttributes();
     }
 }

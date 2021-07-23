@@ -1,11 +1,11 @@
 package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.analyzer.Rule;
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exprs.Cast;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.FunctionCall;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
-import com.github.zhxiaogg.jq.schema.DataType;
 
 import java.util.List;
 import java.util.Optional;

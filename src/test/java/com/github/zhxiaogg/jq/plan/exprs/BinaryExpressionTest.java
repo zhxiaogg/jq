@@ -3,7 +3,7 @@ package com.github.zhxiaogg.jq.plan.exprs;
 import com.github.zhxiaogg.jq.plan.exprs.literals.LiteralImpl;
 import com.github.zhxiaogg.jq.plan.exprs.math.Div;
 import com.github.zhxiaogg.jq.plan.exprs.math.Plus;
-import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import org.junit.Assert;
 import org.junit.Test;
 

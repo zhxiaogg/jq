@@ -1,10 +1,11 @@
 package com.github.zhxiaogg.jq;
 
-import com.github.zhxiaogg.jq.plan.exec.ObjectReader;
+import com.github.zhxiaogg.jq.datatypes.DataType;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
-import com.github.zhxiaogg.jq.schema.DataType;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.schema.RecordReader;
 import com.github.zhxiaogg.jq.schema.Schema;
 import com.github.zhxiaogg.jq.schema.SchemaName;
 import lombok.Data;
@@ -55,7 +56,7 @@ public class Relation {
             }
             attributes.add(new ResolvedAttribute(fieldName, datatype, idx++));
         }
-        ObjectReader reader = new ObjectReader() {
+        RecordReader reader = new RecordReader() {
             @Override
             public Record read(Object data) {
                 List<Object> values = new ArrayList<>(attributes.size());
@@ -74,8 +75,8 @@ public class Relation {
             }
 
             @Override
-            public List<ResolvedAttribute> getAttributes() {
-                return attributes;
+            public AttributeSet getAttributes() {
+                return new AttributeSet(attributes);
             }
         };
         return new Relation(new Schema(new SchemaName(clazz, name), reader));

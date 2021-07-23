@@ -5,7 +5,6 @@ import com.github.zhxiaogg.jq.Relation;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import lombok.Data;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Data
@@ -20,7 +19,7 @@ public class Scan implements LeafPlanNode {
     public AttributeSet outputs(Catalog catalog) {
         Optional<Relation> relation = catalog.relationOf(this.relation);
         if (relation.isPresent()) {
-            return new AttributeSet(Collections.unmodifiableList(relation.get().getSchema().getAttributes()));
+            return relation.get().getSchema().getAttributes();
         } else {
             throw new IllegalArgumentException(String.format("relation %s not found!", relation));
         }

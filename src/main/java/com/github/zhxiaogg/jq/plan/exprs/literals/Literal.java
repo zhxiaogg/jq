@@ -1,9 +1,9 @@
 package com.github.zhxiaogg.jq.plan.exprs.literals;
 
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.LeafExprNode;
-import com.github.zhxiaogg.jq.schema.DataType;
 
 import java.time.Instant;
 

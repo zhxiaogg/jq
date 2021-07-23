@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.plan.exprs.booleans;
 
-import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.utils.BinaryValueOp;
 
 import java.time.Instant;

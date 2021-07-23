@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.schema;
+package com.github.zhxiaogg.jq.datatypes;
 
 import java.time.Instant;
 

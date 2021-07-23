@@ -24,7 +24,7 @@ public final class ListUtils {
                 throw new IllegalArgumentException("size not match!");
             }
         }
-        if(r.hasNext()) {
+        if (r.hasNext()) {
             throw new IllegalArgumentException("size not match!");
         }
         return result;
