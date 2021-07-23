@@ -5,42 +5,55 @@ import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
 import com.github.zhxiaogg.jq.utils.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+// TODO: replacing for-loop search with a HashMap
 public class AggregatorUtil {
-    public static Pair<Map<String, AggExpression>, List<Expression>> extractAggregators(List<Expression> expressions) {
-        Map<String, AggExpression> aggExpressions = new HashMap<>();
+    /**
+     * Transform input expressions by extracting out {@link AggExpression}s.
+     *
+     * @param expressions input expressions
+     * @return list of {@link AggExpression}s and list of transformed {@link Expression}s.
+     */
+    public static Pair<List<AggExpression>, List<Expression>> extractAggregators(List<Expression> expressions) {
         List<Expression> resultExpressions = new ArrayList<>(expressions.size());
+        List<AggExpression> aggExpressions = new ArrayList<>();
         for (Expression expression : expressions) {
-            Pair<Optional<Expression>, Map<String, AggExpression>> resolved = tryExtractAggExpression(expression, aggExpressions);
+            Pair<Optional<Expression>, List<AggExpression>> resolved = tryExtractAggExpression(expression, aggExpressions);
             if (resolved.getLeft().isPresent()) {
                 resultExpressions.add(resolved.getLeft().get());
             } else {
-                throw new IllegalStateException("cannot resolve aggregators!");
+                throw new IllegalArgumentException("cannot resolve aggregators!");
             }
         }
         return Pair.of(aggExpressions, resultExpressions);
     }
 
     /**
-     * Added to the existing map if the possible new {@link AggExpression} does not existed.
+     * Transform the input expression by extracting and replacing {@link AggExpression}s.
      *
-     * @param expression
-     * @param existing
-     * @return return the optionally resolved expression.
+     * @param expression input expression
+     * @param existings  current existing {@link AggExpression} that can be used to transform the input expression.
+     * @return return the optionally resolved expression and new {@link AggExpression}s that not present in existings.
      */
-    public static Pair<Optional<Expression>, Map<String, AggExpression>> tryExtractAggExpression(Expression expression, Map<String, AggExpression> existing) {
-        Map<String, AggExpression> map = new HashMap<>();
+    public static Pair<Optional<Expression>, List<AggExpression>> tryExtractAggExpression(Expression expression, List<AggExpression> existings) {
+        List<AggExpression> newAggExpressions = new ArrayList<>();
         Optional<Expression> optionalResolved = expression.transformDown(e -> {
             if (e instanceof AggExpression) {
-                String key = e.toString();
-                map.computeIfAbsent(key, k -> (AggExpression) e);
-                AggExpression expr = existing.computeIfAbsent(key, k -> (AggExpression) e);
+
+                Optional<AggExpression> existing = existings.stream().filter(agg -> agg.semanticEqual(e)).findFirst();
+                if (!existing.isPresent()) {
+                    existings.add((AggExpression) e);
+                    newAggExpressions.add((AggExpression) e);
+                }
+                AggExpression expr = existing.orElse((AggExpression) e);
                 return Optional.of(new ResolvedAttribute(expr.getId(), expr.toString(), expr.getDataType(), -1));
             } else {
                 return Optional.empty();
             }
         });
-        return Pair.of(optionalResolved, map);
+        return Pair.of(optionalResolved, newAggExpressions);
     }
 }

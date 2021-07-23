@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.zhxiaogg.jq.utils.ListUtils.zipList;
+import static com.github.zhxiaogg.jq.utils.ListUtils.zipAndPatch;
 
 public interface Node<T extends Node<T>> {
     boolean leafNode();
@@ -22,7 +22,7 @@ public interface Node<T extends Node<T>> {
 
         // apply on self if possible
         if (list.stream().anyMatch(Optional::isPresent)) {
-            List<T> updated = zipList(children, list);
+            List<T> updated = zipAndPatch(children, list);
             T newNode = this.withChildren(updated);
             newNode = rule.apply(newNode).orElse(newNode);
             return Optional.of(newNode);
@@ -41,7 +41,7 @@ public interface Node<T extends Node<T>> {
 
         // return a new node if possible
         if (list.stream().anyMatch(Optional::isPresent)) {
-            List<T> updated = zipList(children, list);
+            List<T> updated = zipAndPatch(children, list);
             return Optional.of(node.withChildren(updated));
         } else {
             return newNode;

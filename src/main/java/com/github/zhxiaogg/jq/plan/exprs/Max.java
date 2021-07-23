@@ -2,9 +2,11 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,12 @@ public class Max implements NonLeafExprNode {
     public Expression withChildren(List<Expression> children) {
         return new Max(id, children);
     }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Max &&
+                children.size() == ((Max) other).children.size() &&
+                ListUtils.zip(children, ((Max) other).children).stream().allMatch(p -> p.getLeft().semanticEqual(p.getRight()));    }
 
     @Override
     public Object evaluate(Record record) {

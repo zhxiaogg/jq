@@ -37,6 +37,11 @@ public class Not implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Not && expr.semanticEqual(((Not) other).expr);
+    }
+
+    @Override
     public Boolean evaluate(Record record) {
         return !expr.evaluate(record);
     }

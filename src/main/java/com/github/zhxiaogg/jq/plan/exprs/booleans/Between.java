@@ -33,6 +33,14 @@ public class Between implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Between &&
+                left.semanticEqual(((Between) other).left) &&
+                right.semanticEqual(((Between) other).right) &&
+                target.semanticEqual(((Between) other).target);
+    }
+
+    @Override
     public Boolean evaluate(Record record) {
         return null;
     }

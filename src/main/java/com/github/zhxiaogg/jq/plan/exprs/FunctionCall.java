@@ -6,10 +6,12 @@ import com.github.zhxiaogg.jq.plan.exprs.aggregators.MaxAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.MinAgg;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.SumAgg;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.github.zhxiaogg.jq.utils.Requires.require;
@@ -58,6 +60,14 @@ public class FunctionCall implements NonLeafExprNode {
     @Override
     public Expression withChildren(List<Expression> children) {
         return new FunctionCall(functionName, children, id);
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof FunctionCall &&
+                Objects.equals(functionName, ((FunctionCall) other).functionName) &&
+                arguments.size() == ((FunctionCall) other).getArguments().size() &&
+                ListUtils.zip(arguments, ((FunctionCall) other).arguments).stream().allMatch(p -> p.getLeft().semanticEqual(p.getRight()));
     }
 
     @Override

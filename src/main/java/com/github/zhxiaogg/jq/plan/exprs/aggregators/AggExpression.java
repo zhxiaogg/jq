@@ -16,6 +16,11 @@ public abstract class AggExpression implements NonLeafExprNode {
     protected final AggregateFunction aggregateFunction;
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other != null && this.getClass() == other.getClass() && this.child.semanticEqual(((AggExpression) other).child);
+    }
+
+    @Override
     public String getId() {
         return id;
     }

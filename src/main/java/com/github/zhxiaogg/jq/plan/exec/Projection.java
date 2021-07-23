@@ -6,15 +6,12 @@ import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.zhxiaogg.jq.utils.Requires.require;
-
 @FunctionalInterface
 public interface Projection {
 
     Record apply(Record input);
 
     static Projection create(List<Expression> expressions, AttributeSet input) {
-        require(expressions.stream().allMatch(Expression::isResolved), "expression is not resolved!");
         List<Expression> resolvedExpressions = resolveExpressions(expressions, input);
 
         return new Projection() {

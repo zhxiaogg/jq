@@ -5,6 +5,7 @@ import com.github.zhxiaogg.jq.schema.DataType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -16,6 +17,13 @@ public class UnResolvedAttribute implements LeafExprNode {
 
     public UnResolvedAttribute(String tableName, String name) {
         this(tableName, name, UUID.randomUUID().toString());
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof UnResolvedAttribute &&
+                Objects.equals(tableName, ((UnResolvedAttribute) other).getTableName()) &&
+                Objects.equals(name, ((UnResolvedAttribute) other).getName());
     }
 
     @Override

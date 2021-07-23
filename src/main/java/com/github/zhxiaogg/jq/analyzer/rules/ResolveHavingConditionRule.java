@@ -39,13 +39,15 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                     AttributeSet attributes = new AttributeSet(aggregate.getChild().outputs(catalog).toArray(new Attribute[0]));
                     Optional<Expression> resolvedCondition = condition.transformUp(new ResolveExpressionAttributeRule(attributes));
                     // find all AggExpressions in resolvedCondition
-                    if (resolvedCondition.isPresent()) {
-                        Map<String, AggExpression> aggregationMap = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
-                        Pair<Optional<Expression>, Map<String, AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.get(), aggregationMap);
-                        if (extractResult.getLeft().isPresent()) {
-                            BooleanExpression newCondition = (BooleanExpression) extractResult.getLeft().get();
+                    if (resolvedCondition.isPresent() && resolvedCondition.get().isResolved()) {
+                        List<AggExpression> existings = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
+                        Pair<Optional<Expression>, List<AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.get(), existings);
+                        Optional<Expression> optResolvedCondition = extractResult.getLeft();
+                        List<AggExpression> newAggExpressions = extractResult.getRight();
+                        if (optResolvedCondition.isPresent()) {
+                            BooleanExpression newCondition = (BooleanExpression) optResolvedCondition.get();
                             List<Expression> newAggregators = new ArrayList<>(aggregate.getAggregators());
-                            newAggregators.addAll(extractResult.getRight().values());
+                            newAggregators.addAll(newAggExpressions);
                             Aggregate newAggregate = aggregate.withAggregators(newAggregators);
                             LogicalPlan newFilter = filter.withExpressions(Collections.singletonList(newCondition)).withChildren(Collections.singletonList(newAggregate));
                             // TODO: use ResolvedAttribute after deprecating ordinal field from ResolvedAttribute

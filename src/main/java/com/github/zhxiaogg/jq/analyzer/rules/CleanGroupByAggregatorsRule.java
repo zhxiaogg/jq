@@ -18,7 +18,7 @@ public class CleanGroupByAggregatorsRule implements Rule<LogicalPlan> {
                 List<Expression> aggregators = aggregate.getAggregators();
                 List<Expression> filtered = new ArrayList<>(aggregators.size());
                 for (Expression aggregator : aggregators) {
-                    if (hasAggExpression(aggregator) || !groupings.contains(aggregator)) {
+                    if (hasAggExpression(aggregator) || !groupings.stream().anyMatch(e -> e.semanticEqual(aggregator))) {
                         filtered.add(aggregator);
                     } // else remove this expresion from aggregator
                 }

@@ -46,6 +46,13 @@ public class Or implements NonLeafExprNode, BooleanExpression {
     }
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Or &&
+                left.semanticEqual(((Or) other).left) &&
+                right.semanticEqual(((Or) other).right);
+    }
+
+    @Override
     public Boolean evaluate(Record record) {
         return left.evaluate(record) || right.evaluate(record);
     }

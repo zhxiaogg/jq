@@ -4,6 +4,7 @@ import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.Attribute;
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +27,10 @@ public class ResolveExpressionAttributeRule implements Rule<Expression> {
                 return Optional.empty();
             } else {
                 int ordinal = attributes.byId(node.getId());
-                // TODO: is byName valid?
-                if (ordinal < 0) {
-                    ordinal = attributes.byName(e.toString());
+
+                // TODO: consider table name support
+                if (ordinal < 0 && e instanceof UnResolvedAttribute) {
+                    ordinal = attributes.byName(((UnResolvedAttribute) e).getName());
                 }
                 if (ordinal > -1) {
                     Attribute attribute = attributes.getAttribute(ordinal);

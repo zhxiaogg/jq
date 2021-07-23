@@ -62,7 +62,6 @@ public class MainTest {
                                 new CastDataTypesRule(),
                                 new CleanGroupByAggregatorsRule(),
                                 new ResolveHavingConditionRule(catalog)
-
                         ))
                 );
             }

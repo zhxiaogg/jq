@@ -23,7 +23,7 @@ public interface LogicalPlan extends Node<LogicalPlan> {
         List<Optional<Expression>> optExpressions = getExpressions().stream().map(expr -> expr.transformUp(rule)).collect(Collectors.toList());
 
         if (optExpressions.stream().anyMatch(Optional::isPresent)) {
-            List<Expression> ts = ListUtils.zipList(getExpressions(), optExpressions);
+            List<Expression> ts = ListUtils.zipAndPatch(getExpressions(), optExpressions);
             return Optional.of(withExpressions(ts));
         } else {
             return Optional.empty();
@@ -34,7 +34,7 @@ public interface LogicalPlan extends Node<LogicalPlan> {
         List<Optional<Expression>> optExpressions = getExpressions().stream().map(expr -> expr.transformDown(rule)).collect(Collectors.toList());
 
         if (optExpressions.stream().anyMatch(Optional::isPresent)) {
-            List<Expression> ts = ListUtils.zipList(getExpressions(), optExpressions);
+            List<Expression> ts = ListUtils.zipAndPatch(getExpressions(), optExpressions);
             return Optional.of(withExpressions(ts));
         } else {
             return Optional.empty();

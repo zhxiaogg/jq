@@ -11,7 +11,6 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Data
@@ -56,8 +55,8 @@ public class PhysicalPlanner {
             return new ProjectExec(((Project) plan).getProjections(), new PlanLater(((Project) plan).getChild()));
         } else if (plan instanceof Aggregate) {
             Aggregate aggregate = (Aggregate) plan;
-            Pair<Map<String, AggExpression>, List<Expression>> extractResult = AggregatorUtil.extractAggregators(aggregate.getAggregators());
-            return new AggregateExec(aggregate.getGroupingKeys(), new ArrayList<>(extractResult.getLeft().values()), extractResult.getRight(), new PlanLater(aggregate.getChild()));
+            Pair<List<AggExpression>, List<Expression>> extractResult = AggregatorUtil.extractAggregators(aggregate.getAggregators());
+            return new AggregateExec(aggregate.getGroupingKeys(), new ArrayList<>(extractResult.getLeft()), extractResult.getRight(), new PlanLater(aggregate.getChild()));
         } else {
             return new PlanLater(plan);
         }

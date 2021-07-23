@@ -12,6 +12,8 @@ public interface Expression extends Node<Expression> {
         return new Attribute(getId(), toString(), getDataType(), null);
     }
 
+    boolean semanticEqual(Expression other);
+
     boolean isResolved();
 
     String getId();

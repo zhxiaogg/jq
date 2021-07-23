@@ -5,6 +5,7 @@ import com.github.zhxiaogg.jq.schema.DataType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BinaryExpression implements NonLeafExprNode {
     protected final Expression left;
@@ -15,6 +16,14 @@ public abstract class BinaryExpression implements NonLeafExprNode {
         this.left = left;
         this.right = right;
         this.id = id;
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return Objects.nonNull(other) &&
+                other.getClass() == this.getClass() &&
+                this.left.semanticEqual(((BinaryExpression) other).left) &&
+                this.right.semanticEqual(((BinaryExpression) other).right);
     }
 
     @Override

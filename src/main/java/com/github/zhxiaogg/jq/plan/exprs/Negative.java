@@ -35,6 +35,12 @@ public class Negative implements NonLeafExprNode {
     }
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Negative &&
+                child.semanticEqual(((Negative) other).getChild());
+    }
+
+    @Override
     public Object evaluate(Record record) {
         Object value = child.evaluate(record);
         switch (getDataType()) {

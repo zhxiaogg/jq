@@ -2,6 +2,7 @@ package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.schema.DataType;
+import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 
 import java.util.List;
@@ -28,6 +29,13 @@ public class Min implements NonLeafExprNode {
     @Override
     public Expression withChildren(List<Expression> children) {
         return new Min(id, children);
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Min &&
+                children.size() == ((Min) other).children.size() &&
+                ListUtils.zip(children, ((Min) other).children).stream().allMatch(p -> p.getLeft().semanticEqual(p.getRight()));
     }
 
     @Override

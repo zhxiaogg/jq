@@ -4,13 +4,11 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.NonLeafExprNode;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
+import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -44,6 +42,13 @@ public class In implements NonLeafExprNode, BooleanExpression {
         } else {
             return new In(children.get(0), null, subQuery, id);
         }
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof In &&
+                (ListUtils.zip(values, ((In) other).values).stream().allMatch(p -> p.getLeft().semanticEqual(p.getRight())) ||
+                        Objects.equals(subQuery, ((In) other).subQuery));
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.github.zhxiaogg.jq.utils.Requires.require;
@@ -43,6 +44,13 @@ public class And implements NonLeafExprNode, BooleanExpression {
     @Override
     public String toString() {
         return String.format("%s AND %s", left, right);
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof And &&
+                left.semanticEqual(((And) other).left) &&
+                right.semanticEqual(((And) other).right);
     }
 
     @Override

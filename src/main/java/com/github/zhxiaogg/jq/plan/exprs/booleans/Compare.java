@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -20,6 +21,14 @@ public class Compare implements NonLeafExprNode, BooleanExpression {
 
     public Compare(CompareOp op, Expression left, Expression right) {
         this(op, left, right, UUID.randomUUID().toString());
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Compare &&
+                Objects.equals(op, ((Compare) other).op) &&
+                left.semanticEqual(((Compare) other).left) &&
+                right.semanticEqual(((Compare) other).right);
     }
 
     @Override

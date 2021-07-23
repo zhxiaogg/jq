@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -21,15 +22,20 @@ public class Alias implements NonLeafExprNode {
     }
 
     @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Alias &&
+                Objects.equals(this.name, ((Alias) other).name) &&
+                inner.semanticEqual(((Alias) other).getInner());
+    }
+
+    @Override
     public Object evaluate(Record record) {
         return inner.evaluate(record);
     }
 
     @Override
     public String toString() {
-        // TODO: fix this
-        return name;
-        // return String.format("%s_as_%s", inner, name);
+        return String.format("%s AS %s", inner, name);
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.github.zhxiaogg.jq.utils.Requires.require;
@@ -35,6 +36,13 @@ public class Cast implements NonLeafExprNode {
     @Override
     public Expression withChildren(List<Expression> children) {
         return new Cast(children.get(0), dataType, id);
+    }
+
+    @Override
+    public boolean semanticEqual(Expression other) {
+        return other instanceof Cast &&
+                Objects.equals(dataType, other.getDataType()) &&
+                child.semanticEqual(((Cast) other).getChild());
     }
 
     @Override
