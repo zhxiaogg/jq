@@ -27,7 +27,7 @@ join_operator:
 ;
 
 expr: literal_value
-    | (table_name DOT)? column_name
+    | column_name (DOT column_name)*
     | unary_operator expr
     | func OPEN_PAR (expr (COMMA expr)*)? CLOSE_PAR
     | expr ( STAR | DIV | MOD) expr

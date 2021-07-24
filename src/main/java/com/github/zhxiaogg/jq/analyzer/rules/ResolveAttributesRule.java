@@ -3,8 +3,6 @@ package com.github.zhxiaogg.jq.analyzer.rules;
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
-import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 
 import java.util.List;

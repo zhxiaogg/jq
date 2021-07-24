@@ -4,7 +4,6 @@ import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.AggregatorUtil;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
@@ -15,7 +14,6 @@ import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.logical.Project;
 import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.RequiredArgsConstructor;
-import org.w3c.dom.Attr;
 
 import java.util.ArrayList;
 import java.util.Collections;

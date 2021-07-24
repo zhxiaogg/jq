@@ -1,7 +1,6 @@
 package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.analyzer.Rule;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
@@ -25,14 +24,18 @@ public class ResolveExpressionAttributeRule implements Rule<Expression> {
             if (e.isResolved() && ignoreResolved) {
                 return Optional.empty();
             } else {
-                int ordinal = attributes.byId(node.getId());
+                int[] ordinals = attributes.byId(node.getId());
 
-                // TODO: consider table name support
-                if (ordinal < 0 && e instanceof UnResolvedAttribute) {
-                    ordinal = attributes.byName(((UnResolvedAttribute) e).getNames());
-                }
-                if (ordinal > -1) {
-                    return Optional.of(attributes.getAttribute(ordinal));
+                if (ordinals.length > 0) {
+                    return Optional.of(attributes.getAttribute(ordinals, 0).withOrdinals(ordinals).withNames(new String[]{e.toString()}));
+                } else if (e instanceof UnResolvedAttribute) {
+                    String[] names = ((UnResolvedAttribute) e).getNames();
+                    ordinals = attributes.byName(names, 0);
+                    if (ordinals.length > 0) {
+                        return Optional.of(attributes.getAttribute(ordinals, 0).withOrdinals(ordinals).withNames(names));
+                    } else {
+                        return Optional.empty();
+                    }
                 } else {
                     return Optional.empty();
                 }

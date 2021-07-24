@@ -32,13 +32,17 @@ public interface AttributeSet {
         }
     }
 
-    ResolvedAttribute getAttribute(int ordinal);
+    static AttributeSet empty() {
+        return new EmptyAttributeSet();
+    }
+
+    ResolvedAttribute getAttribute(int[] ordinals, int offset);
 
     List<ResolvedAttribute> allAttributes();
 
-    int byId(String id);
+    int[] byId(String id);
 
-    int byName(String[] names);
+    int[] byName(String[] names, int offset);
 
     int numAttributes();
 }

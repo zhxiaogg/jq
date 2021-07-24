@@ -76,6 +76,18 @@ public enum DataType implements DataTypeSupport, Comparable<DataType> {
         public boolean canCastTo(DataType dataType) {
             return false;
         }
-    };
+    },
+    Struct {
+        @Override
+        public boolean canCastTo(DataType dataType) {
+            return false;
+        }
+
+        @Override
+        public Object castTo(DataType dataType, Object value) {
+            throw new UnsupportedOperationException("");
+        }
+    }
+
 }
 

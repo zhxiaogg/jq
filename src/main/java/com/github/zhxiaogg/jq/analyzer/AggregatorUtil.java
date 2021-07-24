@@ -41,7 +41,6 @@ public class AggregatorUtil {
         List<AggExpression> newAggExpressions = new ArrayList<>();
         Optional<Expression> optionalResolved = expression.transformDown(e -> {
             if (e instanceof AggExpression) {
-
                 Optional<AggExpression> existing = existings.stream().filter(agg -> agg.semanticEqual(e)).findFirst();
                 if (!existing.isPresent()) {
                     existings.add((AggExpression) e);

@@ -198,7 +198,7 @@ public class SQLListenerImpl implements SQLListener {
     public void enterExpr(SQLParser.ExprContext ctx) {
         if (ctx.literal_value() != null) {
             builders.push(new ExprLiteralBuilder());
-        } else if (ctx.table_name() != null || ctx.column_name() != null) {
+        } else if (!ctx.column_name().isEmpty()) {
             builders.push(new ExprColumnRefBuilder());
         } else if (ctx.unary_operator() != null) {
             builders.push(new ExprUnaryBuilder());

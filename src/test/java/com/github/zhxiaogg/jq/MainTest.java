@@ -16,6 +16,7 @@ import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
+import lombok.Data;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,6 +27,15 @@ import java.util.List;
 
 public class MainTest {
 
+    @Data
+    private static class User {
+        @Field
+        private final String id;
+        @Field
+        private final String name;
+    }
+
+    @Data
     private static class Order {
         @Field(name = "item_id")
         private final int itemId;
@@ -33,26 +43,8 @@ public class MainTest {
         private final double price;
         @Field()
         private final Instant time;
-
-        private Order(int itemId, double price, Instant time) {
-            this.itemId = itemId;
-            this.price = price;
-            this.time = time;
-        }
-
-        public int getItemId() {
-            return itemId;
-        }
-
-
-        public double getPrice() {
-            return price;
-        }
-
-
-        public Instant getTime() {
-            return time;
-        }
+        @Field
+        private final User user;
     }
 
     Analyser getAnalyser(Catalog catalog) {
@@ -84,10 +76,30 @@ public class MainTest {
         PhysicalPlanner physicalPlanner = new PhysicalPlanner(ds);
         PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
         StreamingQuery streaming = ds.streamQuery(executablePlan);
-        RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
+        RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now(), null));
         Assert.assertEquals(RecordBag.empty(), r1);
-        RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now()));
+        RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now(), null));
         Assert.assertEquals(RecordBag.of(Collections.singletonList(Record.create(Arrays.asList(1, 100.0D)))), r2);
+    }
+
+    @Test
+    public void
+    support_nested_fields() {
+        Relation relation = Relation.create("orders", Order.class);
+        Catalog ds = Catalog.create(relation);
+
+        Parser parser = new Parser();
+        Select select = parser.parse("select o.user.id as uid, max(o.price) as value from orders as o where time > '2021-05-31T00:00:00Z' group by o.user.id having sum(price) > 100");
+        LogicalPlan plan = select.toPlanNode();
+        LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
+
+        PhysicalPlanner physicalPlanner = new PhysicalPlanner(ds);
+        PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
+        StreamingQuery streaming = ds.streamQuery(executablePlan);
+        RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now(), new User("1", "x")));
+        Assert.assertEquals(RecordBag.empty(), r1);
+        RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now(), new User("1", "x")));
+        Assert.assertEquals(RecordBag.of(Collections.singletonList(Record.create(Arrays.asList("1", 100.0D)))), r2);
     }
 
 }

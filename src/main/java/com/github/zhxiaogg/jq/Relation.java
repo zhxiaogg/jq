@@ -6,8 +6,10 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.schema.FieldReader;
 import com.github.zhxiaogg.jq.schema.RecordReader;
 import com.github.zhxiaogg.jq.schema.Schema;
+import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -24,64 +26,80 @@ public class Relation {
     private final List<Record> records = new LinkedList<>();
 
     public static Relation create(String name, Class<?> clazz) {
-        List<ResolvedAttribute> attributes = new ArrayList<>();
-        List<Field> fields = new ArrayList<>();
-        int idx = 0;
-        for (Field field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
-            fields.add(field);
-            com.github.zhxiaogg.jq.annotations.Field annotation = field.getAnnotation(com.github.zhxiaogg.jq.annotations.Field.class);
-            if (annotation == null) continue;
-            final String fieldName = Optional.of(annotation.name()).filter(s -> !s.isEmpty()).orElseGet(field::getName);
-            final DataType datatype;
-            if (int.class.equals(field.getType()) || Integer.class.equals(field.getType()) || Long.class.equals(field.getType()) || long.class.equals(field.getType())) {
-                datatype = DataType.Int;
-            } else if (float.class.equals(field.getType()) || Float.class.equals(field.getType()) || double.class.equals(field.getType()) || Double.class.equals(field.getType())) {
-                datatype = DataType.Float;
-            } else if (String.class.equals(field.getType())) {
-                datatype = DataType.String;
-            } else if (Boolean.class.equals(field.getType()) || boolean.class.equals(field.getType())) {
-                datatype = DataType.Boolean;
-            } else if (Instant.class.equals(field.getType())) {
-                datatype = DataType.DateTime;
-            } else {
-                throw new IllegalArgumentException("unsupported field type: " + field.getType().getCanonicalName());
-            }
-            attributes.add(new ResolvedAttribute(fieldName, datatype, idx++));
-        }
-        RecordReader reader = new RecordReader() {
-            @Override
-            public Record read(Object data) {
-                List<Object> values = new ArrayList<>(attributes.size());
-                int i = 0;
-                for (ResolvedAttribute attribute : attributes) {
-                    try {
-                        Field f = fields.get(attribute.getOrdinal());
-                        f.setAccessible(true);
-                        Object value = f.get(data);
-                        values.add(value);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return Record.create(values);
-            }
-        };
-        Schema schema = new Schema(new String[]{name}, (SimpleAttributeSet) AttributeSet.create(attributes), reader);
+        Pair<AttributeSet, RecordReader> attributeSet = resolveAttributeSet(clazz);
+        Schema schema = new Schema(new String[]{name}, ((SimpleAttributeSet) attributeSet.getLeft()).withName(name), attributeSet.getRight());
         return new Relation(schema, clazz);
     }
 
     /**
-     * clear records after every read
+     * Get {@link AttributeSet} and {@link RecordReader} for a Class.
      *
+     * @param clazz
      * @return
      */
+    private static Pair<AttributeSet, RecordReader> resolveAttributeSet(Class<?> clazz) {
+        List<FieldReader> fieldReaders = new ArrayList<>();
+        List<ResolvedAttribute> attributes = new ArrayList<>();
+        int idx = 0;
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            Optional<Pair<ResolvedAttribute, FieldReader>> optAttribute = resolveAttribute(idx, field);
+            if (!optAttribute.isPresent()) continue;
+            fieldReaders.add(optAttribute.get().getRight());
+            attributes.add(optAttribute.get().getLeft());
+            idx += 1;
+        }
+        RecordReader reader = data -> {
+            List<Object> values = new ArrayList<>(attributes.size());
+            for (ResolvedAttribute attribute : attributes) {
+                FieldReader f = fieldReaders.get(attribute.getOrdinals()[0]);
+                Object value = f.read(data);
+                values.add(value);
+            }
+            return Record.create(values);
+        };
+        return Pair.of(AttributeSet.create(attributes), reader);
+    }
+
+    /**
+     * Get {@link ResolvedAttribute} and {@link FieldReader} for a given {@link Field}
+     *
+     * @param idx   ordinal of the field in the parent {@link AttributeSet}
+     * @param field
+     * @return
+     */
+    private static Optional<Pair<ResolvedAttribute, FieldReader>> resolveAttribute(int idx, Field field) {
+        com.github.zhxiaogg.jq.annotations.Field annotation = field.getAnnotation(com.github.zhxiaogg.jq.annotations.Field.class);
+        if (annotation == null) return Optional.empty();
+        final String fieldName = Optional.of(annotation.name()).filter(s -> !s.isEmpty()).orElseGet(field::getName);
+        Class<?> fieldType = field.getType();
+        FieldReader fr = FieldReader.create(field);
+        ResolvedAttribute attribute;
+        if (int.class.equals(fieldType) || Integer.class.equals(fieldType) || Long.class.equals(fieldType) || long.class.equals(fieldType)) {
+            attribute = new ResolvedAttribute(fieldName, DataType.Int, idx);
+        } else if (float.class.equals(fieldType) || Float.class.equals(fieldType) || double.class.equals(fieldType) || Double.class.equals(fieldType)) {
+            attribute = new ResolvedAttribute(fieldName, DataType.Float, idx);
+        } else if (String.class.equals(fieldType)) {
+            attribute = new ResolvedAttribute(fieldName, DataType.String, idx);
+        } else if (Boolean.class.equals(fieldType) || boolean.class.equals(fieldType)) {
+            attribute = new ResolvedAttribute(fieldName, DataType.Boolean, idx);
+        } else if (Instant.class.equals(fieldType)) {
+            attribute = new ResolvedAttribute(fieldName, DataType.DateTime, idx);
+        } else {
+            // treat the field as DataType.Struct
+            Pair<AttributeSet, RecordReader> nestedAttribute = resolveAttributeSet(fieldType);
+            fr = FieldReader.create(field, nestedAttribute.getRight());
+            attribute = new ResolvedAttribute(fieldName, DataType.Struct, nestedAttribute.getLeft(), idx);
+        }
+
+        return Optional.of(Pair.of(attribute, fr));
+    }
+
+
     public RecordBag records() {
         ArrayList<Record> result = new ArrayList<>(records.size());
         result.addAll(records);
-        RecordBag bag = RecordBag.of(result);
-        // records.clear();
-        return bag;
+        return RecordBag.of(result);
     }
 
     public void add(Object data) {

@@ -1,6 +1,7 @@
 package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
+import com.github.zhxiaogg.jq.utils.AttributeSearchUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +31,13 @@ public class SimpleAttributeSet implements AttributeSet {
         this(new String[0], attributes);
     }
 
-
     @Override
-    public ResolvedAttribute getAttribute(int ordinal) {
-        return attributes[ordinal];
+    public ResolvedAttribute getAttribute(int[] ordinals, int offset) {
+        ResolvedAttribute attribute = attributes[ordinals[offset]];
+        if (ordinals.length - offset > 1) {
+            attribute = attribute.getInner().getAttribute(ordinals, offset + 1);
+        }
+        return attribute;
     }
 
     @Override
@@ -50,35 +54,14 @@ public class SimpleAttributeSet implements AttributeSet {
     }
 
     @Override
-    public int byId(String id) {
-        for (int i = 0; i < attributes.length; i++) {
-            if (attributes[i].getId().equals(id)) {
-                return i;
+    public int[] byId(String id) {
+        int[] ordinals = new int[0];
+        for (ResolvedAttribute attribute : attributes) {
+            if ((ordinals = attribute.byId(id)).length > 0) {
+                break;
             }
         }
-        return -1;
-    }
-
-    /**
-     * Matches input against target, checking if input prefix can fully match the target.
-     *
-     * @param input
-     * @param target
-     * @return
-     */
-    private boolean prefixMatches(String[] input, String[] target) {
-        boolean matched = true;
-        if (input.length > target.length) {
-            for (int i = 0; i < target.length; i++) {
-                if (!input[i].equalsIgnoreCase(target[i])) {
-                    matched = false;
-                    break;
-                }
-            }
-        } else {
-            matched = false;
-        }
-        return matched;
+        return ordinals;
     }
 
     /**
@@ -115,18 +98,18 @@ public class SimpleAttributeSet implements AttributeSet {
      * @return
      */
     @Override
-    public int byName(String[] names) {
+    public int[] byName(String[] names, int offset) {
         int offsetAfterRelationNames = 0;
-        if (prefixMatches(names, this.relationNames)) {
-            offsetAfterRelationNames = this.relationNames.length;
+        if (AttributeSearchUtil.prefixMatches(names, this.relationNames, offset)) {
+            offsetAfterRelationNames = offset + this.relationNames.length;
         }
-
+        int[] ordinals = new int[0];
         for (int i = 0; i < attributes.length; i++) {
-            if (fullyMatches(names, attributes[i].getNames(), offsetAfterRelationNames)) {
-                return i;
+            if ((ordinals = attributes[i].byName(names, offsetAfterRelationNames)).length > 0) {
+                break;
             }
         }
-        return -1;
+        return ordinals;
     }
 
     @Override

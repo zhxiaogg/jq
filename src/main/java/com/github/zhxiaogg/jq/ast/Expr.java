@@ -44,18 +44,11 @@ public interface Expr extends AstNode {
 
     @Data
     class ExprColumnRef implements Expr {
-        private final TableName tableName;
-        private final ColumnName columnName;
+        private final List<ColumnName> columnNames;
 
         @Override
         public Expression toExpression() {
-            String tableName = (this.tableName == null) ? null : this.tableName.getName();
-            String[] names;
-            if(this.tableName != null) {
-                names = new String[]{tableName, columnName.getName()};
-            } else {
-                names = new String[]{columnName.getName()};
-            }
+            String[] names = columnNames.stream().map(ColumnName::getName).toArray(String[]::new);
             return new UnResolvedAttribute(names);
         }
     }

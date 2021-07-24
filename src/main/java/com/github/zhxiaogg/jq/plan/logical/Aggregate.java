@@ -2,7 +2,6 @@ package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.utils.ListUtils;
@@ -34,6 +33,10 @@ public class Aggregate implements LogicalPlan {
 
     public Aggregate withAggregators(List<Expression> aggregators) {
         return new Aggregate(this.groupingKeys, aggregators, child);
+    }
+
+    public Aggregate withGroupings(List<Expression> groupings) {
+        return new Aggregate(groupings, aggregators, child);
     }
 
     @Override

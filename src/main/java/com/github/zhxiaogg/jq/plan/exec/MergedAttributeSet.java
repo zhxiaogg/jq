@@ -4,6 +4,7 @@ import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -11,15 +12,20 @@ public class MergedAttributeSet implements AttributeSet {
     private final List<AttributeSet> attributeSets;
 
     @Override
-    public ResolvedAttribute getAttribute(int ordinal) {
-        int offset = 0;
+    public ResolvedAttribute getAttribute(int[] ordinals, int offset) {
+        int idx = 0;
         for (AttributeSet attributeSet : attributeSets) {
-            if (ordinal < attributeSet.numAttributes() + offset) {
-                return attributeSet.getAttribute(ordinal - offset);
+            if (ordinals[offset] < attributeSet.numAttributes() + idx) {
+                int[] newOrdinals = new int[ordinals.length];
+                for (int i = 0; i < ordinals.length; i++) {
+                    newOrdinals[i] = ordinals[i];
+                    if (i == offset) newOrdinals[i] += idx;
+                }
+                return attributeSet.getAttribute(newOrdinals, offset);
             }
-            offset += attributeSet.numAttributes();
+            idx += attributeSet.numAttributes();
         }
-        throw new ArrayIndexOutOfBoundsException(ordinal);
+        throw new IllegalStateException("cannot find attribute at " + Arrays.toString(ordinals));
     }
 
     @Override
@@ -35,31 +41,31 @@ public class MergedAttributeSet implements AttributeSet {
     }
 
     @Override
-    public int byId(String id) {
-        int ordinal = -1;
+    public int[] byId(String id) {
+        int[] ordinals = new int[0];
         int offset = 0;
         for (AttributeSet attributeSet : attributeSets) {
-            if ((ordinal = attributeSet.byId(id)) > -1) {
-                ordinal = offset + ordinal;
+            if ((ordinals = attributeSet.byId(id)).length > 0) {
+                ordinals[0] += offset;
                 break;
             }
             offset += attributeSet.numAttributes();
         }
-        return ordinal;
+        return ordinals;
     }
 
     @Override
-    public int byName(String[] names) {
-        int ordinal = -1;
-        int offset = 0;
+    public int[] byName(String[] names, int offset) {
+        int[] ordinals = new int[0];
+        int idx = 0;
         for (AttributeSet attributeSet : attributeSets) {
-            if ((ordinal = attributeSet.byName(names)) > -1) {
-                ordinal = offset + ordinal;
+            if ((ordinals = attributeSet.byName(names, offset)).length > 0) {
+                ordinals[0] += idx;
                 break;
             }
-            offset += attributeSet.numAttributes();
+            idx += attributeSet.numAttributes();
         }
-        return ordinal;
+        return ordinals;
     }
 
     @Override
