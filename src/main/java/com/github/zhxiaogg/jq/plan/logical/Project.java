@@ -2,6 +2,7 @@ package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import lombok.Data;
 
@@ -42,6 +43,6 @@ public class Project implements LogicalPlan {
 
     @Override
     public AttributeSet outputs(Catalog catalog) {
-        return new AttributeSet(projections.stream().map(Expression::toAttribute).collect(Collectors.toList()));
+        return AttributeSet.create(projections.stream().map(Expression::toAttribute).collect(Collectors.toList()));
     }
 }

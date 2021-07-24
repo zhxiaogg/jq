@@ -1,60 +1,44 @@
 package com.github.zhxiaogg.jq.plan.exec;
 
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class AttributeSet {
-    /**
-     * relation names if any.
-     */
-    private final String[] names;
-
-    private final ResolvedAttribute[] attributes;
-
-    public AttributeSet(List<ResolvedAttribute> attributes) {
-        this(new String[0], attributes.toArray(new ResolvedAttribute[0]));
-    }
-
-    public AttributeSet(ResolvedAttribute[] attributes) {
-        this(new String[0], attributes);
-    }
-
-
-    public static AttributeSet create(List<ResolvedAttribute> left, List<ResolvedAttribute> right) {
+public interface AttributeSet {
+    static AttributeSet create(List<ResolvedAttribute> left, List<ResolvedAttribute> right) {
         List<ResolvedAttribute> outputs = new ArrayList<>(left);
         outputs.addAll(right);
-        return new AttributeSet(new String[0], outputs.toArray(new ResolvedAttribute[0]));
+        return create(new String[0], outputs.toArray(new ResolvedAttribute[0]));
     }
 
-    public ResolvedAttribute getAttribute(int ordinal) {
-        return attributes[ordinal];
+    static AttributeSet create(String[] relationNames, ResolvedAttribute[] attributes) {
+        return new SimpleAttributeSet(relationNames, attributes);
     }
 
-    public List<ResolvedAttribute> allAttributes() {
-        return Arrays.stream(attributes).collect(Collectors.toList());
+    static AttributeSet create(List<ResolvedAttribute> attributes) {
+        return new SimpleAttributeSet(attributes);
     }
 
-    public int byId(String id) {
-        for (int i = 0; i < attributes.length; i++) {
-            if (attributes[i].getId().equals(id)) {
-                return i;
-            }
+    static AttributeSet create(ResolvedAttribute[] attributes) {
+        return new SimpleAttributeSet(attributes);
+    }
+
+    static AttributeSet createMerged(List<AttributeSet> attributeSets) {
+        if (attributeSets.size() == 1) {
+            return attributeSets.get(0);
+        } else {
+            return new MergedAttributeSet(attributeSets);
         }
-        return -1;
     }
 
-    public int byName(String name) {
-        for (int i = 0; i < attributes.length; i++) {
-            if (attributes[i].getName().equals(name)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    ResolvedAttribute getAttribute(int ordinal);
+
+    List<ResolvedAttribute> allAttributes();
+
+    int byId(String id);
+
+    int byName(String[] names);
+
+    int numAttributes();
 }

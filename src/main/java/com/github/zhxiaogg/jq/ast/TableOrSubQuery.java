@@ -16,9 +16,8 @@ public interface TableOrSubQuery extends AstNode {
 
         public LogicalPlan toPlanNode() {
             String tableName = getTableName().getName();
-            Optional<String> alias = Optional.ofNullable(getAlias()).map(TableAlias::getName);
-            // TODO: use alias
-            return new Scan(tableName);
+            Optional<String> aliasName = Optional.ofNullable(alias).map(TableAlias::getName);
+            return new Scan(tableName, aliasName.orElse(null));
         }
     }
 

@@ -72,7 +72,7 @@ public class MaxAgg extends AggExpression {
 
         @Override
         public AttributeSet updateOutputs() {
-            return new AttributeSet(new ResolvedAttribute[]{evaluate.toAttribute()});
+            return AttributeSet.create(new ResolvedAttribute[]{evaluate.toAttribute()});
         }
     }
 }

@@ -5,25 +5,23 @@ import com.github.zhxiaogg.jq.plan.exec.Record;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
 public class UnResolvedAttribute implements LeafExprNode {
-    private final String tableName;
-    private final String name;
+    private final String[] names;
     private final String id;
 
-    public UnResolvedAttribute(String tableName, String name) {
-        this(tableName, name, UUID.randomUUID().toString());
+    public UnResolvedAttribute(String[] names) {
+        this(names, UUID.randomUUID().toString());
     }
 
     @Override
     public boolean semanticEqual(Expression other) {
         return other instanceof UnResolvedAttribute &&
-                Objects.equals(tableName, ((UnResolvedAttribute) other).getTableName()) &&
-                Objects.equals(name, ((UnResolvedAttribute) other).getName());
+                Arrays.equals(names, ((UnResolvedAttribute) other).getNames());
     }
 
     @Override
@@ -38,7 +36,7 @@ public class UnResolvedAttribute implements LeafExprNode {
 
     @Override
     public String toString() {
-        return name;
+        return String.join(".", names);
     }
 
     @Override

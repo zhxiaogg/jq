@@ -67,6 +67,6 @@ public class AggregateExec implements PhysicalPlan {
     @Override
     public AttributeSet outputs() {
         ResolvedAttribute[] attributes = ListUtils.concat(groupings, aggregators).stream().map(Expression::toAttribute).toArray(ResolvedAttribute[]::new);
-        return new AttributeSet(attributes);
+        return AttributeSet.create(attributes);
     }
 }

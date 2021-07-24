@@ -2,7 +2,7 @@ package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.JoinType;
-import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.booleans.BooleanExpression;
 import lombok.Data;
@@ -44,7 +44,7 @@ public class Join implements LogicalPlan {
     }
 
     @Override
-    public AttributeSet outputs(Catalog catalog) {
+    public SimpleAttributeSet outputs(Catalog catalog) {
         return null;
     }
 }

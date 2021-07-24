@@ -77,7 +77,7 @@ public class MainTest {
         Catalog ds = Catalog.create(relation);
 
         Parser parser = new Parser();
-        Select select = parser.parse("select item_id, max(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having sum(price) > 100");
+        Select select = parser.parse("select item_id, max(o.price) as value from orders as o where time > '2021-05-31T00:00:00Z' group by o.item_id having sum(price) > 100");
         LogicalPlan plan = select.toPlanNode();
         LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
 

@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import lombok.Data;
 
@@ -29,7 +29,7 @@ public class Limit implements LogicalPlan {
     }
 
     @Override
-    public AttributeSet outputs(Catalog catalog) {
+    public SimpleAttributeSet outputs(Catalog catalog) {
         return null;
     }
 

@@ -1,21 +1,21 @@
 package com.github.zhxiaogg.jq.schema;
 
-import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import lombok.Data;
 
 @Data
 public class Schema {
     private final String[] names;
-    private final AttributeSet attributes;
+    private final SimpleAttributeSet attributes;
     private final RecordReader reader;
 
-    public Schema(String[] names, AttributeSet attributes, RecordReader reader) {
+    public Schema(String[] names, SimpleAttributeSet attributes, RecordReader reader) {
         this.names = names;
         this.attributes = attributes;
         this.reader = reader;
     }
 
-    public AttributeSet getAttributes() {
+    public SimpleAttributeSet getAttributes() {
         return attributes;
     }
 }

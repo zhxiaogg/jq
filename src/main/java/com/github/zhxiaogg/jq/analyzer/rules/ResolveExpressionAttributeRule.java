@@ -1,9 +1,9 @@
 package com.github.zhxiaogg.jq.analyzer.rules;
 
 import com.github.zhxiaogg.jq.analyzer.Rule;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
-import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import lombok.RequiredArgsConstructor;
 
@@ -29,11 +29,10 @@ public class ResolveExpressionAttributeRule implements Rule<Expression> {
 
                 // TODO: consider table name support
                 if (ordinal < 0 && e instanceof UnResolvedAttribute) {
-                    ordinal = attributes.byName(((UnResolvedAttribute) e).getName());
+                    ordinal = attributes.byName(((UnResolvedAttribute) e).getNames());
                 }
                 if (ordinal > -1) {
-                    ResolvedAttribute attribute = attributes.getAttribute(ordinal);
-                    return Optional.of(new ResolvedAttribute(attribute.getId(), attribute.getName(), attribute.getDataType(), ordinal));
+                    return Optional.of(attributes.getAttribute(ordinal));
                 } else {
                     return Optional.empty();
                 }

@@ -4,6 +4,7 @@ import com.github.zhxiaogg.jq.Catalog;
 import com.github.zhxiaogg.jq.analyzer.AggregatorUtil;
 import com.github.zhxiaogg.jq.analyzer.Rule;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
@@ -14,8 +15,12 @@ import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.logical.Project;
 import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.RequiredArgsConstructor;
+import org.w3c.dom.Attr;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,8 +54,8 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                             newAggregators.addAll(newAggExpressions);
                             Aggregate newAggregate = aggregate.withAggregators(newAggregators);
                             LogicalPlan newFilter = filter.withExpressions(Collections.singletonList(newCondition)).withChildren(Collections.singletonList(newAggregate));
-                            // TODO: use ResolvedAttribute after deprecating ordinal field from ResolvedAttribute
-                            List<Expression> projections = aggregate.getExpressions().stream().map(e -> new UnResolvedAttribute(null, e.toString(), e.getId())).collect(Collectors.toList());
+                            // TODO: don't use toString here.
+                            List<Expression> projections = aggregate.getExpressions().stream().map(e -> new UnResolvedAttribute(new String[]{e.toString()}, e.getId())).collect(Collectors.toList());
                             return Optional.of(new Project(projections, newFilter));
                         }
                     }
@@ -62,34 +67,6 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                 return Optional.empty();
             }
         });
-    }
-
-    /**
-     * Extract possibly new {@link AggExpression}s from input expression.
-     *
-     * @param aggregate against which to check if the returned {@link AggExpression} is actually new.
-     * @param input     input {@link Expression}.
-     * @return A optionally new expression if there is any new {@link AggExpression}, and a set of
-     * the new {@link AggExpression}s.
-     */
-    private Pair<Optional<Expression>, Set<AggExpression>> extractAggExpressions(Aggregate aggregate, Expression input) {
-        final Set<AggExpression> newAggExpressions = new HashSet<>();
-        Optional<Expression> newCondition = input.transformUp(e -> {
-            if (e instanceof AggExpression) {
-                AggExpression agg = (AggExpression) e;
-                Optional<AggExpression> existingAgg = findDuplicate(aggregate, agg);
-                if (existingAgg.isPresent()) {
-                    agg = existingAgg.get();
-                }
-                newAggExpressions.add(agg);
-                // TODO: use ResolvedAttribute after deprecating ordinal field from ResolvedAttribute
-                return Optional.of(new UnResolvedAttribute(null, agg.toString(), agg.getId()));
-            } else {
-                return Optional.empty();
-            }
-        });
-
-        return Pair.of(newCondition, newAggExpressions);
     }
 
     /**

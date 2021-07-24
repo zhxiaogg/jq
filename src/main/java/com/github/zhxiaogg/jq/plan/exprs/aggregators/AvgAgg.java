@@ -79,7 +79,7 @@ public class AvgAgg extends AggExpression {
 
         @Override
         public AttributeSet updateOutputs() {
-            return new AttributeSet(new ResolvedAttribute[]{
+            return AttributeSet.create(new ResolvedAttribute[]{
                     this.sum.toAttribute(),
                     this.count.toAttribute()}
             );

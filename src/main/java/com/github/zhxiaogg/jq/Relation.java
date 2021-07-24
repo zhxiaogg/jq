@@ -4,6 +4,7 @@ import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
+import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.RecordReader;
 import com.github.zhxiaogg.jq.schema.Schema;
@@ -66,7 +67,7 @@ public class Relation {
                 return Record.create(values);
             }
         };
-        Schema schema = new Schema(new String[]{name}, new AttributeSet(attributes), reader);
+        Schema schema = new Schema(new String[]{name}, (SimpleAttributeSet) AttributeSet.create(attributes), reader);
         return new Relation(schema, clazz);
     }
 

@@ -8,7 +8,7 @@ public interface Expression extends Node<Expression> {
 
     default ResolvedAttribute toAttribute() {
         // TODO: don't use toString here
-        return new ResolvedAttribute(getId(), toString(), getDataType(), -1);
+        return new ResolvedAttribute(getId(), new String[]{toString()}, getDataType(), -1);
     }
 
     boolean semanticEqual(Expression other);

@@ -12,11 +12,11 @@ import java.time.Instant;
 @Deprecated
 public class Expressions {
     public static SumAgg sum(String attribute) {
-        return new SumAgg(new UnResolvedAttribute(null, attribute));
+        return new SumAgg(new UnResolvedAttribute(new String[]{attribute}));
     }
 
     public static Expression attri(String attribute) {
-        return new UnResolvedAttribute(null, attribute);
+        return new UnResolvedAttribute(new String[]{attribute});
     }
 
     public static BooleanExpression gt(Expression left, Expression right) {
@@ -29,7 +29,7 @@ public class Expressions {
 
 
     public static BooleanExpression gt(String left, Instant right) {
-        return new Compare(CompareOp.GT, new UnResolvedAttribute(null, left), Literal.create(right));
+        return new Compare(CompareOp.GT, new UnResolvedAttribute(new String[]{left}), Literal.create(right));
     }
 
     public static Expression alias(Expression inner, String name) {
@@ -41,6 +41,6 @@ public class Expressions {
     }
 
     public static Expression max(String attribute) {
-        return new MaxAgg(new UnResolvedAttribute(null, attribute));
+        return new MaxAgg(new UnResolvedAttribute(new String[]{attribute}));
     }
 }

@@ -50,7 +50,13 @@ public interface Expr extends AstNode {
         @Override
         public Expression toExpression() {
             String tableName = (this.tableName == null) ? null : this.tableName.getName();
-            return new UnResolvedAttribute(tableName, columnName.getName());
+            String[] names;
+            if(this.tableName != null) {
+                names = new String[]{tableName, columnName.getName()};
+            } else {
+                names = new String[]{columnName.getName()};
+            }
+            return new UnResolvedAttribute(names);
         }
     }
 
