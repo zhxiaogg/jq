@@ -10,16 +10,26 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class AttributeSet {
+    /**
+     * relation names if any.
+     */
+    private final String[] names;
+
     private final ResolvedAttribute[] attributes;
 
     public AttributeSet(List<ResolvedAttribute> attributes) {
-        this(attributes.toArray(new ResolvedAttribute[0]));
+        this(new String[0], attributes.toArray(new ResolvedAttribute[0]));
     }
+
+    public AttributeSet(ResolvedAttribute[] attributes) {
+        this(new String[0], attributes);
+    }
+
 
     public static AttributeSet create(List<ResolvedAttribute> left, List<ResolvedAttribute> right) {
         List<ResolvedAttribute> outputs = new ArrayList<>(left);
         outputs.addAll(right);
-        return new AttributeSet(outputs.toArray(new ResolvedAttribute[0]));
+        return new AttributeSet(new String[0], outputs.toArray(new ResolvedAttribute[0]));
     }
 
     public ResolvedAttribute getAttribute(int ordinal) {

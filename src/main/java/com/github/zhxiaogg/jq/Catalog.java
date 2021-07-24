@@ -35,10 +35,10 @@ public class Catalog {
     }
 
     public Optional<Relation> relationOf(String name) {
-        return relations.stream().filter(ds -> ds.getSchema().getName().getName().equalsIgnoreCase(name)).findFirst();
+        return relations.stream().filter(relation -> relation.getSchema().getNames()[0].equalsIgnoreCase(name)).findFirst();
     }
 
     public Optional<Relation> relationOf(Class<?> clazz) {
-        return relations.stream().filter(ds -> ds.getSchema().getName().getClazz() == clazz).findFirst();
+        return relations.stream().filter(relation -> relation.getClazz() == clazz).findFirst();
     }
 }

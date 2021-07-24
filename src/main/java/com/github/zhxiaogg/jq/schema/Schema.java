@@ -5,10 +5,17 @@ import lombok.Data;
 
 @Data
 public class Schema {
-    private final SchemaName name;
+    private final String[] names;
+    private final AttributeSet attributes;
     private final RecordReader reader;
 
+    public Schema(String[] names, AttributeSet attributes, RecordReader reader) {
+        this.names = names;
+        this.attributes = attributes;
+        this.reader = reader;
+    }
+
     public AttributeSet getAttributes() {
-        return reader.getAttributes();
+        return attributes;
     }
 }

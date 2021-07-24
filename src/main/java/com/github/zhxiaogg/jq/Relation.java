@@ -7,10 +7,7 @@ import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.schema.RecordReader;
 import com.github.zhxiaogg.jq.schema.Schema;
-import com.github.zhxiaogg.jq.schema.SchemaName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
@@ -20,15 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Data
-@EqualsAndHashCode
-@ToString
 public class Relation {
     private final Schema schema;
+    private final Class<?> clazz;
     private final List<Record> records = new LinkedList<>();
-
-    public Relation(Schema schema) {
-        this.schema = schema;
-    }
 
     public static Relation create(String name, Class<?> clazz) {
         List<ResolvedAttribute> attributes = new ArrayList<>();
@@ -73,13 +65,9 @@ public class Relation {
                 }
                 return Record.create(values);
             }
-
-            @Override
-            public AttributeSet getAttributes() {
-                return new AttributeSet(attributes);
-            }
         };
-        return new Relation(new Schema(new SchemaName(clazz, name), reader));
+        Schema schema = new Schema(new String[]{name}, new AttributeSet(attributes), reader);
+        return new Relation(schema, clazz);
     }
 
     /**
@@ -96,8 +84,8 @@ public class Relation {
     }
 
     public void add(Object data) {
-        if (data.getClass() != schema.getName().getClazz()) {
-            throw new IllegalArgumentException("expected " + schema.getName().getClazz());
+        if (data.getClass() != clazz) {
+            throw new IllegalArgumentException("expected " + clazz);
         }
         Record record = schema.getReader().read(data);
         records.add(record);

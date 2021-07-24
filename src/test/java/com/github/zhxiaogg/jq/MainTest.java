@@ -11,14 +11,17 @@ import com.github.zhxiaogg.jq.analyzer.rules.ResolveHavingConditionRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.ast.Select;
 import com.github.zhxiaogg.jq.parser.Parser;
+import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.logical.LogicalPlan;
 import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MainTest {
@@ -77,15 +80,14 @@ public class MainTest {
         Select select = parser.parse("select item_id, max(price) as value from orders where time > '2021-05-31T00:00:00Z' group by item_id having sum(price) > 100");
         LogicalPlan plan = select.toPlanNode();
         LogicalPlan analysedPlan = getAnalyser(ds).analysis(plan);
-        System.out.println(analysedPlan);
 
         PhysicalPlanner physicalPlanner = new PhysicalPlanner(ds);
         PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
         StreamingQuery streaming = ds.streamQuery(executablePlan);
         RecordBag r1 = streaming.fire(new Order(1, 100, Instant.now()));
-        System.out.println(r1);
+        Assert.assertEquals(RecordBag.empty(), r1);
         RecordBag r2 = streaming.fire(new Order(1, 100, Instant.now()));
-        System.out.println(r2);
+        Assert.assertEquals(RecordBag.of(Collections.singletonList(Record.create(Arrays.asList(1, 100.0D)))), r2);
     }
 
 }
