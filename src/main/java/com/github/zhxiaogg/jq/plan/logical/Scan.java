@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.plan.logical;
 
-import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.Relation;
+import com.github.zhxiaogg.jq.catalog.Catalog;
+import com.github.zhxiaogg.jq.catalog.Relation;
 import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

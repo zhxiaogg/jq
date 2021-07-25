@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq;
+package com.github.zhxiaogg.jq.catalog;
 
 import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 import com.github.zhxiaogg.jq.streaming.StreamingQuery;
@@ -39,6 +39,8 @@ public class Catalog {
     }
 
     public Optional<Relation> relationOf(Class<?> clazz) {
-        return relations.stream().filter(relation -> relation.getClazz() == clazz).findFirst();
+        return relations.stream()
+                .filter(relation -> relation instanceof ObjectRelation && ((ObjectRelation) relation).getClazz() == clazz)
+                .findFirst();
     }
 }

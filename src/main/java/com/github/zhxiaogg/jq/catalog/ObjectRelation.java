@@ -1,14 +1,10 @@
-package com.github.zhxiaogg.jq;
+package com.github.zhxiaogg.jq.catalog;
 
 import com.github.zhxiaogg.jq.datatypes.DataType;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
-import com.github.zhxiaogg.jq.schema.FieldReader;
-import com.github.zhxiaogg.jq.schema.RecordReader;
-import com.github.zhxiaogg.jq.schema.Schema;
 import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.Data;
 
@@ -20,16 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Data
-public class Relation {
+public class ObjectRelation implements Relation {
     private final Schema schema;
     private final Class<?> clazz;
     private final List<Record> records = new LinkedList<>();
-
-    public static Relation create(String name, Class<?> clazz) {
-        Pair<AttributeSet, RecordReader> attributeSet = resolveAttributeSet(clazz);
-        Schema schema = new Schema(new String[]{name}, ((SimpleAttributeSet) attributeSet.getLeft()).withName(name), attributeSet.getRight());
-        return new Relation(schema, clazz);
-    }
 
     /**
      * Get {@link AttributeSet} and {@link RecordReader} for a Class.
@@ -37,7 +27,7 @@ public class Relation {
      * @param clazz
      * @return
      */
-    private static Pair<AttributeSet, RecordReader> resolveAttributeSet(Class<?> clazz) {
+     static Pair<AttributeSet, RecordReader> resolveAttributeSet(Class<?> clazz) {
         List<FieldReader> fieldReaders = new ArrayList<>();
         List<ResolvedAttribute> attributes = new ArrayList<>();
         int idx = 0;
@@ -68,7 +58,7 @@ public class Relation {
      * @param field
      * @return
      */
-    private static Optional<Pair<ResolvedAttribute, FieldReader>> resolveAttribute(int idx, Field field) {
+     static Optional<Pair<ResolvedAttribute, FieldReader>> resolveAttribute(int idx, Field field) {
         com.github.zhxiaogg.jq.annotations.Field annotation = field.getAnnotation(com.github.zhxiaogg.jq.annotations.Field.class);
         if (annotation == null) return Optional.empty();
         final String fieldName = Optional.of(annotation.name()).filter(s -> !s.isEmpty()).orElseGet(field::getName);
@@ -95,14 +85,15 @@ public class Relation {
         return Optional.of(Pair.of(attribute, fr));
     }
 
-
-    public RecordBag records() {
+    @Override
+    public RecordBag scan() {
         ArrayList<Record> result = new ArrayList<>(records.size());
         result.addAll(records);
         return RecordBag.of(result);
     }
 
-    public void add(Object data) {
+    @Override
+    public void insert(Object data) {
         if (data.getClass() != clazz) {
             throw new IllegalArgumentException("expected " + clazz);
         }

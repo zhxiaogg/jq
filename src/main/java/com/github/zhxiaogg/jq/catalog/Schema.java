@@ -1,4 +1,4 @@
-package com.github.zhxiaogg.jq.schema;
+package com.github.zhxiaogg.jq.catalog;
 
 import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
 import lombok.Data;

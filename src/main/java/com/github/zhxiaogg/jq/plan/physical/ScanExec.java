@@ -1,6 +1,6 @@
 package com.github.zhxiaogg.jq.plan.physical;
 
-import com.github.zhxiaogg.jq.Relation;
+import com.github.zhxiaogg.jq.catalog.Relation;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class ScanExec implements PhysicalPlan {
 
     @Override
     public RecordBag exec() {
-        return relation.records();
+        return relation.scan();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.analyzer;
 
-import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.Relation;
+import com.github.zhxiaogg.jq.catalog.Catalog;
+import com.github.zhxiaogg.jq.catalog.Relation;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.aggregators.AggExpression;
 import com.github.zhxiaogg.jq.plan.logical.*;

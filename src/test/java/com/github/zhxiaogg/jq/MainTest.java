@@ -10,6 +10,8 @@ import com.github.zhxiaogg.jq.analyzer.rules.ResolveAttributesRule;
 import com.github.zhxiaogg.jq.analyzer.rules.ResolveHavingConditionRule;
 import com.github.zhxiaogg.jq.annotations.Field;
 import com.github.zhxiaogg.jq.ast.Select;
+import com.github.zhxiaogg.jq.catalog.Catalog;
+import com.github.zhxiaogg.jq.catalog.Relation;
 import com.github.zhxiaogg.jq.parser.Parser;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;

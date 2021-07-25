@@ -1,7 +1,7 @@
 package com.github.zhxiaogg.jq.streaming;
 
-import com.github.zhxiaogg.jq.Catalog;
-import com.github.zhxiaogg.jq.Relation;
+import com.github.zhxiaogg.jq.catalog.Catalog;
+import com.github.zhxiaogg.jq.catalog.Relation;
 import com.github.zhxiaogg.jq.plan.exec.RecordBag;
 import com.github.zhxiaogg.jq.plan.physical.PhysicalPlan;
 
@@ -19,7 +19,7 @@ public class StreamingQuery {
     public RecordBag fire(Object data) {
         Optional<Relation> relation = catalog.relationOf(data.getClass());
         if (!relation.isPresent()) throw new IllegalArgumentException("dataset not found for input data.");
-        relation.get().add(data);
+        relation.get().insert(data);
         return plan.exec();
     }
 }
