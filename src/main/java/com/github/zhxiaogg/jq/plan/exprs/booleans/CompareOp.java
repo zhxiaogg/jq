@@ -53,9 +53,9 @@ public enum CompareOp implements CompareOpImpl, BinaryValueOp<Boolean> {
     public Boolean applyWithDataType(DataType dataType, Object l, Object r) {
         switch (dataType) {
             case Float:
-                return this.compareImpl((Double) l, (Double) r);
+                return this.compareImpl(((Number) l).doubleValue(), ((Number) r).doubleValue());
             case Int:
-                return this.compareImpl((Long) l, (Long) r);
+                return this.compareImpl(((Number) l).longValue(), ((Number) r).longValue());
             case DateTime:
                 return this.compareImpl((Instant) l, (Instant) r);
             case String:

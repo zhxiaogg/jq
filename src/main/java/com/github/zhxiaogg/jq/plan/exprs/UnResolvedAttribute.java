@@ -1,6 +1,7 @@
 package com.github.zhxiaogg.jq.plan.exprs;
 
 import com.github.zhxiaogg.jq.datatypes.DataType;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exec.Record;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,10 @@ public class UnResolvedAttribute implements LeafExprNode {
     @Override
     public DataType getDataType() {
         return DataType.UnKnown;
+    }
+
+    @Override
+    public ResolvedAttribute toAttribute() {
+        return new ResolvedAttribute(id, names, getDataType(), new int[0], AttributeSet.empty(new String[0]));
     }
 }

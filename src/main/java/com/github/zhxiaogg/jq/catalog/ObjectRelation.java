@@ -9,7 +9,6 @@ import com.github.zhxiaogg.jq.utils.Pair;
 import lombok.Data;
 
 import java.lang.reflect.Field;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ObjectRelation implements Relation {
      * @param clazz
      * @return
      */
-     static Pair<AttributeSet, RecordReader> resolveAttributeSet(Class<?> clazz) {
+    static Pair<AttributeSet, RecordReader> resolveAttributeSet(Class<?> clazz) {
         List<FieldReader> fieldReaders = new ArrayList<>();
         List<ResolvedAttribute> attributes = new ArrayList<>();
         int idx = 0;
@@ -58,28 +57,23 @@ public class ObjectRelation implements Relation {
      * @param field
      * @return
      */
-     static Optional<Pair<ResolvedAttribute, FieldReader>> resolveAttribute(int idx, Field field) {
+    static Optional<Pair<ResolvedAttribute, FieldReader>> resolveAttribute(int idx, Field field) {
         com.github.zhxiaogg.jq.annotations.Field annotation = field.getAnnotation(com.github.zhxiaogg.jq.annotations.Field.class);
         if (annotation == null) return Optional.empty();
         final String fieldName = Optional.of(annotation.name()).filter(s -> !s.isEmpty()).orElseGet(field::getName);
         Class<?> fieldType = field.getType();
         FieldReader fr = FieldReader.create(field);
         ResolvedAttribute attribute;
-        if (int.class.equals(fieldType) || Integer.class.equals(fieldType) || Long.class.equals(fieldType) || long.class.equals(fieldType)) {
-            attribute = new ResolvedAttribute(fieldName, DataType.Int, idx);
-        } else if (float.class.equals(fieldType) || Float.class.equals(fieldType) || double.class.equals(fieldType) || Double.class.equals(fieldType)) {
-            attribute = new ResolvedAttribute(fieldName, DataType.Float, idx);
-        } else if (String.class.equals(fieldType)) {
-            attribute = new ResolvedAttribute(fieldName, DataType.String, idx);
-        } else if (Boolean.class.equals(fieldType) || boolean.class.equals(fieldType)) {
-            attribute = new ResolvedAttribute(fieldName, DataType.Boolean, idx);
-        } else if (Instant.class.equals(fieldType)) {
-            attribute = new ResolvedAttribute(fieldName, DataType.DateTime, idx);
-        } else {
+        DataType dataType = DataType.getDataType(fieldType);
+        if (dataType.isPrimitive()) {
+            attribute = new ResolvedAttribute(fieldName, dataType, idx);
+        } else if (dataType.equals(DataType.Struct)) {
             // treat the field as DataType.Struct
             Pair<AttributeSet, RecordReader> nestedAttribute = resolveAttributeSet(fieldType);
             fr = FieldReader.create(field, nestedAttribute.getRight());
             attribute = new ResolvedAttribute(fieldName, DataType.Struct, nestedAttribute.getLeft(), idx);
+        } else {
+            throw new IllegalStateException(String.format("unsupported field %s with data type: %s", field.getName(), dataType));
         }
 
         return Optional.of(Pair.of(attribute, fr));

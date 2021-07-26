@@ -1,8 +1,8 @@
 package com.github.zhxiaogg.jq.analyzer.rules;
 
-import com.github.zhxiaogg.jq.catalog.Catalog;
 import com.github.zhxiaogg.jq.analyzer.AggregatorUtil;
 import com.github.zhxiaogg.jq.analyzer.Rule;
+import com.github.zhxiaogg.jq.catalog.Catalog;
 import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import com.github.zhxiaogg.jq.plan.exprs.Expression;
 import com.github.zhxiaogg.jq.plan.exprs.UnResolvedAttribute;
@@ -41,7 +41,7 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                     AttributeSet attributes = aggregate.getChild().outputs(catalog);
                     Optional<Expression> resolvedCondition = condition.transformUp(new ResolveExpressionAttributeRule(attributes));
                     // find all AggExpressions in resolvedCondition
-                    if (resolvedCondition.isPresent() && resolvedCondition.get().isResolved()) {
+                    if (resolvedCondition.isPresent()) {
                         List<AggExpression> existings = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
                         Pair<Optional<Expression>, List<AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.get(), existings);
                         Optional<Expression> optResolvedCondition = extractResult.getLeft();

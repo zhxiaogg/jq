@@ -19,7 +19,7 @@ public class ResolvedAttribute implements LeafExprNode {
     private final AttributeSet inner;
 
     public ResolvedAttribute(String name, DataType dataType, int ordinal) {
-        this(UUID.randomUUID().toString(), new String[]{name}, dataType, new int[]{ordinal}, AttributeSet.empty());
+        this(UUID.randomUUID().toString(), new String[]{name}, dataType, new int[]{ordinal}, AttributeSet.empty(new String[0]));
     }
 
     public ResolvedAttribute(String name, DataType dataType, AttributeSet children, int ordinal) {
@@ -106,8 +106,43 @@ public class ResolvedAttribute implements LeafExprNode {
         return ordinals.stream().mapToInt(v -> v).toArray();
     }
 
+    /**
+     * Expand names and create nested attributes if possible.
+     *
+     * @return
+     */
+    public ResolvedAttribute expand() {
+        if (names.length > 1) {
+            AttributeSet children = AttributeSet.empty(new String[0]);
+            for (int i = names.length - 1; i > 0; i--) {
+                DataType dt = i == names.length - 1 ? DataType.Any : DataType.Struct;
+                ResolvedAttribute resolvedAttribute = new ResolvedAttribute(names[i], dt, children, 0);
+                children = AttributeSet.create(Collections.singletonList(resolvedAttribute));
+            }
+            return new ResolvedAttribute(id, new String[]{names[0]}, DataType.Struct, new int[0], children);
+        } else {
+            return this;
+        }
+    }
+
     @Override
     public String toString() {
         return String.join(".", names);
+    }
+
+    public ResolvedAttribute mergeWith(ResolvedAttribute target) {
+        DataType dataType = this.dataType;
+        if (dataType.equals(DataType.UnKnown)) {
+            dataType = target.getDataType();
+        }
+        AttributeSet children;
+        if (this.inner.equals(AttributeSet.empty())) {
+            children = target.inner;
+        } else if (target.inner.equals(AttributeSet.empty())) {
+            children = this.inner;
+        } else {
+            children = this.inner.mergeWith(target.inner);
+        }
+        return new ResolvedAttribute(id, names, dataType, ordinals, children);
     }
 }

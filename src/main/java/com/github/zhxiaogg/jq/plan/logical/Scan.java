@@ -2,7 +2,7 @@ package com.github.zhxiaogg.jq.plan.logical;
 
 import com.github.zhxiaogg.jq.catalog.Catalog;
 import com.github.zhxiaogg.jq.catalog.Relation;
-import com.github.zhxiaogg.jq.plan.exec.SimpleAttributeSet;
+import com.github.zhxiaogg.jq.plan.exec.AttributeSet;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -15,10 +15,14 @@ public class Scan implements LeafPlanNode {
     private final String alias;
 
     @Override
-    public SimpleAttributeSet outputs(Catalog catalog) {
+    public AttributeSet outputs(Catalog catalog) {
         Optional<Relation> relation = catalog.relationOf(this.relation);
         if (relation.isPresent()) {
-            return relation.get().getSchema().getAttributes().withName(alias);
+            AttributeSet attributes = relation.get().getSchema().getAttributes();
+            if (alias != null) {
+                attributes = attributes.withName(alias);
+            }
+            return attributes;
         } else {
             throw new IllegalArgumentException(String.format("relation %s not found!", relation));
         }

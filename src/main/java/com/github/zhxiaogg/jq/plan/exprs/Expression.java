@@ -9,7 +9,7 @@ public interface Expression extends Node<Expression> {
 
     default ResolvedAttribute toAttribute() {
         // TODO: don't use toString here
-        return new ResolvedAttribute(getId(), new String[]{toString()}, getDataType(), new int[0], AttributeSet.empty());
+        return new ResolvedAttribute(getId(), new String[]{toString()}, getDataType(), new int[0], AttributeSet.empty(new String[0]));
     }
 
     boolean semanticEqual(Expression other);

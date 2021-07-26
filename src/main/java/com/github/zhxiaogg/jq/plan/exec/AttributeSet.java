@@ -12,8 +12,8 @@ public interface AttributeSet {
         return create(new String[0], outputs.toArray(new ResolvedAttribute[0]));
     }
 
-    static AttributeSet create(String[] relationNames, ResolvedAttribute[] attributes) {
-        return new SimpleAttributeSet(relationNames, attributes);
+    static AttributeSet create(String[] names, ResolvedAttribute[] attributes) {
+        return new SimpleAttributeSet(names, attributes);
     }
 
     static AttributeSet create(List<ResolvedAttribute> attributes) {
@@ -28,12 +28,16 @@ public interface AttributeSet {
         if (attributeSets.size() == 1) {
             return attributeSets.get(0);
         } else {
-            return new MergedAttributeSet(attributeSets);
+            return new MergedAttributeSet(new String[0], attributeSets);
         }
     }
 
+    static AttributeSet empty(String[] names) {
+        return new EmptyAttributeSet(names);
+    }
+
     static AttributeSet empty() {
-        return new EmptyAttributeSet();
+        return new EmptyAttributeSet(new String[0]);
     }
 
     ResolvedAttribute getAttribute(int[] ordinals, int offset);
@@ -45,4 +49,16 @@ public interface AttributeSet {
     int[] byName(String[] names, int offset);
 
     int numAttributes();
+
+    AttributeSet withName(String alias);
+
+    AttributeSet withAttributes(List<ResolvedAttribute> attributes);
+
+    /**
+     * Merge target AttributeSet into current AttributeSet.
+     *
+     * @param target
+     * @return
+     */
+    AttributeSet mergeWith(AttributeSet target);
 }

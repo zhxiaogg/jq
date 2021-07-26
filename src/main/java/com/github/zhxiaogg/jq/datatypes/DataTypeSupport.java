@@ -4,4 +4,6 @@ public interface DataTypeSupport {
     boolean canCastTo(DataType dataType);
 
     Object castTo(DataType dataType, Object value);
+
+    boolean isPrimitive();
 }

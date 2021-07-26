@@ -3,20 +3,21 @@ package com.github.zhxiaogg.jq.plan.exec;
 import com.github.zhxiaogg.jq.plan.exprs.ResolvedAttribute;
 import com.github.zhxiaogg.jq.utils.AttributeSearchUtil;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.zhxiaogg.jq.utils.Requires.require;
 
 public class SimpleAttributeSet implements AttributeSet {
     /**
      * relation names if any.
      */
-    private final String[] relationNames;
+    private final String[] names;
 
     private final ResolvedAttribute[] attributes;
 
-    public SimpleAttributeSet(String[] relationNames, ResolvedAttribute[] attributes) {
-        this.relationNames = relationNames;
+    public SimpleAttributeSet(String[] names, ResolvedAttribute[] attributes) {
+        this.names = names;
         this.attributes = attributes;
         for (int i = 0; i < attributes.length; i++) {
             attributes[i] = attributes[i].withOrdinal(i);
@@ -45,11 +46,46 @@ public class SimpleAttributeSet implements AttributeSet {
         return Arrays.stream(attributes).collect(Collectors.toList());
     }
 
-    public SimpleAttributeSet withName(String name) {
-        if (name == null) {
+    @Override
+    public SimpleAttributeSet withName(String alias) {
+        require(Objects.nonNull(alias) && !alias.trim().isEmpty(), "invalid alias.");
+        if (names.length == 1 && names[0].equalsIgnoreCase(alias)) {
             return this;
         } else {
-            return new SimpleAttributeSet(new String[]{name}, attributes);
+            return new SimpleAttributeSet(new String[]{alias}, attributes);
+        }
+    }
+
+    @Override
+    public AttributeSet withAttributes(List<ResolvedAttribute> attributes) {
+        return new SimpleAttributeSet(names, attributes.toArray(new ResolvedAttribute[0]));
+    }
+
+    @Override
+    public AttributeSet mergeWith(AttributeSet target) {
+        if (target instanceof EmptyAttributeSet) {
+            return this;
+        } else if (target instanceof SimpleAttributeSet) {
+            List<ResolvedAttribute> expandedAttributes = Arrays.stream(((SimpleAttributeSet) target).attributes).map(ResolvedAttribute::expand).collect(Collectors.toList());
+            Map<String, ResolvedAttribute> targetAttributes = new HashMap<>();
+            for (ResolvedAttribute a : expandedAttributes) {
+                targetAttributes.put(a.getNames()[0], a);
+            }
+            List<ResolvedAttribute> mergedAttributes = new ArrayList<>();
+            for (ResolvedAttribute attribute : this.attributes) {
+                ResolvedAttribute expanded = attribute.expand();
+                ResolvedAttribute targetAttribute = targetAttributes.get(expanded.getNames()[0]);
+                if (targetAttribute != null) {
+                    ResolvedAttribute merged = expanded.mergeWith(targetAttribute);
+                    targetAttributes.remove(expanded.getNames()[0]);
+                    mergedAttributes.add(merged);
+                } else {
+                    mergedAttributes.add(expanded);
+                }
+            }
+            return new SimpleAttributeSet(names, mergedAttributes.toArray(new ResolvedAttribute[0]));
+        } else {
+            throw new IllegalStateException("not supported by now!");
         }
     }
 
@@ -65,29 +101,6 @@ public class SimpleAttributeSet implements AttributeSet {
     }
 
     /**
-     * Matches input against target starts from offset, check if they fully matches.
-     *
-     * @param input
-     * @param target
-     * @param offset
-     * @return
-     */
-    private boolean fullyMatches(String[] input, String[] target, int offset) {
-        boolean matched = true;
-        if (input.length - offset == target.length) {
-            for (int i = 0; i < target.length; i++) {
-                if (!input[i + offset].equalsIgnoreCase(target[i])) {
-                    matched = false;
-                    break;
-                }
-            }
-        } else {
-            matched = false;
-        }
-        return matched;
-    }
-
-    /**
      * Get attribute oridnal by matching input names with attribute names.
      * <p>
      * Strategy:
@@ -100,8 +113,8 @@ public class SimpleAttributeSet implements AttributeSet {
     @Override
     public int[] byName(String[] names, int offset) {
         int offsetAfterRelationNames = 0;
-        if (AttributeSearchUtil.prefixMatches(names, this.relationNames, offset)) {
-            offsetAfterRelationNames = offset + this.relationNames.length;
+        if (AttributeSearchUtil.prefixMatches(names, this.names, offset)) {
+            offsetAfterRelationNames = offset + this.names.length;
         }
         int[] ordinals = new int[0];
         for (int i = 0; i < attributes.length; i++) {

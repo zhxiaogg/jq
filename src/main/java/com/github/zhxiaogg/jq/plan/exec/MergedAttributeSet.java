@@ -6,9 +6,13 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
+import static com.github.zhxiaogg.jq.utils.Requires.require;
 
 @Data
 public class MergedAttributeSet implements AttributeSet {
+    private final String[] names;
     private final List<AttributeSet> attributeSets;
 
     @Override
@@ -71,5 +75,25 @@ public class MergedAttributeSet implements AttributeSet {
     @Override
     public int numAttributes() {
         return attributeSets.stream().mapToInt(AttributeSet::numAttributes).sum();
+    }
+
+    @Override
+    public AttributeSet withName(String alias) {
+        require(Objects.nonNull(alias) && !alias.trim().isEmpty(), "invalid alias.");
+        if (names.length == 1 && names[0].equalsIgnoreCase(alias)) {
+            return this;
+        } else {
+            return new MergedAttributeSet(new String[]{alias}, attributeSets);
+        }
+    }
+
+    @Override
+    public AttributeSet withAttributes(List<ResolvedAttribute> attributes) {
+        throw new IllegalStateException("not supported!");
+    }
+
+    @Override
+    public AttributeSet mergeWith(AttributeSet target) {
+        throw new IllegalStateException("not supported!");
     }
 }

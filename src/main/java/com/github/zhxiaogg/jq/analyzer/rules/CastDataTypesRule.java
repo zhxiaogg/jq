@@ -61,14 +61,15 @@ public class CastDataTypesRule implements Rule<LogicalPlan> {
                 } else if (dt1.canCastTo(dt2)) {
                     return dt2;
                 } else if (dt2.canCastTo(dt1)) {
-
                     return dt1;
                 } else {
                     return dt1;
                 }
             });
 
-            if (expressions.stream().allMatch(e -> e.getDataType().equals(castTo))) {
+            boolean hasCastable = expressions.stream()
+                    .anyMatch(e -> e.getDataType().canCastTo(castTo));
+            if (!hasCastable) {
                 result = Optional.empty();
             } else {
                 result = Optional.of(expressions.stream().map(e -> {
