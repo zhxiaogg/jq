@@ -37,25 +37,23 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                 Aggregate aggregate = (Aggregate) filter.getChild();
                 BooleanExpression condition = filter.getCondition();
 
-                if (aggregate.getExpressions().stream().allMatch(Expression::isResolved) && !condition.isResolved()) {
+                if (!condition.isResolved()) {
                     AttributeSet attributes = aggregate.getChild().outputs(catalog);
                     Optional<Expression> resolvedCondition = condition.transformUp(new ResolveExpressionAttributeRule(attributes));
                     // find all AggExpressions in resolvedCondition
-                    if (resolvedCondition.isPresent()) {
-                        List<AggExpression> existings = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
-                        Pair<Optional<Expression>, List<AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.get(), existings);
-                        Optional<Expression> optResolvedCondition = extractResult.getLeft();
-                        List<AggExpression> newAggExpressions = extractResult.getRight();
-                        if (optResolvedCondition.isPresent()) {
-                            BooleanExpression newCondition = (BooleanExpression) optResolvedCondition.get();
-                            List<Expression> newAggregators = new ArrayList<>(aggregate.getAggregators());
-                            newAggregators.addAll(newAggExpressions);
-                            Aggregate newAggregate = aggregate.withAggregators(newAggregators);
-                            LogicalPlan newFilter = filter.withExpressions(Collections.singletonList(newCondition)).withChildren(Collections.singletonList(newAggregate));
-                            // TODO: don't use toString here.
-                            List<Expression> projections = aggregate.getExpressions().stream().map(e -> new UnResolvedAttribute(new String[]{e.toString()}, e.getId())).collect(Collectors.toList());
-                            return Optional.of(new Project(projections, newFilter));
-                        }
+                    List<AggExpression> existings = AggregatorUtil.extractAggregators(aggregate.getAggregators()).getLeft();
+                    Pair<Optional<Expression>, List<AggExpression>> extractResult = AggregatorUtil.tryExtractAggExpression(resolvedCondition.orElse(condition), existings);
+                    Optional<Expression> optResolvedCondition = extractResult.getLeft();
+                    List<AggExpression> newAggExpressions = extractResult.getRight();
+                    if (optResolvedCondition.isPresent()) {
+                        BooleanExpression newCondition = (BooleanExpression) optResolvedCondition.get();
+                        List<Expression> newAggregators = new ArrayList<>(aggregate.getAggregators());
+                        newAggregators.addAll(newAggExpressions);
+                        Aggregate newAggregate = aggregate.withAggregators(newAggregators);
+                        LogicalPlan newFilter = filter.withExpressions(Collections.singletonList(newCondition)).withChildren(Collections.singletonList(newAggregate));
+                        // TODO: don't use toString here.
+                        List<Expression> projections = aggregate.getExpressions().stream().map(e -> new UnResolvedAttribute(new String[]{e.toString()}, e.getId())).collect(Collectors.toList());
+                        return Optional.of(new Project(projections, newFilter));
                     }
                     return Optional.empty();
                 } else {
@@ -65,19 +63,5 @@ public class ResolveHavingConditionRule implements Rule<LogicalPlan> {
                 return Optional.empty();
             }
         });
-    }
-
-    /**
-     * Find for the input a duplicated {@link AggExpression} from the aggregate if any.
-     *
-     * @param aggregate against which to check if the input is duplicated.
-     * @param input     input {@link AggExpression}
-     * @return A duplicated {@link AggExpression} if any
-     */
-    private Optional<AggExpression> findDuplicate(Aggregate aggregate, AggExpression input) {
-        return aggregate.getAggregators().stream()
-                .filter(e -> e instanceof AggExpression && e.toString().equals(input.toString()))
-                .map(e -> (AggExpression) e)
-                .findFirst();
     }
 }

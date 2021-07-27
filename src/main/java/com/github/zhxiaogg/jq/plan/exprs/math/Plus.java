@@ -29,6 +29,9 @@ public class Plus extends BinaryExpression {
                 return (Long) l + (Long) r;
             case String:
                 return (String) l + (String) r;
+            case Any:
+                // TODO: improve this?
+                return ((Number) l).doubleValue() + ((Number) r).doubleValue();
             default:
                 throw new IllegalArgumentException("unsupported plus on data type of " + getDataType().name());
         }

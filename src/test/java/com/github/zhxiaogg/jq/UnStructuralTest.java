@@ -48,6 +48,63 @@ public class UnStructuralTest {
         Assert.assertEquals(RecordBag.of(Arrays.asList(Record.create(Arrays.asList(1L, "x")))), result);
     }
 
+    @Test
+    public void support_aggregate_selects() {
+        Parser parser = new Parser();
+        Select select = parser.parse("select id, sum(value) from events group by id having max(value) > 1");
+        LogicalPlan plan = select.toPlanNode();
+
+        UnStructuralRelation relation = Relation.createUnStructural(new String[]{"events"});
+        List<Relation> relations = Collections.singletonList(relation);
+        Catalog catalog = new Catalog(relations);
+
+        Analyser analyser = getAnalyser(catalog);
+        LogicalPlan analysedPlan = analyser.analysis(plan);
+        PhysicalPlanner physicalPlanner = new PhysicalPlanner(catalog);
+        PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
+
+        HashMap<Object, Object> record1 = new HashMap<>();
+        record1.put("id", 1L);
+        record1.put("name", "x");
+        record1.put("value", 10);
+        record1.put("value2", 10);
+        relation.insert(record1);
+        relation.insert(record1);
+        RecordBag result = executablePlan.exec();
+
+        Assert.assertEquals(RecordBag.of(Arrays.asList(Record.create(Arrays.asList(1L, 20.0D)))), result);
+    }
+
+    @Test
+    public void support_aggregate_and_nested_fields() {
+        Parser parser = new Parser();
+        Select select = parser.parse("select id, sum(value), max(user.age) from events group by id having max(value) > 1");
+        LogicalPlan plan = select.toPlanNode();
+
+        UnStructuralRelation relation = Relation.createUnStructural(new String[]{"events"});
+        List<Relation> relations = Collections.singletonList(relation);
+        Catalog catalog = new Catalog(relations);
+
+        Analyser analyser = getAnalyser(catalog);
+        LogicalPlan analysedPlan = analyser.analysis(plan);
+        PhysicalPlanner physicalPlanner = new PhysicalPlanner(catalog);
+        PhysicalPlan executablePlan = physicalPlanner.plan(analysedPlan);
+
+        HashMap<String, Object> user = new HashMap<>();
+        user.put("age", 18);
+        HashMap<Object, Object> record1 = new HashMap<>();
+        record1.put("id", 1L);
+        record1.put("name", "x");
+        record1.put("value", 10);
+        record1.put("value2", 10);
+        record1.put("user", user);
+        relation.insert(record1);
+        relation.insert(record1);
+        RecordBag result = executablePlan.exec();
+
+        Assert.assertEquals(RecordBag.of(Arrays.asList(Record.create(Arrays.asList(1L, 20.0D, 18.0D)))), result);
+    }
+
     Analyser getAnalyser(Catalog catalog) {
         return new Analyser() {
             @Override

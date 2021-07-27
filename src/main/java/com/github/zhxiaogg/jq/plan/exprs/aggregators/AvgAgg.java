@@ -64,6 +64,7 @@ public class AvgAgg extends AggExpression {
         public Object getInitValue(DataType dataType) {
             switch (dataType) {
                 case Float:
+                case Any:
                     return 0.0D;
                 case Int:
                     return 0L;

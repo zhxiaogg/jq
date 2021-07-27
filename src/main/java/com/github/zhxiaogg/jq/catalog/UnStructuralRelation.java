@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -95,7 +96,7 @@ public class UnStructuralRelation implements Relation {
             }
             names = newNames;
         }
-        ResolvedAttribute resolved = new ResolvedAttribute(attribute.getId(), names, DataType.Any, new int[0], AttributeSet.empty(new String[0]));
+        ResolvedAttribute resolved = new ResolvedAttribute(UUID.randomUUID().toString(), names, DataType.Any, new int[0], AttributeSet.empty(new String[0]));
         return resolved.expand();
     }
 }

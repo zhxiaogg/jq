@@ -55,6 +55,11 @@ public class SumAgg extends AggExpression {
                     return 0.0D;
                 case Int:
                     return 0L;
+                case Any:
+                    // this may happen with UnStructuralRelations, like JSON objects, we treat
+                    // the numbers as double here.
+                    // TODO: improve this?
+                    return 0.0D;
                 default:
                     throw new IllegalStateException("unsupported data type " + dataType);
             }

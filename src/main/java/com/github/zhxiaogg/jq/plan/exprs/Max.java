@@ -45,7 +45,8 @@ public class Max implements NonLeafExprNode {
             case Int:
                 return values.stream().mapToInt(v1 -> (int) v1).max().getAsInt();
             case Float:
-                return values.stream().mapToDouble(v -> (double) v).max().getAsDouble();
+            case Any:
+                return values.stream().mapToDouble(v -> ((Number) v).doubleValue()).max().getAsDouble();
             default:
                 throw new IllegalStateException("unsupported data type: " + this.getDataType());
         }

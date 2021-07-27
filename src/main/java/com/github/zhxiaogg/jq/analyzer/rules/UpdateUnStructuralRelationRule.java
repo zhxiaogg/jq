@@ -11,9 +11,7 @@ import com.github.zhxiaogg.jq.plan.logical.Scan;
 import com.github.zhxiaogg.jq.utils.ListUtils;
 import lombok.Data;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -45,6 +43,12 @@ public class UpdateUnStructuralRelationRule implements Rule<LogicalPlan> {
         if (optUnStructuralScan.isPresent()) {
             Optional<LogicalPlan> optAggregate = findFirst(node, n -> n instanceof Aggregate);
             List<UnResolvedAttribute> unResolvedAttributes = collectUnResolvedAttributes(optAggregate.orElse(node));
+            // remove duplications
+            Map<String, UnResolvedAttribute> map = new HashMap<>();
+            for (UnResolvedAttribute unResolvedAttribute : unResolvedAttributes) {
+                map.putIfAbsent(unResolvedAttribute.toString(), unResolvedAttribute);
+            }
+            unResolvedAttributes = new ArrayList<>(map.values());
 
             UnStructuralRelation relation = (UnStructuralRelation) catalog.relationOf(((Scan) optUnStructuralScan.get()).getRelation()).get();
             relation.update(unResolvedAttributes);

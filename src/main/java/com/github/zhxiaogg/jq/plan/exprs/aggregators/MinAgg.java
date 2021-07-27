@@ -56,6 +56,7 @@ public class MinAgg extends AggExpression {
         public Object getInitValue(DataType dataType) {
             switch (dataType) {
                 case Float:
+                case Any:
                     return Double.POSITIVE_INFINITY;
                 case Int:
                     return Long.MAX_VALUE;
